@@ -1,0 +1,296 @@
+/* Header tokens: override in your CSS, e.g. `:root { --n-header-h: 5rem; }` */
+@layer base {
+  :root {
+    --n-header-h: 4rem;
+    --n-header-max-w: 80rem;
+    --n-header-px: 1rem;
+    --n-header-bg: #fff;
+    --n-header-border: var(--ui-neutral-200);
+    --n-header-shadow-sm:
+      0 2px 4px -1px rgb(0 0 0 / 0.16), 0 1px 2px 0 rgb(0 0 0 / 0.1);
+    --n-header-shadow-md:
+      0 6px 12px -2px rgb(0 0 0 / 0.18), 0 2px 4px -1px rgb(0 0 0 / 0.1);
+    --n-header-shadow-lg:
+      0 10px 20px -4px rgb(0 0 0 / 0.2), 0 4px 8px -2px rgb(0 0 0 / 0.12);
+    --n-header-shadow-xl:
+      0 16px 32px -6px rgb(0 0 0 / 0.25), 0 6px 12px -4px rgb(0 0 0 / 0.14);
+
+    @variant dark {
+      --n-header-bg: var(--ui-neutral-950);
+      --n-header-border: var(--ui-neutral-800);
+      --n-header-shadow-sm:
+        0 2px 4px -1px rgb(0 0 0 / 0.6), 0 1px 2px 0 rgb(0 0 0 / 0.4);
+      --n-header-shadow-md:
+        0 6px 12px -2px rgb(0 0 0 / 0.65), 0 2px 4px -1px rgb(0 0 0 / 0.4);
+      --n-header-shadow-lg:
+        0 10px 20px -4px rgb(0 0 0 / 0.7), 0 4px 8px -2px rgb(0 0 0 / 0.45);
+      --n-header-shadow-xl:
+        0 16px 32px -6px rgb(0 0 0 / 0.75), 0 6px 12px -4px rgb(0 0 0 / 0.5);
+    }
+  }
+}
+
+/* Menu and mobile icons used by NHeader itself; Tailwind can't see them in a package it doesn't scan */
+@source inline("i-lucide-{menu,x,panel-left,panel-left-close}");
+
+@layer components {
+  .n-header {
+    position: relative;
+    z-index: 40;
+    background-color: var(--n-header-bg);
+    color: var(--ui-neutral-900);
+    transition: box-shadow 0.2s;
+
+    @variant dark {
+      color: var(--ui-neutral-100);
+    }
+
+    &[data-sticky] {
+      position: sticky;
+      top: 0;
+    }
+
+    &[data-border] {
+      border-bottom: 1px solid var(--n-header-border);
+    }
+
+    &[data-shadow="sm"] {
+      box-shadow: var(--n-header-shadow-sm);
+    }
+    &[data-shadow="md"] {
+      box-shadow: var(--n-header-shadow-md);
+    }
+    &[data-shadow="lg"] {
+      box-shadow: var(--n-header-shadow-lg);
+    }
+    &[data-shadow="xl"] {
+      box-shadow: var(--n-header-shadow-xl);
+    }
+
+    /* Mobile first: the menu button shows, the navigation and the right side live in the panel */
+    .n-header-bar {
+      display: flex;
+      box-sizing: border-box;
+      align-items: center;
+      gap: 1.5rem;
+      height: var(--n-header-h);
+      padding-inline: var(--n-header-px);
+    }
+    &[data-container] .n-header-bar {
+      max-width: var(--n-header-max-w);
+      margin-inline: auto;
+    }
+
+    .n-header-brand {
+      display: inline-flex;
+      align-items: center;
+      flex-shrink: 0;
+      gap: 0.5rem;
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: inherit;
+      text-decoration: none;
+
+      &:focus-visible {
+        outline: 2px solid var(--ui-primary-500);
+        outline-offset: 4px;
+        border-radius: 0.25rem;
+      }
+    }
+    .n-header-logo {
+      font-size: 1.5rem;
+      color: var(--ui-primary-500);
+    }
+
+    .n-header-nav,
+    .n-header-right {
+      display: none;
+    }
+    .n-header-nav {
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .n-header-right {
+      align-items: center;
+      gap: 0.5rem;
+      margin-inline-start: auto;
+    }
+    .n-header-toggle {
+      margin-inline-start: auto;
+    }
+    .n-header-sidebar-toggle:dir(rtl) {
+      scale: -1 1;
+    }
+    /* In a dashboard the right side stays in the bar on phones (the menu, if any, only holds the navigation) and the buttons follow it */
+    &[data-sidebar] {
+      .n-header-right {
+        display: flex;
+        margin-inline-start: auto;
+      }
+      /* Closes up the bar's 1.5rem gap to 0.5rem between the buttons at the end */
+      .n-header-toggle,
+      .n-header-sidebar-toggle {
+        margin-inline-start: -1rem;
+      }
+    }
+
+    /* Default (left): the navigation follows the logo and the right side is pushed to the end */
+    &[data-nav-align="center"] .n-header-nav {
+      margin-inline: auto;
+    }
+    &[data-nav-align="center"] .n-header-right {
+      margin-inline-start: 0;
+    }
+    &[data-nav-align="right"] .n-header-nav {
+      margin-inline-start: auto;
+    }
+    &[data-nav-align="right"] .n-header-right {
+      margin-inline-start: 0;
+    }
+
+    .n-header-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--ui-radius, 0.5rem);
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--ui-neutral-600);
+      text-decoration: none;
+      transition:
+        color 0.15s,
+        background-color 0.15s;
+
+      @variant dark {
+        color: var(--ui-neutral-400);
+      }
+
+      &:hover {
+        color: var(--ui-neutral-900);
+        background-color: var(--ui-neutral-100);
+
+        @variant dark {
+          color: var(--ui-neutral-50);
+          background-color: var(--ui-neutral-900);
+        }
+      }
+
+      &[data-active],
+      &[aria-current="page"] {
+        color: var(--ui-primary-600);
+
+        @variant dark {
+          color: var(--ui-primary-400);
+        }
+      }
+
+      &[aria-disabled="true"] {
+        opacity: 0.5;
+        pointer-events: none;
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--ui-primary-500);
+        outline-offset: 2px;
+      }
+    }
+
+    .n-header-panel {
+      position: absolute;
+      inset-inline: 0;
+      top: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      box-sizing: border-box;
+      max-height: calc(100dvh - var(--n-header-h));
+      overflow-y: auto;
+      padding: 0.75rem var(--n-header-px) 1rem;
+      background-color: var(--n-header-bg);
+      border-bottom: 1px solid var(--n-header-border);
+      box-shadow: var(--n-header-shadow-md);
+    }
+    .n-header-panel-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+
+      .n-header-link {
+        padding-block: 0.75rem;
+        font-size: 1rem;
+      }
+    }
+    .n-header-panel-right {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      &:empty {
+        display: none;
+      }
+    }
+
+    /* From the breakpoint up: navigation and right side in the bar, no menu button or panel */
+    &[data-breakpoint="sm"] {
+      @variant sm {
+        .n-header-nav,
+        .n-header-right {
+          display: flex;
+        }
+        .n-header-toggle,
+        .n-header-panel {
+          display: none;
+        }
+      }
+    }
+    &[data-breakpoint="md"] {
+      @variant md {
+        .n-header-nav,
+        .n-header-right {
+          display: flex;
+        }
+        .n-header-toggle,
+        .n-header-panel {
+          display: none;
+        }
+      }
+    }
+    &[data-breakpoint="lg"] {
+      @variant lg {
+        .n-header-nav,
+        .n-header-right {
+          display: flex;
+        }
+        .n-header-toggle,
+        .n-header-panel {
+          display: none;
+        }
+      }
+    }
+    &[data-breakpoint="xl"] {
+      @variant xl {
+        .n-header-nav,
+        .n-header-right {
+          display: flex;
+        }
+        .n-header-toggle,
+        .n-header-panel {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .n-header-panel-enter-active,
+  .n-header-panel-leave-active {
+    transition:
+      opacity 0.15s,
+      transform 0.15s;
+  }
+  .n-header-panel-enter-from,
+  .n-header-panel-leave-to {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+}

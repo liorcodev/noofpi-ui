@@ -1,0 +1,515 @@
+/* Form tokens: override in your CSS, e.g. `:root { --n-input-h: 3rem; }` */
+@layer base {
+  :root {
+    --n-input-h: 2.5rem;
+    --n-input-px: 0.75rem;
+    --n-input-fs: 0.875rem;
+  }
+}
+
+@layer components {
+  .n-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .n-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    font-size: 0.875rem;
+  }
+
+  .n-field-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .n-field-label {
+    font-weight: 500;
+  }
+
+  .n-field-required {
+    margin-inline-start: 0.125rem;
+    color: var(--ui-error-500);
+  }
+
+  .n-field-hint,
+  .n-field-description,
+  .n-field-help {
+    font-size: 0.8125rem;
+    color: var(--ui-neutral-500);
+  }
+
+  .n-field-error {
+    font-size: 0.8125rem;
+    color: var(--ui-error-600);
+
+    @variant dark {
+      color: var(--ui-error-400);
+    }
+  }
+
+  /* Positions the optional leading/trailing icons over the input */
+  .n-input-wrap {
+    position: relative;
+    display: flex;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .n-input-field {
+    position: relative;
+    display: block;
+    flex: 1;
+    min-width: 0;
+
+    &[data-leading] > .n-input {
+      padding-inline-start: calc(var(--n-input-px) * 2 + 1em);
+    }
+
+    &[data-trailing] > .n-input {
+      padding-inline-end: calc(var(--n-input-px) * 2 + 1em);
+    }
+  }
+
+  /* With addons the group draws one ring (a pseudo-element, so the addons' background can't cover it) */
+  .n-input-wrap[data-addon] {
+    height: var(--n-input-h);
+    border-radius: var(--ui-radius, 0.5rem);
+    overflow: hidden;
+
+    & > .n-input-field > .n-input {
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      box-shadow: inset 0 0 0 1px var(--ui-neutral-300);
+      pointer-events: none;
+      transition: box-shadow 0.15s;
+
+      @variant dark {
+        box-shadow: inset 0 0 0 1px var(--ui-neutral-700);
+      }
+    }
+
+    &:hover:not(:has(.n-input:disabled))::after {
+      box-shadow: inset 0 0 0 1px var(--ui-neutral-400);
+    }
+
+    &:has(.n-input:focus-visible)::after {
+      box-shadow: inset 0 0 0 2px var(--ui-primary-500);
+    }
+
+    &:has(.n-input[aria-invalid="true"])::after {
+      box-shadow: inset 0 0 0 1px var(--ui-error-500);
+    }
+
+    &:has(.n-input[aria-invalid="true"]:focus-visible)::after {
+      box-shadow: inset 0 0 0 2px var(--ui-error-500);
+    }
+
+    &:has(.n-input:disabled) {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .n-input-addon {
+    display: flex;
+    flex: none;
+    align-items: center;
+    padding-inline: var(--n-input-px);
+    font-size: var(--n-input-fs);
+    white-space: nowrap;
+    color: var(--ui-neutral-500);
+    background-color: var(--ui-neutral-100);
+
+    @variant dark {
+      background-color: var(--ui-neutral-800);
+    }
+  }
+
+  .n-input-prepend {
+    border-inline-end: 1px solid var(--ui-neutral-300);
+
+    @variant dark {
+      border-inline-end-color: var(--ui-neutral-700);
+    }
+  }
+
+  .n-input-append {
+    border-inline-start: 1px solid var(--ui-neutral-300);
+
+    @variant dark {
+      border-inline-start-color: var(--ui-neutral-700);
+    }
+  }
+
+  .n-input-leading,
+  .n-input-trailing {
+    position: absolute;
+    inset-block: 0;
+    display: flex;
+    align-items: center;
+    font-size: var(--n-input-fs);
+    color: var(--ui-neutral-500);
+  }
+
+  .n-input-leading {
+    inset-inline-start: var(--n-input-px);
+    pointer-events: none;
+  }
+
+  .n-input-trailing {
+    inset-inline-end: var(--n-input-px);
+  }
+
+  .n-input {
+    box-sizing: border-box;
+    width: 100%;
+    height: var(--n-input-h);
+    padding-inline: var(--n-input-px);
+    border: 0;
+    border-radius: var(--ui-radius, 0.5rem);
+    font: inherit;
+    font-size: var(--n-input-fs);
+    color: inherit;
+    background-color: transparent;
+    box-shadow: inset 0 0 0 1px var(--ui-neutral-300);
+    transition: box-shadow 0.15s;
+
+    @variant dark {
+      box-shadow: inset 0 0 0 1px var(--ui-neutral-700);
+    }
+
+    &::placeholder {
+      color: var(--ui-neutral-400);
+    }
+
+    &:hover:not(:disabled) {
+      box-shadow: inset 0 0 0 1px var(--ui-neutral-400);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: inset 0 0 0 2px var(--ui-primary-500);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &[aria-invalid="true"] {
+      box-shadow: inset 0 0 0 1px var(--ui-error-500);
+
+      &:focus-visible {
+        box-shadow: inset 0 0 0 2px var(--ui-error-500);
+      }
+    }
+  }
+
+  /* The ring is a pseudo-element so the buttons' hover background can't cover it */
+  .n-number {
+    position: relative;
+    display: flex;
+    box-sizing: border-box;
+    align-items: stretch;
+    width: 100%;
+    height: var(--n-input-h);
+    border-radius: var(--ui-radius, 0.5rem);
+    font-size: var(--n-input-fs);
+    overflow: hidden;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      box-shadow: inset 0 0 0 1px var(--ui-neutral-300);
+      pointer-events: none;
+      transition: box-shadow 0.15s;
+
+      @variant dark {
+        box-shadow: inset 0 0 0 1px var(--ui-neutral-700);
+      }
+    }
+
+    &:hover:not([data-disabled])::after {
+      box-shadow: inset 0 0 0 1px var(--ui-neutral-400);
+    }
+
+    &:focus-within::after {
+      box-shadow: inset 0 0 0 2px var(--ui-primary-500);
+    }
+
+    &[data-invalid]::after {
+      box-shadow: inset 0 0 0 1px var(--ui-error-500);
+    }
+
+    &[data-invalid]:focus-within::after {
+      box-shadow: inset 0 0 0 2px var(--ui-error-500);
+    }
+
+    &[data-disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .n-number-input {
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    color: inherit;
+    text-align: center;
+    background-color: transparent;
+    outline: none;
+    font-variant-numeric: tabular-nums;
+
+    &::placeholder {
+      color: var(--ui-neutral-400);
+    }
+  }
+
+  .n-number-button {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: var(--n-input-h);
+    padding: 0;
+    border: 0;
+    color: inherit;
+    background-color: transparent;
+    cursor: pointer;
+    transition: background-color 0.15s;
+
+    &:hover:not(:disabled) {
+      background-color: var(--ui-neutral-100);
+
+      @variant dark {
+        background-color: var(--ui-neutral-800);
+      }
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+
+  .n-pin {
+    display: inline-flex;
+    gap: 0.5rem;
+  }
+
+  .n-pin-cell {
+    width: var(--n-pin-cell-w, var(--n-input-h));
+    padding-inline: 0;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .n-checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+
+    &:has(:disabled) {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .n-checkbox-input {
+    width: 1rem;
+    height: 1rem;
+    margin: 0;
+    flex-shrink: 0;
+    appearance: none;
+    box-sizing: border-box;
+    border: 1px solid var(--ui-neutral-400);
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
+    color: var(--ui-primary-500);
+    cursor: inherit;
+
+    @variant dark {
+      border-color: var(--ui-neutral-600);
+    }
+
+    &[type="checkbox"] {
+      border-radius: 0.25rem;
+    }
+
+    &[type="radio"] {
+      border-radius: 9999px;
+    }
+
+    &[type="checkbox"]:checked {
+      border-color: var(--ui-primary-500);
+      background-color: var(--ui-primary-500);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 8.5l3 3 6-7'/%3E%3C/svg%3E");
+    }
+
+    &[type="radio"]:checked {
+      border-color: var(--ui-primary-500);
+      background-image: radial-gradient(
+        circle,
+        var(--ui-primary-500) 0 35%,
+        transparent 40%
+      );
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ui-primary-500);
+      outline-offset: 2px;
+    }
+
+    &[aria-invalid="true"] {
+      border-color: var(--ui-error-500);
+      color: var(--ui-error-500);
+      outline: 1px solid var(--ui-error-500);
+    }
+
+    &[type="checkbox"][aria-invalid="true"]:checked {
+      background-color: var(--ui-error-500);
+    }
+
+    &[type="radio"][aria-invalid="true"]:checked {
+      background-image: radial-gradient(
+        circle,
+        var(--ui-error-500) 0 35%,
+        transparent 40%
+      );
+    }
+  }
+
+  .n-choice-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+
+    &[data-orientation="horizontal"] {
+      flex-flow: row wrap;
+      gap: 0.5rem 1rem;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+    }
+  }
+
+  .n-choice {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .n-choice-description {
+    margin: 0;
+    margin-inline-start: 1.5rem;
+    font-size: 0.8125rem;
+    color: var(--ui-neutral-500);
+  }
+
+  .n-auth {
+    width: 100%;
+    max-width: 24rem;
+    gap: 1.25rem;
+  }
+
+  .n-auth-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .n-auth-icon {
+    font-size: 2rem;
+    color: var(--ui-primary-500);
+  }
+
+  .n-auth-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .n-auth-description {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--ui-neutral-500);
+  }
+
+  .n-auth-providers {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .n-auth-separator {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.8125rem;
+    color: var(--ui-neutral-500);
+
+    &::before,
+    &::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background-color: var(--ui-neutral-200);
+
+      @variant dark {
+        background-color: var(--ui-neutral-800);
+      }
+    }
+  }
+
+  .n-auth-alert {
+    margin: 0;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--ui-radius, 0.5rem);
+    font-size: 0.875rem;
+    color: var(--ui-error-700);
+    background-color: var(--ui-error-50);
+
+    @variant dark {
+      color: var(--ui-error-300);
+      background-color: color-mix(
+        in oklab,
+        var(--ui-error-500) 12%,
+        transparent
+      );
+    }
+  }
+
+  .n-auth-footer {
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--ui-neutral-500);
+  }
+}

@@ -1,0 +1,105 @@
+@layer components {
+  .n-hero-page {
+    --n-hero-page-gap: 2.5rem;
+    --n-hero-page-desc: var(--ui-neutral-500);
+    --n-hero-page-eyebrow: var(--ui-primary-600);
+
+    @variant dark {
+      --n-hero-page-desc: var(--ui-neutral-400);
+      --n-hero-page-eyebrow: var(--ui-primary-400);
+    }
+
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--n-hero-page-gap);
+    width: 100%;
+    padding-block: clamp(2.5rem, 8vw, 6rem);
+    padding-inline: 1rem;
+    text-align: center;
+
+    &[data-layout="horizontal"] {
+      @media (min-width: 48rem) {
+        flex-direction: row;
+        justify-content: space-between;
+        text-align: start;
+
+        &[data-reverse] {
+          flex-direction: row-reverse;
+        }
+
+        > .n-hero-page-body,
+        > .n-hero-page-media {
+          flex: 1 1 0;
+        }
+
+        > .n-hero-page-body {
+          align-items: flex-start;
+          max-width: none;
+        }
+
+        .n-hero-page-actions {
+          justify-content: flex-start;
+        }
+      }
+    }
+  }
+
+  .n-hero-page-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    min-width: 0;
+    max-width: 48rem;
+  }
+
+  .n-hero-page-eyebrow {
+    color: var(--n-hero-page-eyebrow);
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .n-hero-page-title {
+    margin: 0;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  .n-hero-page-description {
+    margin: 0;
+    color: var(--n-hero-page-desc);
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    line-height: 1.6;
+    text-wrap: pretty;
+  }
+
+  .n-hero-page-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-block-start: 0.5rem;
+  }
+
+  .n-hero-page-media {
+    display: flex;
+    justify-content: center;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .n-hero-page-image {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: calc(var(--ui-radius, 0.5rem) * 2);
+  }
+}

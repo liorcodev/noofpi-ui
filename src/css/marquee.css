@@ -1,0 +1,214 @@
+/* Responsive `size` props are classes like `md:n-marquee-size-lg`; Tailwind can't see them being assembled in NMarquee */
+@source inline("{sm:,md:,lg:,xl:,2xl:}n-marquee-size-{sm,md,lg}");
+
+@utility n-marquee-size-sm {
+  --n-marquee-gap: 0.5rem;
+  --n-marquee-logo-h: 1.5rem;
+}
+@utility n-marquee-size-md {
+  --n-marquee-gap: 0.75rem;
+  --n-marquee-logo-h: 2rem;
+}
+@utility n-marquee-size-lg {
+  --n-marquee-gap: 1rem;
+  --n-marquee-logo-h: 3rem;
+}
+
+@layer components {
+  .n-marquee {
+    --n-marquee-gap: 0.75rem;
+    --n-marquee-logo-h: 2rem;
+    --n-marquee-fade: 12%;
+    --n-marquee-muted: 0.8;
+    --n-marquee-label: var(--ui-neutral-500);
+    --n-marquee-label-hover: var(--ui-neutral-900);
+    --n-marquee-img-filter: grayscale(0.5);
+
+    @variant dark {
+      --n-marquee-label: var(--ui-neutral-400);
+      --n-marquee-label-hover: var(--ui-neutral-50);
+    }
+
+    display: flex;
+    box-sizing: border-box;
+    overflow: hidden;
+    width: 100%;
+    padding-block: 0.5rem;
+
+    &[data-size="sm"] {
+      --n-marquee-gap: 0.5rem;
+      --n-marquee-logo-h: 1.5rem;
+    }
+    &[data-size="lg"] {
+      --n-marquee-gap: 1rem;
+      --n-marquee-logo-h: 3rem;
+    }
+
+    &[data-fade] {
+      mask-image: linear-gradient(
+        to right,
+        transparent,
+        #000 var(--n-marquee-fade),
+        #000 calc(100% - var(--n-marquee-fade)),
+        transparent
+      );
+    }
+
+    &[data-orientation="vertical"] {
+      height: 100%;
+      padding-block: 0;
+      padding-inline: 0.5rem;
+
+      &[data-fade] {
+        mask-image: linear-gradient(
+          to bottom,
+          transparent,
+          #000 var(--n-marquee-fade),
+          #000 calc(100% - var(--n-marquee-fade)),
+          transparent
+        );
+      }
+    }
+  }
+
+  .n-marquee-track {
+    display: flex;
+    flex: none;
+    gap: var(--n-marquee-gap);
+    min-width: 100%;
+
+    .n-marquee[data-orientation="vertical"] & {
+      flex-direction: column;
+      min-width: 0;
+      min-height: 100%;
+    }
+  }
+
+  .n-marquee-group {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: space-around;
+    gap: var(--n-marquee-gap);
+    min-width: 100%;
+    animation: n-marquee-x var(--n-marquee-duration, 40s) linear infinite;
+
+    .n-marquee[data-orientation="vertical"] & {
+      flex-direction: column;
+      align-items: flex-start;
+      min-width: 0;
+      min-height: 100%;
+      animation-name: n-marquee-y;
+    }
+
+    .n-marquee[data-reverse] & {
+      animation-direction: reverse;
+    }
+
+    .n-marquee[data-pause]:is(:hover, :focus-within) & {
+      animation-play-state: paused;
+    }
+
+    /* right-to-left pages lay the track out from the right, so slide the other way */
+    &:dir(rtl) {
+      animation-name: n-marquee-x-rtl;
+    }
+  }
+
+  .n-marquee-item {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: 0.625rem;
+    color: var(--n-marquee-label);
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      color 0.2s ease,
+      opacity 0.2s ease,
+      transform 0.2s ease;
+
+    &:is(a):hover,
+    &:is(a):focus-visible {
+      color: var(--n-marquee-label-hover);
+      transform: scale(1.06);
+    }
+
+    &:is(a):focus-visible {
+      border-radius: calc(var(--ui-radius, 0.5rem) * 0.5);
+      outline: 2px solid var(--ui-primary-500);
+      outline-offset: 6px;
+    }
+
+    .n-marquee[data-grayscale] & {
+      opacity: var(--n-marquee-muted);
+      filter: var(--n-marquee-img-filter);
+
+      &:hover,
+      &:focus-visible {
+        opacity: 1;
+        filter: none;
+      }
+    }
+  }
+
+  .n-marquee-logo {
+    display: block;
+    flex: none;
+    width: auto;
+    max-width: none;
+    height: var(--n-marquee-logo-h);
+    object-fit: contain;
+    user-select: none;
+
+    .n-marquee[data-monochrome] & {
+      filter: grayscale(1);
+      transition: filter 0.2s ease;
+    }
+
+    .n-marquee[data-monochrome] .n-marquee-item:is(:hover, :focus-visible) & {
+      filter: none;
+    }
+  }
+
+  .n-marquee-label {
+    font-size: calc(var(--n-marquee-logo-h) * 0.6);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .n-marquee {
+      mask-image: none !important;
+    }
+    .n-marquee-track {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .n-marquee-group {
+      flex-wrap: wrap;
+      justify-content: center;
+      animation-name: none !important;
+
+      &[data-clone] {
+        display: none;
+      }
+    }
+  }
+
+  @keyframes n-marquee-x {
+    to {
+      transform: translateX(calc(-100% - var(--n-marquee-gap)));
+    }
+  }
+  @keyframes n-marquee-x-rtl {
+    to {
+      transform: translateX(calc(100% + var(--n-marquee-gap)));
+    }
+  }
+  @keyframes n-marquee-y {
+    to {
+      transform: translateY(calc(-100% - var(--n-marquee-gap)));
+    }
+  }
+}

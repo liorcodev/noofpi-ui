@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+/* Color Theme Studio export: --color-theme-50 ... 950 and a `.theme.<name>` class per theme */
+@import "./theme.css";
+
+/* noofpi-ui follows --color-theme-* by itself */
+@import "noofpi-ui";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Overriding a token works like in Nuxt UI: plain CSS after the import */
+:root {
+  --ui-radius: 0.5rem;
+}

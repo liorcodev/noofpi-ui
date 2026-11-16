@@ -1,0 +1,32 @@
+/* Scroll-to-top tokens: override in your CSS, e.g. `:root { --n-scroll-to-top-inset: 2rem; }` */
+@layer base {
+  :root {
+    --n-scroll-to-top-inset: 1.5rem;
+    --n-scroll-to-top-z: 50;
+  }
+}
+
+/* Icon used by NScrollToTop itself; Tailwind can't see it in a package it doesn't scan */
+@source inline("i-lucide-arrow-up");
+
+@layer components {
+  .n-scroll-to-top {
+    position: fixed;
+    inset-block-end: var(--n-scroll-to-top-inset);
+    inset-inline-end: var(--n-scroll-to-top-inset);
+    z-index: var(--n-scroll-to-top-z);
+  }
+
+  .n-scroll-to-top-enter-active,
+  .n-scroll-to-top-leave-active {
+    transition:
+      opacity 0.2s,
+      translate 0.2s;
+  }
+
+  .n-scroll-to-top-enter-from,
+  .n-scroll-to-top-leave-to {
+    opacity: 0;
+    translate: 0 0.5rem;
+  }
+}

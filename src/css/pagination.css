@@ -1,0 +1,111 @@
+/* Size tokens: override in your CSS, e.g. `:root { --n-pagination-item-md: 2.5rem; }` */
+@layer base {
+  :root {
+    --n-pagination-item-sm: 1.75rem;
+    --n-pagination-item-md: 2.25rem;
+    --n-pagination-item-lg: 2.75rem;
+    --n-pagination-fg: var(--ui-neutral-800);
+    --n-pagination-muted: var(--ui-neutral-400);
+    --n-pagination-hover: var(--ui-neutral-100);
+    --n-pagination-active-bg: var(--ui-primary-500);
+    --n-pagination-active-fg: #fff;
+
+    @variant dark {
+      --n-pagination-fg: var(--ui-neutral-100);
+      --n-pagination-muted: var(--ui-neutral-600);
+      --n-pagination-hover: var(--ui-neutral-800);
+      --n-pagination-active-bg: var(--ui-primary-400);
+      --n-pagination-active-fg: var(--ui-primary-950);
+    }
+  }
+}
+
+@layer components {
+  .n-pagination {
+    display: inline-flex;
+    color: var(--n-pagination-fg);
+    font-size: 0.875rem;
+
+    &,
+    &[data-size="md"] {
+      --n-pagination-item: var(--n-pagination-item-md);
+    }
+    &[data-size="sm"] {
+      --n-pagination-item: var(--n-pagination-item-sm);
+      font-size: 0.75rem;
+    }
+    &[data-size="lg"] {
+      --n-pagination-item: var(--n-pagination-item-lg);
+      font-size: 1rem;
+    }
+
+    &[data-disabled] {
+      opacity: 0.5;
+    }
+  }
+
+  .n-pagination-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .n-pagination-item,
+  .n-pagination-gap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-width: var(--n-pagination-item);
+    height: var(--n-pagination-item);
+    padding: 0 0.25rem;
+  }
+
+  .n-pagination-gap {
+    color: var(--n-pagination-muted);
+    user-select: none;
+  }
+
+  .n-pagination-item {
+    border: 0;
+    border-radius: var(--ui-radius, 0.5rem);
+    background-color: transparent;
+    color: inherit;
+    font: inherit;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    transition: background-color 0.15s;
+
+    &:hover:not(:disabled, [data-active]) {
+      background-color: var(--n-pagination-hover);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ui-primary-500);
+      outline-offset: 1px;
+    }
+
+    &[data-active] {
+      background-color: var(--n-pagination-active-bg);
+      color: var(--n-pagination-active-fg);
+      font-weight: 600;
+    }
+
+    &:disabled:not([data-active]) {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    &[data-active]:disabled {
+      cursor: default;
+    }
+  }
+
+  [dir="rtl"] .n-pagination .n-icon {
+    transform: scaleX(-1);
+  }
+}

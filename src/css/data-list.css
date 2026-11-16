@@ -1,0 +1,159 @@
+/* Size tokens: override in your CSS, e.g. `:root { --n-data-list-py-md: 0.5rem; }` */
+@layer base {
+  :root {
+    --n-data-list-py-sm: 0.5rem;
+    --n-data-list-fs-sm: 0.8125rem;
+    --n-data-list-py-md: 0.75rem;
+    --n-data-list-fs-md: 0.875rem;
+    --n-data-list-py-lg: 1rem;
+    --n-data-list-fs-lg: 1rem;
+    --n-data-list-border: var(--ui-neutral-300);
+    --n-data-list-label: var(--ui-neutral-500);
+    --n-data-list-value: var(--ui-neutral-900);
+
+    @variant dark {
+      --n-data-list-border: var(--ui-neutral-700);
+      --n-data-list-label: var(--ui-neutral-400);
+      --n-data-list-value: var(--ui-neutral-100);
+    }
+  }
+}
+
+@layer components {
+  .n-data-list {
+    --n-data-list-tile-bg: var(--n-c-100);
+    --n-data-list-tile-fg: var(--n-c-700);
+
+    @variant dark {
+      --n-data-list-tile-bg: color-mix(
+        in oklab,
+        var(--n-c-500) 20%,
+        transparent
+      );
+      --n-data-list-tile-fg: var(--n-c-300);
+    }
+
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 0;
+
+    &,
+    &[data-size="md"] {
+      --n-data-list-py: var(--n-data-list-py-md);
+      --n-data-list-fs: var(--n-data-list-fs-md);
+    }
+    &[data-size="sm"] {
+      --n-data-list-py: var(--n-data-list-py-sm);
+      --n-data-list-fs: var(--n-data-list-fs-sm);
+    }
+    &[data-size="lg"] {
+      --n-data-list-py: var(--n-data-list-py-lg);
+      --n-data-list-fs: var(--n-data-list-fs-lg);
+    }
+
+    &[data-color="primary"] {
+      --n-c-100: var(--ui-primary-100);
+      --n-c-300: var(--ui-primary-300);
+      --n-c-500: var(--ui-primary-500);
+      --n-c-700: var(--ui-primary-700);
+    }
+    &[data-color="neutral"] {
+      --n-c-100: var(--ui-neutral-100);
+      --n-c-300: var(--ui-neutral-300);
+      --n-c-500: var(--ui-neutral-500);
+      --n-c-700: var(--ui-neutral-700);
+    }
+    &[data-color="success"] {
+      --n-c-100: var(--ui-success-100);
+      --n-c-300: var(--ui-success-300);
+      --n-c-500: var(--ui-success-500);
+      --n-c-700: var(--ui-success-700);
+    }
+    &[data-color="info"] {
+      --n-c-100: var(--ui-info-100);
+      --n-c-300: var(--ui-info-300);
+      --n-c-500: var(--ui-info-500);
+      --n-c-700: var(--ui-info-700);
+    }
+    &[data-color="warning"] {
+      --n-c-100: var(--ui-warning-100);
+      --n-c-300: var(--ui-warning-300);
+      --n-c-500: var(--ui-warning-500);
+      --n-c-700: var(--ui-warning-700);
+    }
+    &[data-color="error"] {
+      --n-c-100: var(--ui-error-100);
+      --n-c-300: var(--ui-error-300);
+      --n-c-500: var(--ui-error-500);
+      --n-c-700: var(--ui-error-700);
+    }
+  }
+
+  .n-data-list-head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .n-data-list-icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: calc(var(--ui-radius, 0.5rem) * 0.75);
+    background-color: var(--n-data-list-tile-bg);
+    color: var(--n-data-list-tile-fg);
+    font-size: 1.25rem;
+
+    & > svg {
+      width: 1em;
+      height: 1em;
+    }
+  }
+
+  .n-data-list-title {
+    margin: 0;
+    color: var(--n-data-list-value);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.5rem;
+  }
+
+  .n-data-list-body {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    font-size: var(--n-data-list-fs);
+    line-height: 1.5;
+  }
+
+  .n-data-list-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: var(--n-data-list-py);
+  }
+
+  .n-data-list[data-divided] .n-data-list-row:not(:last-child) {
+    border-bottom: 1px solid var(--n-data-list-border);
+  }
+
+  .n-data-list-label {
+    min-width: 0;
+    color: var(--n-data-list-label);
+  }
+
+  .n-data-list-value {
+    min-width: 0;
+    margin: 0;
+    color: var(--n-data-list-value);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    text-align: end;
+  }
+}

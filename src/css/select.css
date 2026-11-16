@@ -1,0 +1,302 @@
+/* Select tokens: override in your CSS, e.g. `:root { --n-select-max-h: 20rem; }` */
+@layer base {
+  :root {
+    --n-select-max-h: 16rem;
+    --n-select-offset: 0.375rem;
+    --n-select-z: 50;
+    --n-select-bg: #fff;
+    --n-select-border: var(--ui-neutral-200);
+    --n-select-fg: var(--ui-neutral-800);
+    --n-select-muted: var(--ui-neutral-500);
+    --n-select-hover: var(--ui-neutral-100);
+    --n-select-shadow:
+      0 10px 20px -4px rgb(0 0 0 / 0.2), 0 4px 8px -2px rgb(0 0 0 / 0.12);
+
+    @variant dark {
+      --n-select-bg: var(--ui-neutral-900);
+      --n-select-border: var(--ui-neutral-800);
+      --n-select-fg: var(--ui-neutral-100);
+      --n-select-muted: var(--ui-neutral-400);
+      --n-select-hover: var(--ui-neutral-800);
+      --n-select-shadow:
+        0 10px 20px -4px rgb(0 0 0 / 0.7), 0 4px 8px -2px rgb(0 0 0 / 0.45);
+    }
+  }
+}
+
+@layer components {
+  .n-select {
+    position: relative;
+    width: 100%;
+
+    /* Lifts the open list above the content that follows it */
+    &[data-open] {
+      z-index: var(--n-select-z);
+    }
+  }
+
+  .n-select-trigger {
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    width: 100%;
+    height: var(--n-input-h, 2.5rem);
+    padding-inline: var(--n-input-px, 0.75rem);
+    border: 0;
+    border-radius: var(--ui-radius, 0.5rem);
+    font: inherit;
+    font-size: var(--n-input-fs, 0.875rem);
+    color: inherit;
+    text-align: start;
+    background-color: transparent;
+    box-shadow: inset 0 0 0 1px var(--ui-neutral-300);
+    cursor: pointer;
+    transition: box-shadow 0.15s;
+
+    @variant dark {
+      box-shadow: inset 0 0 0 1px var(--ui-neutral-700);
+    }
+
+    &:hover:not(:disabled) {
+      box-shadow: inset 0 0 0 1px var(--ui-neutral-400);
+    }
+
+    &:focus-visible,
+    .n-select[data-open] > & {
+      outline: none;
+      box-shadow: inset 0 0 0 2px var(--ui-primary-500);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &[aria-invalid="true"] {
+      box-shadow: inset 0 0 0 1px var(--ui-error-500);
+
+      &:focus-visible {
+        box-shadow: inset 0 0 0 2px var(--ui-error-500);
+      }
+    }
+
+    &[data-placeholder] .n-select-value {
+      color: var(--ui-neutral-400);
+    }
+
+    /* Badges wrap, so the trigger grows with them */
+    &[data-badges] {
+      height: auto;
+      min-height: var(--n-input-h, 2.5rem);
+      padding-block: 0.25rem;
+
+      .n-select-value {
+        flex-wrap: wrap;
+      }
+    }
+  }
+
+  .n-select-value {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .n-select-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .n-select-icon,
+  .n-select-chevron,
+  .n-select-check {
+    flex-shrink: 0;
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
+  .n-select-chevron {
+    color: var(--ui-neutral-400);
+    transition: rotate 0.15s;
+
+    .n-select[data-open] & {
+      rotate: 180deg;
+    }
+  }
+
+  .n-select-check {
+    margin-inline-start: auto;
+    color: var(--ui-primary-500);
+  }
+
+  .n-select-list {
+    --n-select-shift: -0.25rem;
+
+    position: absolute;
+    z-index: var(--n-select-z);
+    inset-inline: 0;
+    box-sizing: border-box;
+    max-height: var(--n-select-max-h);
+    margin: 0;
+    padding: 0.25rem;
+    overflow-y: auto;
+    border: 1px solid var(--n-select-border);
+    border-radius: var(--ui-radius, 0.5rem);
+    background-color: var(--n-select-bg);
+    color: var(--n-select-fg);
+    box-shadow: var(--n-select-shadow);
+    font-size: 0.875rem;
+    list-style: none;
+
+    .n-select[data-side="bottom"] > & {
+      top: calc(100% + var(--n-select-offset));
+      transform-origin: top;
+    }
+    .n-select[data-side="top"] > & {
+      bottom: calc(100% + var(--n-select-offset));
+      transform-origin: bottom;
+      --n-select-shift: 0.25rem;
+    }
+  }
+
+  .n-select-enter-active,
+  .n-select-leave-active {
+    transition:
+      opacity 0.15s,
+      translate 0.15s;
+  }
+
+  .n-select-enter-from,
+  .n-select-leave-to {
+    opacity: 0;
+    translate: 0 var(--n-select-shift);
+  }
+
+  .n-select-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.625rem;
+    border-radius: calc(var(--ui-radius, 0.5rem) - 0.125rem);
+    line-height: 1.25;
+    cursor: pointer;
+
+    &[data-active] {
+      background-color: var(--n-select-hover);
+    }
+
+    &[aria-selected="true"] {
+      font-weight: 500;
+    }
+
+    &[aria-disabled="true"] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .n-select-option-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .n-select-description {
+    color: var(--n-select-muted);
+    font-size: 0.8125rem;
+  }
+
+  /* Combobox: a text input that reuses the select list */
+  .n-combobox-control {
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    height: var(--n-input-h, 2.5rem);
+    padding-inline: var(--n-input-px, 0.75rem);
+    border-radius: var(--ui-radius, 0.5rem);
+    font-size: var(--n-input-fs, 0.875rem);
+    box-shadow: inset 0 0 0 1px var(--ui-neutral-300);
+    cursor: text;
+    transition: box-shadow 0.15s;
+
+    @variant dark {
+      box-shadow: inset 0 0 0 1px var(--ui-neutral-700);
+    }
+
+    &:hover:not([data-disabled]) {
+      box-shadow: inset 0 0 0 1px var(--ui-neutral-400);
+    }
+
+    &:focus-within {
+      box-shadow: inset 0 0 0 2px var(--ui-primary-500);
+    }
+
+    &[data-invalid] {
+      box-shadow: inset 0 0 0 1px var(--ui-error-500);
+
+      &:focus-within {
+        box-shadow: inset 0 0 0 2px var(--ui-error-500);
+      }
+    }
+
+    &[data-disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .n-combobox-input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+
+    &::placeholder {
+      color: var(--ui-neutral-400);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  .n-combobox-clear {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    padding: 0.125rem;
+    border: 0;
+    border-radius: 9999px;
+    background: transparent;
+    color: var(--ui-neutral-400);
+    cursor: pointer;
+
+    &:hover {
+      color: var(--ui-neutral-600);
+      background-color: var(--n-select-hover);
+    }
+
+    .n-icon {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  .n-combobox-empty {
+    padding: 0.5rem 0.625rem;
+    color: var(--n-select-muted);
+  }
+}

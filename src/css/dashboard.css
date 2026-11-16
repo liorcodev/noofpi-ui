@@ -1,0 +1,144 @@
+/* Dashboard tokens: override in your CSS, e.g. `:root { --n-dashboard-p: 2rem; }` */
+@layer base {
+  :root {
+    --n-dashboard-p: 1.5rem;
+    --n-dashboard-bg: var(--ui-neutral-50);
+    --n-dashboard-backdrop: rgb(0 0 0 / 0.4);
+
+    @variant dark {
+      --n-dashboard-bg: var(--ui-neutral-900);
+      --n-dashboard-backdrop: rgb(0 0 0 / 0.6);
+    }
+  }
+}
+
+@layer components {
+  /* The header on top; below it the sidebar and the main content, which scrolls on its own */
+  .n-dashboard {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    background-color: var(--n-dashboard-bg);
+    color: var(--ui-neutral-900);
+
+    @variant dark {
+      color: var(--ui-neutral-100);
+    }
+
+    .n-dashboard-body {
+      position: relative;
+      flex: 1;
+      display: flex;
+      min-height: 0;
+    }
+
+    .n-dashboard-main {
+      flex: 1;
+      min-width: 0;
+      box-sizing: border-box;
+      overflow-y: auto;
+      padding: var(--n-dashboard-p);
+    }
+
+    /* Mobile first: the sidebar is a drawer over the content, opened by the header's button */
+    .n-dashboard-sidebar {
+      position: absolute;
+      inset-block: 0;
+      inset-inline-start: 0;
+      z-index: 30;
+      max-width: 85%;
+      transform: translateX(-100%);
+      visibility: hidden;
+      transition:
+        transform 0.2s,
+        visibility 0.2s;
+    }
+    &:dir(rtl) .n-dashboard-sidebar {
+      transform: translateX(100%);
+    }
+    &[data-open] .n-dashboard-sidebar {
+      transform: none;
+      visibility: visible;
+    }
+
+    .n-dashboard-backdrop {
+      position: absolute;
+      inset: 0;
+      z-index: 20;
+      background-color: var(--n-dashboard-backdrop);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    &[data-open] .n-dashboard-backdrop {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* From the breakpoint up: the sidebar sits next to the content, no button or backdrop */
+    &[data-breakpoint="sm"] {
+      @variant sm {
+        .n-dashboard-sidebar {
+          position: static;
+          z-index: auto;
+          max-width: none;
+          flex-shrink: 0;
+          transform: none;
+          visibility: visible;
+        }
+        .n-dashboard-backdrop,
+        .n-header-sidebar-toggle {
+          display: none;
+        }
+      }
+    }
+    &[data-breakpoint="md"] {
+      @variant md {
+        .n-dashboard-sidebar {
+          position: static;
+          z-index: auto;
+          max-width: none;
+          flex-shrink: 0;
+          transform: none;
+          visibility: visible;
+        }
+        .n-dashboard-backdrop,
+        .n-header-sidebar-toggle {
+          display: none;
+        }
+      }
+    }
+    &[data-breakpoint="lg"] {
+      @variant lg {
+        .n-dashboard-sidebar {
+          position: static;
+          z-index: auto;
+          max-width: none;
+          flex-shrink: 0;
+          transform: none;
+          visibility: visible;
+        }
+        .n-dashboard-backdrop,
+        .n-header-sidebar-toggle {
+          display: none;
+        }
+      }
+    }
+    &[data-breakpoint="xl"] {
+      @variant xl {
+        .n-dashboard-sidebar {
+          position: static;
+          z-index: auto;
+          max-width: none;
+          flex-shrink: 0;
+          transform: none;
+          visibility: visible;
+        }
+        .n-dashboard-backdrop,
+        .n-header-sidebar-toggle {
+          display: none;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,165 @@
+/* Override in your CSS, e.g. `:root { --n-card-p: 1rem; }` */
+@layer base {
+  :root {
+    --n-card-p: 1.25rem;
+  }
+}
+
+@layer components {
+  .n-card {
+    --n-card-bg: #fff;
+    --n-card-fg: var(--ui-neutral-900);
+    --n-card-border: var(--n-c-300);
+    --n-card-ring: transparent;
+
+    @variant dark {
+      --n-card-bg: var(--ui-neutral-900);
+      --n-card-fg: var(--ui-neutral-100);
+      --n-card-border: var(--n-c-700);
+    }
+
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: var(--ui-radius, 0.5rem);
+    background-color: var(--n-card-bg);
+    color: var(--n-card-fg);
+    box-shadow: 0 0 0 1px var(--n-card-ring);
+    text-decoration: none;
+
+    &[data-variant="outline"] {
+      --n-card-ring: var(--n-card-border);
+    }
+    &[data-variant="solid"] {
+      --n-card-bg: var(--n-solid-bg, var(--n-c-600));
+      --n-card-fg: var(--n-solid-fg, #fff);
+      --n-card-border: rgb(255 255 255 / 0.25);
+
+      @variant dark {
+        --n-card-bg: var(--n-solid-bg-dark, var(--n-c-500));
+        --n-card-fg: var(--n-solid-fg-dark, var(--n-c-900));
+        --n-card-border: rgb(0 0 0 / 0.2);
+      }
+    }
+    &[data-variant="soft"] {
+      --n-card-bg: var(--n-c-50);
+      --n-card-fg: var(--n-c-900);
+      --n-card-border: var(--n-c-200);
+
+      @variant dark {
+        --n-card-bg: color-mix(in oklab, var(--n-c-500) 10%, transparent);
+        --n-card-fg: var(--n-c-100);
+        --n-card-border: color-mix(in oklab, var(--n-c-500) 25%, transparent);
+      }
+    }
+    &[data-variant="subtle"] {
+      --n-card-bg: var(--n-c-50);
+      --n-card-fg: var(--n-c-900);
+      --n-card-border: var(--n-c-300);
+      --n-card-ring: var(--n-card-border);
+
+      @variant dark {
+        --n-card-bg: color-mix(in oklab, var(--n-c-500) 10%, transparent);
+        --n-card-fg: var(--n-c-100);
+        --n-card-border: color-mix(in oklab, var(--n-c-500) 35%, transparent);
+      }
+    }
+
+    &[data-color="primary"] {
+      --n-c-50: var(--ui-primary-50);
+      --n-c-100: var(--ui-primary-100);
+      --n-c-200: var(--ui-primary-200);
+      --n-c-300: var(--ui-primary-300);
+      --n-c-500: var(--ui-primary-500);
+      --n-c-600: var(--ui-primary-600);
+      --n-c-700: var(--ui-primary-700);
+      --n-c-900: var(--ui-primary-900);
+    }
+    &[data-color="neutral"] {
+      --n-c-50: var(--ui-neutral-50);
+      --n-c-100: var(--ui-neutral-100);
+      --n-c-200: var(--ui-neutral-200);
+      --n-c-300: var(--ui-neutral-200);
+      --n-c-500: var(--ui-neutral-500);
+      --n-c-600: var(--ui-neutral-600);
+      --n-c-700: var(--ui-neutral-800);
+      --n-c-900: var(--ui-neutral-900);
+      --n-solid-bg: var(--ui-neutral-900);
+      --n-solid-bg-dark: #fff;
+      --n-solid-fg-dark: var(--ui-neutral-900);
+    }
+    &[data-color="success"] {
+      --n-c-50: var(--ui-success-50);
+      --n-c-100: var(--ui-success-100);
+      --n-c-200: var(--ui-success-200);
+      --n-c-300: var(--ui-success-300);
+      --n-c-500: var(--ui-success-500);
+      --n-c-600: var(--ui-success-600);
+      --n-c-700: var(--ui-success-700);
+      --n-c-900: var(--ui-success-900);
+    }
+    &[data-color="info"] {
+      --n-c-50: var(--ui-info-50);
+      --n-c-100: var(--ui-info-100);
+      --n-c-200: var(--ui-info-200);
+      --n-c-300: var(--ui-info-300);
+      --n-c-500: var(--ui-info-500);
+      --n-c-600: var(--ui-info-600);
+      --n-c-700: var(--ui-info-700);
+      --n-c-900: var(--ui-info-900);
+    }
+    &[data-color="warning"] {
+      --n-c-50: var(--ui-warning-50);
+      --n-c-100: var(--ui-warning-100);
+      --n-c-200: var(--ui-warning-200);
+      --n-c-300: var(--ui-warning-300);
+      --n-c-500: var(--ui-warning-500);
+      --n-c-600: var(--ui-warning-600);
+      --n-c-700: var(--ui-warning-700);
+      --n-c-900: var(--ui-warning-900);
+    }
+    &[data-color="error"] {
+      --n-c-50: var(--ui-error-50);
+      --n-c-100: var(--ui-error-100);
+      --n-c-200: var(--ui-error-200);
+      --n-c-300: var(--ui-error-300);
+      --n-c-500: var(--ui-error-500);
+      --n-c-600: var(--ui-error-600);
+      --n-c-700: var(--ui-error-700);
+      --n-c-900: var(--ui-error-900);
+    }
+  }
+
+  .n-card-media {
+    position: relative;
+    overflow: hidden;
+
+    & > img,
+    & > video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .n-card-header,
+  .n-card-body,
+  .n-card-footer {
+    padding: var(--n-card-p);
+  }
+
+  .n-card-header,
+  .n-card-footer {
+    border-color: var(--n-card-border);
+  }
+
+  .n-card-header {
+    border-bottom-width: 1px;
+  }
+
+  .n-card-footer {
+    border-top-width: 1px;
+  }
+}

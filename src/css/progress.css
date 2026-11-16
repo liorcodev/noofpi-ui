@@ -1,0 +1,149 @@
+/* Size tokens: override in your CSS, e.g. `:root { --n-progress-h-md: 0.75rem; }` */
+@layer base {
+  :root {
+    --n-progress-h-xs: 0.25rem;
+    --n-progress-h-sm: 0.375rem;
+    --n-progress-h-md: 0.5rem;
+    --n-progress-h-lg: 0.75rem;
+    --n-progress-track: var(--ui-neutral-200);
+
+    @variant dark {
+      --n-progress-track: var(--ui-neutral-800);
+    }
+  }
+}
+
+@layer components {
+  .n-progress {
+    --n-progress-fg: var(--ui-neutral-900);
+    --n-progress-muted: var(--ui-neutral-500);
+    --n-progress-bar-bg: var(--n-c-600);
+
+    @variant dark {
+      --n-progress-fg: var(--ui-neutral-100);
+      --n-progress-muted: var(--ui-neutral-400);
+      --n-progress-bar-bg: var(--n-c-400);
+    }
+
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: column;
+    gap: 0.375rem;
+    min-width: 0;
+
+    &,
+    &[data-size="md"] {
+      --n-progress-h: var(--n-progress-h-md);
+    }
+    &[data-size="xs"] {
+      --n-progress-h: var(--n-progress-h-xs);
+    }
+    &[data-size="sm"] {
+      --n-progress-h: var(--n-progress-h-sm);
+    }
+    &[data-size="lg"] {
+      --n-progress-h: var(--n-progress-h-lg);
+    }
+
+    &[data-color="primary"] {
+      --n-c-400: var(--ui-primary-400);
+      --n-c-600: var(--ui-primary-600);
+    }
+    &[data-color="neutral"] {
+      --n-c-400: var(--ui-neutral-400);
+      --n-c-600: var(--ui-neutral-600);
+    }
+    &[data-color="success"] {
+      --n-c-400: var(--ui-success-400);
+      --n-c-600: var(--ui-success-600);
+    }
+    &[data-color="info"] {
+      --n-c-400: var(--ui-info-400);
+      --n-c-600: var(--ui-info-600);
+    }
+    &[data-color="warning"] {
+      --n-c-400: var(--ui-warning-400);
+      --n-c-600: var(--ui-warning-600);
+    }
+    &[data-color="error"] {
+      --n-c-400: var(--ui-error-400);
+      --n-c-600: var(--ui-error-600);
+    }
+  }
+
+  .n-progress-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  .n-progress-label {
+    color: var(--n-progress-fg);
+    font-weight: 500;
+  }
+
+  .n-progress-value {
+    margin-inline-start: auto;
+    color: var(--n-progress-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .n-progress-track {
+    position: relative;
+    height: var(--n-progress-h);
+    overflow: hidden;
+    border-radius: 9999px;
+    background-color: var(--n-progress-track);
+  }
+
+  .n-progress-bar {
+    height: 100%;
+    border-radius: inherit;
+    background-color: var(--n-progress-bar-bg);
+    transition: width 0.3s ease;
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+
+  .n-progress[data-indeterminate] .n-progress-bar {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    width: 40%;
+    transition: none;
+    animation: n-progress-slide 1.4s ease-in-out infinite;
+
+    @media (prefers-reduced-motion: reduce) {
+      width: 100%;
+      animation: none;
+      opacity: 0.5;
+    }
+  }
+
+  @keyframes n-progress-slide {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(250%);
+    }
+  }
+
+  [dir="rtl"] .n-progress[data-indeterminate] .n-progress-bar {
+    animation-name: n-progress-slide-rtl;
+  }
+
+  @keyframes n-progress-slide-rtl {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(-250%);
+    }
+  }
+}

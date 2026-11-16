@@ -1,0 +1,115 @@
+/*
+ * noofpi-ui colors.
+ *
+ * `primary` follows the Color Theme Studio theme: its `theme.css` defines `--color-theme-50` ... `--color-theme-950`
+ * (and `.theme.<name>` classes that swap them). Without that file the shades below are noofpi's own green.
+ *
+ * Override any `--ui-*` variable after importing noofpi-ui, e.g. for a studio export with another prefix:
+ *   :root { --ui-primary-500: var(--color-brand-500); }
+ */
+
+@theme inline {
+  --color-primary-50: var(--ui-primary-50);
+  --color-primary-100: var(--ui-primary-100);
+  --color-primary-200: var(--ui-primary-200);
+  --color-primary-300: var(--ui-primary-300);
+  --color-primary-400: var(--ui-primary-400);
+  --color-primary-500: var(--ui-primary-500);
+  --color-primary-600: var(--ui-primary-600);
+  --color-primary-700: var(--ui-primary-700);
+  --color-primary-800: var(--ui-primary-800);
+  --color-primary-900: var(--ui-primary-900);
+  --color-primary-950: var(--ui-primary-950);
+}
+
+/* `.theme` too, so a theme applied to a subtree re-resolves the shades there */
+:root,
+.theme {
+  --ui-primary-50: var(--color-theme-50, #d6fee7);
+  --ui-primary-100: var(--color-theme-100, #bdfad8);
+  --ui-primary-200: var(--color-theme-200, #9eedc2);
+  --ui-primary-300: var(--color-theme-300, #75daa8);
+  --ui-primary-400: var(--color-theme-400, #4bc78f);
+  --ui-primary-500: var(--color-theme-500, #1ba872);
+  --ui-primary-600: var(--color-theme-600, #007e52);
+  --ui-primary-700: var(--color-theme-700, #005737);
+  --ui-primary-800: var(--color-theme-800, #003620);
+  --ui-primary-900: var(--color-theme-900, #001f10);
+  --ui-primary-950: var(--color-theme-950, #000e06);
+
+  /* Grays one step darker in light mode and one step lighter in dark mode, so the light shades (borders, hovers, shaded blocks) show up */
+  --ui-neutral-50: var(--color-zinc-100);
+  --ui-neutral-100: var(--color-zinc-200);
+  --ui-neutral-200: var(--color-zinc-300);
+  --ui-neutral-300: var(--color-zinc-400);
+  --ui-neutral-400: var(--color-zinc-500);
+  --ui-neutral-500: var(--color-zinc-600);
+  --ui-neutral-600: var(--color-zinc-700);
+  --ui-neutral-700: var(--color-zinc-800);
+  --ui-neutral-800: var(--color-zinc-900);
+  --ui-neutral-900: var(--color-zinc-950);
+  --ui-neutral-950: var(--color-zinc-950);
+
+  @variant dark {
+    --ui-neutral-50: var(--color-zinc-50);
+    --ui-neutral-100: var(--color-zinc-50);
+    --ui-neutral-200: var(--color-zinc-100);
+    --ui-neutral-300: var(--color-zinc-200);
+    --ui-neutral-400: var(--color-zinc-300);
+    --ui-neutral-500: var(--color-zinc-400);
+    --ui-neutral-600: var(--color-zinc-500);
+    --ui-neutral-700: var(--color-zinc-600);
+    --ui-neutral-800: var(--color-zinc-700);
+    --ui-neutral-900: var(--color-zinc-800);
+    --ui-neutral-950: var(--color-zinc-900);
+  }
+
+  --ui-success-50: var(--color-green-50);
+  --ui-success-100: var(--color-green-100);
+  --ui-success-200: var(--color-green-200);
+  --ui-success-300: var(--color-green-300);
+  --ui-success-400: var(--color-green-400);
+  --ui-success-500: var(--color-green-500);
+  --ui-success-600: var(--color-green-600);
+  --ui-success-700: var(--color-green-700);
+  --ui-success-800: var(--color-green-800);
+  --ui-success-900: var(--color-green-900);
+  --ui-success-950: var(--color-green-950);
+
+  --ui-info-50: var(--color-sky-50);
+  --ui-info-100: var(--color-sky-100);
+  --ui-info-200: var(--color-sky-200);
+  --ui-info-300: var(--color-sky-300);
+  --ui-info-400: var(--color-sky-400);
+  --ui-info-500: var(--color-sky-500);
+  --ui-info-600: var(--color-sky-600);
+  --ui-info-700: var(--color-sky-700);
+  --ui-info-800: var(--color-sky-800);
+  --ui-info-900: var(--color-sky-900);
+  --ui-info-950: var(--color-sky-950);
+
+  /* Own orange scale (constant hue ~22deg) so lighter hover/active shades stay orange instead of drifting to yellow */
+  --ui-warning-50: #fff3ec;
+  --ui-warning-100: #ffe3d2;
+  --ui-warning-200: #ffc6a3;
+  --ui-warning-300: #ffa26b;
+  --ui-warning-400: #ff7f3a;
+  --ui-warning-500: #f9611a;
+  --ui-warning-600: #e84a0c;
+  --ui-warning-700: #c0370c;
+  --ui-warning-800: #982c11;
+  --ui-warning-900: #7a2712;
+  --ui-warning-950: #431107;
+
+  --ui-error-50: var(--color-red-50);
+  --ui-error-100: var(--color-red-100);
+  --ui-error-200: var(--color-red-200);
+  --ui-error-300: var(--color-red-300);
+  --ui-error-400: var(--color-red-400);
+  --ui-error-500: var(--color-red-500);
+  --ui-error-600: var(--color-red-600);
+  --ui-error-700: var(--color-red-700);
+  --ui-error-800: var(--color-red-800);
+  --ui-error-900: var(--color-red-900);
+  --ui-error-950: var(--color-red-950);
+}

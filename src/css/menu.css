@@ -1,0 +1,219 @@
+/* Menu tokens: override in your CSS, e.g. `:root { --n-menu-min-w: 14rem; }` */
+@layer base {
+  :root {
+    --n-menu-min-w: 12rem;
+    --n-menu-offset: 0.375rem;
+    --n-menu-z: 50;
+    --n-menu-bg: #fff;
+    --n-menu-border: var(--ui-neutral-200);
+    --n-menu-fg: var(--ui-neutral-800);
+    --n-menu-muted: var(--ui-neutral-500);
+    --n-menu-hover: var(--ui-neutral-100);
+    --n-menu-shadow:
+      0 10px 20px -4px rgb(0 0 0 / 0.2), 0 4px 8px -2px rgb(0 0 0 / 0.12);
+
+    @variant dark {
+      --n-menu-bg: var(--ui-neutral-900);
+      --n-menu-border: var(--ui-neutral-800);
+      --n-menu-fg: var(--ui-neutral-100);
+      --n-menu-muted: var(--ui-neutral-400);
+      --n-menu-hover: var(--ui-neutral-800);
+      --n-menu-shadow:
+        0 10px 20px -4px rgb(0 0 0 / 0.7), 0 4px 8px -2px rgb(0 0 0 / 0.45);
+    }
+  }
+}
+
+@layer components {
+  .n-menu {
+    position: relative;
+    display: inline-flex;
+    vertical-align: middle;
+
+    /* Lifts the open menu above the content that follows it */
+    &[data-open] {
+      z-index: var(--n-menu-z);
+    }
+  }
+
+  .n-menu-trigger {
+    display: inline-flex;
+    border-radius: var(--ui-radius, 0.5rem);
+
+    /* The wrapper is the trigger when its content isn't focusable (an `NAvatar`) */
+    &[role="button"] {
+      cursor: pointer;
+      border-radius: 9999px;
+
+      &:focus-visible {
+        outline: 2px solid var(--ui-primary-500);
+        outline-offset: 2px;
+      }
+
+      &[aria-disabled="true"] {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+    }
+  }
+
+  .n-menu-panel {
+    --n-menu-shift: -0.25rem;
+
+    position: absolute;
+    z-index: var(--n-menu-z);
+    box-sizing: border-box;
+    min-width: max(var(--n-menu-min-w), 100%);
+    max-width: 90vw;
+    padding: 0.25rem;
+    border: 1px solid var(--n-menu-border);
+    border-radius: var(--ui-radius, 0.5rem);
+    background-color: var(--n-menu-bg);
+    color: var(--n-menu-fg);
+    box-shadow: var(--n-menu-shadow);
+    font-size: 0.875rem;
+    outline: none;
+
+    .n-menu[data-placement^="bottom"] > & {
+      top: calc(100% + var(--n-menu-offset));
+      transform-origin: top;
+    }
+    .n-menu[data-placement^="top"] > & {
+      bottom: calc(100% + var(--n-menu-offset));
+      transform-origin: bottom;
+      --n-menu-shift: 0.25rem;
+    }
+    .n-menu[data-placement$="start"] > & {
+      inset-inline-start: 0;
+    }
+    .n-menu[data-placement$="end"] > & {
+      inset-inline-end: 0;
+    }
+    .n-menu[data-placement="bottom"] > &,
+    .n-menu[data-placement="top"] > & {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+
+  .n-menu-enter-active,
+  .n-menu-leave-active {
+    transition:
+      opacity 0.15s,
+      translate 0.15s;
+  }
+
+  .n-menu-enter-from,
+  .n-menu-leave-to {
+    opacity: 0;
+    translate: 0 var(--n-menu-shift);
+  }
+
+  .n-menu-header {
+    padding: 0.5rem 0.625rem;
+  }
+
+  .n-menu-label {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem 0.625rem;
+    line-height: 1.3;
+  }
+
+  .n-menu-label-text {
+    font-weight: 600;
+  }
+
+  .n-menu-label-description {
+    color: var(--n-menu-muted);
+    font-size: 0.8125rem;
+    overflow-wrap: anywhere;
+  }
+
+  .n-menu-separator {
+    height: 1px;
+    margin: 0.25rem -0.25rem;
+    background-color: var(--n-menu-border);
+  }
+
+  .n-menu-item {
+    --n-menu-item-fg: var(--n-menu-fg);
+    --n-menu-item-bg: var(--n-menu-hover);
+
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.5rem 0.625rem;
+    border: 0;
+    border-radius: calc(var(--ui-radius, 0.5rem) - 0.125rem);
+    background: none;
+    color: var(--n-menu-item-fg);
+    font: inherit;
+    line-height: 1.25;
+    text-align: start;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+      background-color: var(--n-menu-item-bg);
+    }
+
+    &[aria-disabled="true"] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &[data-color="primary"] {
+      --n-menu-accent: var(--ui-primary-500);
+      --n-menu-item-fg: var(--ui-primary-600);
+    }
+    &[data-color="success"] {
+      --n-menu-accent: var(--ui-success-500);
+      --n-menu-item-fg: var(--ui-success-600);
+    }
+    &[data-color="info"] {
+      --n-menu-accent: var(--ui-info-500);
+      --n-menu-item-fg: var(--ui-info-600);
+    }
+    &[data-color="warning"] {
+      --n-menu-accent: var(--ui-warning-500);
+      --n-menu-item-fg: var(--ui-warning-600);
+    }
+    &[data-color="error"] {
+      --n-menu-accent: var(--ui-error-500);
+      --n-menu-item-fg: var(--ui-error-600);
+    }
+    &[data-color]:not([data-color="neutral"]) {
+      --n-menu-item-bg: color-mix(
+        in oklab,
+        var(--n-menu-accent) 12%,
+        transparent
+      );
+
+      @variant dark {
+        --n-menu-item-fg: color-mix(in oklab, var(--n-menu-accent) 70%, white);
+      }
+    }
+  }
+
+  .n-menu-icon {
+    flex-shrink: 0;
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
+  .n-menu-item-label {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .n-menu-shortcut {
+    margin-inline-start: auto;
+    padding-inline-start: 1rem;
+    color: var(--n-menu-muted);
+    font-size: 0.75rem;
+  }
+}

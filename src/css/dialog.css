@@ -1,0 +1,215 @@
+/* Dialog tokens: override in your CSS, e.g. `:root { --n-dialog-w: 40rem; }` */
+@layer base {
+  :root {
+    --n-dialog-z: 60;
+    --n-dialog-backdrop: rgb(0 0 0 / 0.5);
+    --n-dialog-bg: #fff;
+    --n-dialog-border: var(--ui-neutral-200);
+    --n-dialog-fg: var(--ui-neutral-800);
+    --n-dialog-muted: var(--ui-neutral-500);
+    --n-dialog-shadow:
+      0 20px 40px -8px rgb(0 0 0 / 0.25), 0 8px 16px -4px rgb(0 0 0 / 0.15);
+
+    @variant dark {
+      --n-dialog-backdrop: rgb(0 0 0 / 0.7);
+      --n-dialog-bg: var(--ui-neutral-900);
+      --n-dialog-border: var(--ui-neutral-800);
+      --n-dialog-fg: var(--ui-neutral-100);
+      --n-dialog-muted: var(--ui-neutral-400);
+    }
+  }
+}
+
+@layer components {
+  .n-dialog {
+    --n-dialog-dir: 1;
+    --n-dialog-from: translateY(0.75rem) scale(0.97);
+
+    position: fixed;
+    inset: 0;
+    z-index: var(--n-dialog-z);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background-color: var(--n-dialog-backdrop);
+    outline: none;
+
+    &:dir(rtl) {
+      --n-dialog-dir: -1;
+    }
+
+    &[data-size="sm"] {
+      --n-dialog-w: 24rem;
+    }
+    &[data-size="md"] {
+      --n-dialog-w: 32rem;
+    }
+    &[data-size="lg"] {
+      --n-dialog-w: 42rem;
+    }
+    &[data-size="xl"] {
+      --n-dialog-w: 56rem;
+    }
+    &[data-size="full"] {
+      --n-dialog-w: 100%;
+    }
+
+    &[data-placement="top"],
+    &[data-placement="bottom"],
+    &[data-placement="start"],
+    &[data-placement="end"] {
+      padding: 0;
+    }
+    &[data-placement="top"] {
+      align-items: flex-start;
+      --n-dialog-from: translateY(-100%);
+    }
+    &[data-placement="bottom"] {
+      align-items: flex-end;
+      --n-dialog-from: translateY(100%);
+    }
+    &[data-placement="start"] {
+      justify-content: flex-start;
+      --n-dialog-from: translateX(calc(-100% * var(--n-dialog-dir)));
+    }
+    &[data-placement="end"] {
+      justify-content: flex-end;
+      --n-dialog-from: translateX(calc(100% * var(--n-dialog-dir)));
+    }
+  }
+
+  .n-dialog-panel {
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: column;
+    width: 100%;
+    max-width: var(--n-dialog-w, 32rem);
+    max-height: calc(100dvh - 2rem);
+    border: 1px solid var(--n-dialog-border);
+    border-radius: calc(var(--ui-radius, 0.5rem) + 0.25rem);
+    background-color: var(--n-dialog-bg);
+    color: var(--n-dialog-fg);
+    box-shadow: var(--n-dialog-shadow);
+    outline: none;
+
+    .n-dialog[data-placement="top"] > &,
+    .n-dialog[data-placement="bottom"] > & {
+      max-width: none;
+      max-height: 90dvh;
+    }
+    .n-dialog[data-placement="top"] > & {
+      border-width: 0 0 1px;
+      border-radius: 0 0 calc(var(--ui-radius, 0.5rem) + 0.25rem)
+        calc(var(--ui-radius, 0.5rem) + 0.25rem);
+    }
+    .n-dialog[data-placement="bottom"] > & {
+      border-width: 1px 0 0;
+      border-radius: calc(var(--ui-radius, 0.5rem) + 0.25rem)
+        calc(var(--ui-radius, 0.5rem) + 0.25rem) 0 0;
+    }
+    .n-dialog[data-placement="start"] > &,
+    .n-dialog[data-placement="end"] > & {
+      height: 100%;
+      max-height: none;
+      border-radius: 0;
+    }
+    .n-dialog[data-placement="start"] > & {
+      border-width: 0 1px 0 0;
+
+      &:dir(rtl) {
+        border-width: 0 0 0 1px;
+      }
+    }
+    .n-dialog[data-placement="end"] > & {
+      border-width: 0 0 0 1px;
+
+      &:dir(rtl) {
+        border-width: 0 1px 0 0;
+      }
+    }
+  }
+
+  .n-dialog-enter-active,
+  .n-dialog-leave-active {
+    transition: opacity 0.2s;
+
+    & > .n-dialog-panel {
+      transition:
+        transform 0.2s,
+        opacity 0.2s;
+    }
+  }
+
+  .n-dialog-enter-from,
+  .n-dialog-leave-to {
+    opacity: 0;
+
+    & > .n-dialog-panel {
+      opacity: 0;
+      transform: var(--n-dialog-from);
+    }
+  }
+
+  .n-dialog-header {
+    display: flex;
+    flex-shrink: 0;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.25rem 0;
+  }
+
+  .n-dialog-heading {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .n-dialog-title {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+
+  .n-dialog-description {
+    margin: 0.25rem 0 0;
+    color: var(--n-dialog-muted);
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+
+  .n-dialog-close {
+    flex-shrink: 0;
+    margin-inline-start: auto;
+  }
+
+  .n-dialog-body {
+    flex: 1;
+    min-height: 0;
+    padding: 1rem 1.25rem;
+    overflow-y: auto;
+    font-size: 0.875rem;
+  }
+
+  .n-dialog-footer {
+    display: flex;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem 1rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .n-dialog-enter-active,
+    .n-dialog-leave-active,
+    .n-dialog-enter-active > .n-dialog-panel,
+    .n-dialog-leave-active > .n-dialog-panel {
+      transition: none;
+    }
+  }
+}

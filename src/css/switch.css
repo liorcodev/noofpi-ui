@@ -1,0 +1,133 @@
+/* Size tokens: override in your CSS, e.g. `:root { --n-switch-h-md: 1.5rem; }` */
+@layer base {
+  :root {
+    --n-switch-h-sm: 1rem;
+    --n-switch-h-md: 1.25rem;
+    --n-switch-h-lg: 1.5rem;
+    --n-switch-off: var(--ui-neutral-300);
+
+    @variant dark {
+      --n-switch-off: var(--ui-neutral-700);
+    }
+  }
+}
+
+@layer components {
+  .n-switch {
+    --n-switch-h: var(--n-switch-h-md);
+    --n-switch-on: var(--n-c-600);
+
+    @variant dark {
+      --n-switch-on: var(--n-c-400);
+    }
+
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+
+    &[data-size="sm"] {
+      --n-switch-h: var(--n-switch-h-sm);
+    }
+    &[data-size="lg"] {
+      --n-switch-h: var(--n-switch-h-lg);
+      font-size: 1rem;
+    }
+
+    &:has(:disabled) {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &,
+    &[data-color="primary"] {
+      --n-c-400: var(--ui-primary-400);
+      --n-c-600: var(--ui-primary-600);
+    }
+    &[data-color="neutral"] {
+      --n-c-400: var(--ui-neutral-400);
+      --n-c-600: var(--ui-neutral-600);
+    }
+    &[data-color="success"] {
+      --n-c-400: var(--ui-success-400);
+      --n-c-600: var(--ui-success-600);
+    }
+    &[data-color="info"] {
+      --n-c-400: var(--ui-info-400);
+      --n-c-600: var(--ui-info-600);
+    }
+    &[data-color="warning"] {
+      --n-c-400: var(--ui-warning-400);
+      --n-c-600: var(--ui-warning-600);
+    }
+    &[data-color="error"] {
+      --n-c-400: var(--ui-error-400);
+      --n-c-600: var(--ui-error-600);
+    }
+  }
+
+  .n-switch-input {
+    --n-switch-gap: 0.125rem;
+    --n-switch-thumb: calc(var(--n-switch-h) - var(--n-switch-gap) * 2);
+
+    position: relative;
+    width: calc(var(--n-switch-h) * 1.8);
+    height: var(--n-switch-h);
+    margin: 0;
+    flex-shrink: 0;
+    appearance: none;
+    box-sizing: border-box;
+    border-radius: 9999px;
+    background-color: var(--n-switch-off);
+    cursor: inherit;
+    transition: background-color 0.15s ease;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset-block-start: var(--n-switch-gap);
+      inset-inline-start: var(--n-switch-gap);
+      width: var(--n-switch-thumb);
+      height: var(--n-switch-thumb);
+      border-radius: 9999px;
+      background-color: white;
+      box-shadow: 0 1px 2px rgb(0 0 0 / 0.25);
+      transition: transform 0.15s ease;
+    }
+
+    &:checked {
+      background-color: var(--n-switch-on);
+
+      &::before {
+        transform: translateX(
+          calc(var(--n-switch-h) * 1.8 - var(--n-switch-h))
+        );
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--n-switch-on);
+      outline-offset: 2px;
+    }
+
+    &[aria-invalid="true"] {
+      outline: 1px solid var(--ui-error-500);
+      outline-offset: 1px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+
+      &::before {
+        transition: none;
+      }
+    }
+  }
+
+  [dir="rtl"] .n-switch-input:checked::before {
+    transform: translateX(
+      calc((var(--n-switch-h) * 1.8 - var(--n-switch-h)) * -1)
+    );
+  }
+}

@@ -1,0 +1,9 @@
+@layer components {
+  /* Sized by font-size (1em); override with any utility, e.g. `class="text-2xl"` or `class="size-6"` */
+  .n-icon {
+    display: inline-block;
+    flex-shrink: 0;
+    width: 1em;
+    height: 1em;
+  }
+}

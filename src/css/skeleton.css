@@ -1,0 +1,71 @@
+/* Placeholder color: override in your CSS, e.g. `:root { --n-skeleton-bg: var(--ui-neutral-300); }` */
+@layer base {
+  :root {
+    --n-skeleton-bg: var(--ui-neutral-200);
+
+    @variant dark {
+      --n-skeleton-bg: var(--ui-neutral-800);
+    }
+  }
+}
+
+@layer components {
+  .n-skeleton {
+    display: block;
+    box-sizing: border-box;
+    min-width: 0;
+
+    &[data-shape="rect"] {
+      width: var(--n-skeleton-w, 100%);
+      height: var(--n-skeleton-h, 1rem);
+      border-radius: calc(var(--ui-radius, 0.5rem) * 0.75);
+    }
+
+    &[data-shape="circle"] {
+      --n-skeleton-size: var(--n-skeleton-w, var(--n-skeleton-h, 2.5rem));
+      flex-shrink: 0;
+      width: var(--n-skeleton-size);
+      height: var(--n-skeleton-size);
+      border-radius: 9999px;
+    }
+
+    &[data-shape="text"] {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      width: var(--n-skeleton-w, 100%);
+    }
+
+    &[data-shape="rect"],
+    &[data-shape="circle"] {
+      background-color: var(--n-skeleton-bg);
+    }
+
+    &[data-animated][data-shape="rect"],
+    &[data-animated][data-shape="circle"],
+    &[data-animated] .n-skeleton-line {
+      animation: n-skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+      @media (prefers-reduced-motion: reduce) {
+        animation: none;
+      }
+    }
+  }
+
+  .n-skeleton-line {
+    display: block;
+    height: var(--n-skeleton-h, 0.875rem);
+    border-radius: calc(var(--ui-radius, 0.5rem) * 0.5);
+    background-color: var(--n-skeleton-bg);
+
+    &:last-child:not(:first-child) {
+      width: 60%;
+    }
+  }
+
+  @keyframes n-skeleton-pulse {
+    50% {
+      opacity: 0.5;
+    }
+  }
+}

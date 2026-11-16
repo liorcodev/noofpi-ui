@@ -1,0 +1,435 @@
+/* Size tokens: override in your CSS, e.g. `:root { --n-btn-h-md: 3rem; }` */
+@layer base {
+  :root {
+    --n-btn-h-xxs: 1.25rem;
+    --n-btn-px-xxs: 0.375rem;
+    --n-btn-fs-xxs: 0.625rem;
+    --n-btn-gap-xxs: 0.25rem;
+    --n-btn-icon-xxs: 0.75rem;
+
+    --n-btn-h-xs: 1.5rem;
+    --n-btn-px-xs: 0.5rem;
+    --n-btn-fs-xs: 0.75rem;
+    --n-btn-gap-xs: 0.25rem;
+    --n-btn-icon-xs: 0.875rem;
+
+    --n-btn-h-sm: 2rem;
+    --n-btn-px-sm: 0.75rem;
+    --n-btn-fs-sm: 0.8125rem;
+    --n-btn-gap-sm: 0.375rem;
+    --n-btn-icon-sm: 1rem;
+
+    --n-btn-h-md: 2.5rem;
+    --n-btn-px-md: 1rem;
+    --n-btn-fs-md: 0.875rem;
+    --n-btn-gap-md: 0.5rem;
+    --n-btn-icon-md: 1.125rem;
+
+    --n-btn-h-lg: 2.875rem;
+    --n-btn-px-lg: 1.25rem;
+    --n-btn-fs-lg: 1rem;
+    --n-btn-gap-lg: 0.5rem;
+    --n-btn-icon-lg: 1.25rem;
+
+    --n-btn-h-xl: 3.25rem;
+    --n-btn-px-xl: 1.5rem;
+    --n-btn-fs-xl: 1.125rem;
+    --n-btn-gap-xl: 0.625rem;
+    --n-btn-icon-xl: 1.5rem;
+
+    --n-btn-h-xxl: 3.75rem;
+    --n-btn-px-xxl: 1.75rem;
+    --n-btn-fs-xxl: 1.25rem;
+    --n-btn-gap-xxl: 0.75rem;
+    --n-btn-icon-xxl: 1.75rem;
+  }
+}
+
+/* Responsive props are classes like `md:n-size-lg`; Tailwind can't see them being assembled in NButton */
+@source inline("{,sm:,md:,lg:,xl:,2xl:}n-size-{xxs,xs,sm,md,lg,xl,xxl}");
+@source inline("{,sm:,md:,lg:,xl:,2xl:}n-shape-{rounded,square,pill,circle}");
+@source inline("{,sm:,md:,lg:,xl:,2xl:}n-{block,inline}");
+
+@utility n-size-xxs {
+  --n-btn-h: var(--n-btn-h-xxs);
+  --n-btn-px: var(--n-btn-px-xxs);
+  --n-btn-fs: var(--n-btn-fs-xxs);
+  --n-btn-gap: var(--n-btn-gap-xxs);
+  --n-btn-icon: var(--n-btn-icon-xxs);
+}
+@utility n-size-xs {
+  --n-btn-h: var(--n-btn-h-xs);
+  --n-btn-px: var(--n-btn-px-xs);
+  --n-btn-fs: var(--n-btn-fs-xs);
+  --n-btn-gap: var(--n-btn-gap-xs);
+  --n-btn-icon: var(--n-btn-icon-xs);
+}
+@utility n-size-sm {
+  --n-btn-h: var(--n-btn-h-sm);
+  --n-btn-px: var(--n-btn-px-sm);
+  --n-btn-fs: var(--n-btn-fs-sm);
+  --n-btn-gap: var(--n-btn-gap-sm);
+  --n-btn-icon: var(--n-btn-icon-sm);
+}
+@utility n-size-md {
+  --n-btn-h: var(--n-btn-h-md);
+  --n-btn-px: var(--n-btn-px-md);
+  --n-btn-fs: var(--n-btn-fs-md);
+  --n-btn-gap: var(--n-btn-gap-md);
+  --n-btn-icon: var(--n-btn-icon-md);
+}
+@utility n-size-lg {
+  --n-btn-h: var(--n-btn-h-lg);
+  --n-btn-px: var(--n-btn-px-lg);
+  --n-btn-fs: var(--n-btn-fs-lg);
+  --n-btn-gap: var(--n-btn-gap-lg);
+  --n-btn-icon: var(--n-btn-icon-lg);
+}
+@utility n-size-xl {
+  --n-btn-h: var(--n-btn-h-xl);
+  --n-btn-px: var(--n-btn-px-xl);
+  --n-btn-fs: var(--n-btn-fs-xl);
+  --n-btn-gap: var(--n-btn-gap-xl);
+  --n-btn-icon: var(--n-btn-icon-xl);
+}
+@utility n-size-xxl {
+  --n-btn-h: var(--n-btn-h-xxl);
+  --n-btn-px: var(--n-btn-px-xxl);
+  --n-btn-fs: var(--n-btn-fs-xxl);
+  --n-btn-gap: var(--n-btn-gap-xxl);
+  --n-btn-icon: var(--n-btn-icon-xxl);
+}
+
+/* Shapes only set variables (`initial` falls back to the default in `.n-button`), so `rounded-*` utilities still win */
+@utility n-shape-rounded {
+  --n-btn-radius: var(--ui-radius, 0.5rem);
+  --n-btn-fit-w: initial;
+  --n-btn-fit-px: initial;
+}
+@utility n-shape-square {
+  --n-btn-radius: 0px;
+  --n-btn-fit-w: initial;
+  --n-btn-fit-px: initial;
+}
+@utility n-shape-pill {
+  --n-btn-radius: 9999px;
+  --n-btn-fit-w: initial;
+  --n-btn-fit-px: initial;
+}
+@utility n-shape-circle {
+  --n-btn-radius: 9999px;
+  --n-btn-fit-w: var(--n-btn-h);
+  --n-btn-fit-px: 0px;
+}
+
+@utility n-block {
+  --n-btn-block-w: 100%;
+}
+@utility n-inline {
+  --n-btn-block-w: initial;
+}
+
+@layer components {
+  .n-button {
+    /* Per-color shades, picked by `data-color`. The tones are what each variant is built from */
+    --n-tone: var(--n-c-600);
+    --n-edge: var(--n-c-500);
+    --n-edge-soft: color-mix(in oklab, var(--n-tone) 45%, transparent);
+    --n-tint: var(--n-c-50);
+    --n-tint-hover: var(--n-c-100);
+    --n-tint-active: var(--n-c-200);
+
+    @variant dark {
+      --n-tone: var(--n-c-400);
+      --n-edge: var(--n-c-400);
+      --n-edge-soft: color-mix(in oklab, var(--n-c-500) 25%, transparent);
+      --n-tint: color-mix(in oklab, var(--n-c-500) 10%, transparent);
+      --n-tint-hover: color-mix(in oklab, var(--n-c-500) 16%, transparent);
+      --n-tint-active: color-mix(in oklab, var(--n-c-500) 22%, transparent);
+    }
+
+    position: relative;
+    display: inline-flex;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    gap: var(--n-btn-gap, 0.5rem);
+    height: var(--n-btn-h, 2.5rem);
+    width: var(--n-btn-block-w, var(--n-btn-fit-w, auto));
+    padding-inline: var(--n-btn-fit-px, var(--n-btn-px, 1rem));
+    border-radius: var(--n-btn-radius, var(--ui-radius, 0.5rem));
+    border: 0;
+    font-size: var(--n-btn-fs, 0.875rem);
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    background-color: var(--n-bg, transparent);
+    color: var(--n-fg, inherit);
+    box-shadow: inset 0 0 0 1px var(--n-ring, transparent);
+    transition:
+      color 0.15s,
+      background-color 0.15s,
+      box-shadow 0.15s,
+      opacity 0.15s;
+
+    &:focus-visible {
+      outline: 2px solid var(--n-c-500);
+      outline-offset: 2px;
+    }
+
+    &:disabled,
+    &[aria-disabled="true"] {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    &[data-loading] {
+      cursor: progress;
+    }
+
+    &:not(:disabled, [aria-disabled="true"]):hover {
+      background-color: var(--n-bg-hover, var(--n-bg, transparent));
+      color: var(--n-fg-hover, var(--n-fg, inherit));
+    }
+
+    &:not(:disabled, [aria-disabled="true"]):active {
+      background-color: var(
+        --n-bg-active,
+        var(--n-bg-hover, var(--n-bg, transparent))
+      );
+    }
+
+    /* No label: a square around the icon (a circle with `shape="circle"`) */
+    &[data-icon-only] {
+      width: var(--n-btn-block-w, var(--n-btn-h, 2.5rem));
+      padding-inline: 0;
+    }
+
+    /* variants */
+    &[data-variant="solid"] {
+      --n-bg: var(--n-c-500);
+      --n-bg-hover: var(--n-c-600);
+      --n-bg-active: var(--n-c-700);
+      --n-fg: #fff;
+
+      @variant dark {
+        --n-bg: var(--n-c-400);
+        --n-bg-hover: var(--n-c-300);
+        --n-bg-active: var(--n-c-200);
+        --n-fg: var(--n-c-950);
+      }
+    }
+
+    &[data-variant="outline"] {
+      --n-fg: var(--n-tone);
+      --n-ring: var(--n-edge);
+      --n-bg-hover: var(--n-tint);
+      --n-bg-active: var(--n-tint-hover);
+    }
+
+    /* Rests on the shade it used to only show on hover, so hover and press step darker */
+    &[data-variant="soft"] {
+      --n-bg: var(--n-tint-hover);
+      --n-fg: var(--n-tone);
+      --n-bg-hover: var(--n-tint-active);
+      --n-bg-active: color-mix(
+        in oklab,
+        var(--n-tint-active) 85%,
+        var(--n-tone)
+      );
+    }
+
+    &[data-variant="subtle"] {
+      --n-bg: var(--n-tint);
+      --n-fg: var(--n-tone);
+      --n-ring: var(--n-edge-soft);
+      --n-bg-hover: var(--n-tint-hover);
+      --n-bg-active: var(--n-tint-active);
+    }
+
+    &[data-variant="ghost"] {
+      --n-fg: var(--n-tone);
+      --n-bg-hover: var(--n-tint);
+      --n-bg-active: var(--n-tint-hover);
+    }
+
+    &[data-variant="link"] {
+      --n-fg: var(--n-tone);
+      --n-fg-hover: var(--n-c-700);
+      height: auto;
+      width: auto;
+      padding-inline: 0;
+      border-radius: 0.25rem;
+
+      @variant dark {
+        --n-fg-hover: var(--n-c-300);
+      }
+
+      &:not(:disabled, [aria-disabled="true"]):hover {
+        text-decoration: underline;
+        text-underline-offset: 4px;
+      }
+    }
+
+    /* Neutral has no accent: solid is inverted text color, the rest use a grey edge */
+    &[data-color="neutral"] {
+      --n-tone: var(--n-c-700);
+      --n-edge: var(--n-c-300);
+      --n-edge-soft: var(--n-c-300);
+
+      @variant dark {
+        --n-tone: var(--n-c-200);
+        --n-edge: var(--n-c-700);
+        --n-edge-soft: var(--n-c-700);
+        --n-tint: var(--n-c-900);
+        --n-tint-hover: var(--n-c-800);
+        --n-tint-active: var(--n-c-700);
+      }
+
+      &[data-variant="solid"] {
+        --n-bg: var(--n-c-900);
+        --n-bg-hover: var(--n-c-800);
+        --n-bg-active: var(--n-c-700);
+        --n-fg: #fff;
+
+        @variant dark {
+          --n-bg: var(--n-c-50);
+          --n-bg-hover: var(--n-c-100);
+          --n-bg-active: var(--n-c-200);
+          --n-fg: var(--n-c-900);
+        }
+      }
+
+      &[data-variant="link"] {
+        --n-fg-hover: var(--n-c-900);
+
+        @variant dark {
+          --n-fg-hover: var(--n-c-50);
+        }
+      }
+    }
+
+    &[data-color="primary"] {
+      --n-c-50: var(--ui-primary-50);
+      --n-c-100: var(--ui-primary-100);
+      --n-c-200: var(--ui-primary-200);
+      --n-c-300: var(--ui-primary-300);
+      --n-c-400: var(--ui-primary-400);
+      --n-c-500: var(--ui-primary-500);
+      --n-c-600: var(--ui-primary-600);
+      --n-c-700: var(--ui-primary-700);
+      --n-c-800: var(--ui-primary-800);
+      --n-c-900: var(--ui-primary-900);
+      --n-c-950: var(--ui-primary-950);
+    }
+    &[data-color="neutral"] {
+      --n-c-50: var(--ui-neutral-50);
+      --n-c-100: var(--ui-neutral-100);
+      --n-c-200: var(--ui-neutral-200);
+      --n-c-300: var(--ui-neutral-300);
+      --n-c-400: var(--ui-neutral-400);
+      --n-c-500: var(--ui-neutral-500);
+      --n-c-600: var(--ui-neutral-600);
+      --n-c-700: var(--ui-neutral-700);
+      --n-c-800: var(--ui-neutral-800);
+      --n-c-900: var(--ui-neutral-900);
+      --n-c-950: var(--ui-neutral-950);
+    }
+    &[data-color="success"] {
+      --n-c-50: var(--ui-success-50);
+      --n-c-100: var(--ui-success-100);
+      --n-c-200: var(--ui-success-200);
+      --n-c-300: var(--ui-success-300);
+      --n-c-400: var(--ui-success-400);
+      --n-c-500: var(--ui-success-500);
+      --n-c-600: var(--ui-success-600);
+      --n-c-700: var(--ui-success-700);
+      --n-c-800: var(--ui-success-800);
+      --n-c-900: var(--ui-success-900);
+      --n-c-950: var(--ui-success-950);
+    }
+    &[data-color="info"] {
+      --n-c-50: var(--ui-info-50);
+      --n-c-100: var(--ui-info-100);
+      --n-c-200: var(--ui-info-200);
+      --n-c-300: var(--ui-info-300);
+      --n-c-400: var(--ui-info-400);
+      --n-c-500: var(--ui-info-500);
+      --n-c-600: var(--ui-info-600);
+      --n-c-700: var(--ui-info-700);
+      --n-c-800: var(--ui-info-800);
+      --n-c-900: var(--ui-info-900);
+      --n-c-950: var(--ui-info-950);
+    }
+    &[data-color="warning"] {
+      --n-c-50: var(--ui-warning-50);
+      --n-c-100: var(--ui-warning-100);
+      --n-c-200: var(--ui-warning-200);
+      --n-c-300: var(--ui-warning-300);
+      --n-c-400: var(--ui-warning-400);
+      --n-c-500: var(--ui-warning-500);
+      --n-c-600: var(--ui-warning-600);
+      --n-c-700: var(--ui-warning-700);
+      --n-c-800: var(--ui-warning-800);
+      --n-c-900: var(--ui-warning-900);
+      --n-c-950: var(--ui-warning-950);
+    }
+    &[data-color="error"] {
+      --n-c-50: var(--ui-error-50);
+      --n-c-100: var(--ui-error-100);
+      --n-c-200: var(--ui-error-200);
+      --n-c-300: var(--ui-error-300);
+      --n-c-400: var(--ui-error-400);
+      --n-c-500: var(--ui-error-500);
+      --n-c-600: var(--ui-error-600);
+      --n-c-700: var(--ui-error-700);
+      --n-c-800: var(--ui-error-800);
+      --n-c-900: var(--ui-error-900);
+      --n-c-950: var(--ui-error-950);
+    }
+  }
+
+  .n-button-label {
+    min-width: 0;
+    /* Trim the line box to cap-height..baseline so the text is optically centered like the icon (a plain line box
+       leaves it 1-2px low). The padding/negative margin give `overflow: hidden` room so ascenders/descenders aren't clipped */
+    line-height: 1.5;
+    text-box: trim-both cap alphabetic;
+    padding-block: 0.4em;
+    margin-block: -0.4em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Labels with no capitals or digits look centered on their x-height instead */
+  .n-button[data-lowercase] .n-button-label {
+    text-box-edge: ex alphabetic;
+  }
+
+  .n-button-icon {
+    display: inline-block;
+    flex-shrink: 0;
+    width: var(--n-btn-icon, 1.125rem);
+    height: var(--n-btn-icon, 1.125rem);
+  }
+
+  .n-spin {
+    animation: n-spin 0.8s linear infinite;
+
+    @media (prefers-reduced-motion: reduce) {
+      animation-duration: 2.4s;
+    }
+  }
+
+  @keyframes n-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}

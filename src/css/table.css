@@ -1,0 +1,331 @@
+/* Table tokens: override in your CSS, e.g. `:root { --n-table-py-md: 0.5rem; }` */
+@layer base {
+  :root {
+    --n-table-px-sm: 0.75rem;
+    --n-table-py-sm: 0.375rem;
+    --n-table-fs-sm: 0.8125rem;
+    --n-table-px-md: 1rem;
+    --n-table-py-md: 0.625rem;
+    --n-table-fs-md: 0.875rem;
+    --n-table-px-lg: 1.25rem;
+    --n-table-py-lg: 0.875rem;
+    --n-table-fs-lg: 1rem;
+    --n-table-bg: #fff;
+    --n-table-fg: var(--ui-neutral-900);
+    --n-table-border-sm: var(--ui-neutral-300);
+    --n-table-border-md: color-mix(
+      in oklab,
+      var(--ui-neutral-300),
+      var(--ui-neutral-400)
+    );
+    --n-table-border-lg: var(--ui-neutral-400);
+    --n-table-bw-sm: 1px;
+    --n-table-bw-md: 1px;
+    --n-table-bw-lg: 1px;
+    --n-table-head-bg: var(--ui-neutral-50);
+    --n-table-head-fg: var(--ui-neutral-800);
+    --n-table-muted: var(--ui-neutral-500);
+    --n-table-stripe: color-mix(
+      in oklab,
+      var(--ui-neutral-500) 6%,
+      transparent
+    );
+    --n-table-hover: color-mix(
+      in oklab,
+      var(--ui-neutral-500) 10%,
+      transparent
+    );
+
+    @variant dark {
+      --n-table-bg: var(--ui-neutral-900);
+      --n-table-fg: var(--ui-neutral-100);
+      --n-table-border-sm: var(--ui-neutral-700);
+      --n-table-border-md: color-mix(
+        in oklab,
+        var(--ui-neutral-700),
+        var(--ui-neutral-600)
+      );
+      --n-table-border-lg: var(--ui-neutral-600);
+      --n-table-head-bg: var(--ui-neutral-800);
+      --n-table-head-fg: var(--ui-neutral-200);
+      --n-table-muted: var(--ui-neutral-400);
+    }
+  }
+}
+
+/* Sort and spinner icons used by NTable itself; Tailwind can't see them in a package it doesn't scan */
+@source inline("i-lucide-{chevrons-up-down,arrow-up,arrow-down,loader-circle}");
+
+@layer components {
+  .n-table {
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+    border: var(--n-table-bw) solid var(--n-table-border);
+    border-radius: var(--ui-radius, 0.5rem);
+    background-color: var(--n-table-bg);
+    color: var(--n-table-fg);
+
+    &,
+    &[data-border="sm"] {
+      --n-table-border: var(--n-table-border-sm);
+      --n-table-bw: var(--n-table-bw-sm);
+    }
+    &[data-border="md"] {
+      --n-table-border: var(--n-table-border-md);
+      --n-table-bw: var(--n-table-bw-md);
+    }
+    &[data-border="lg"] {
+      --n-table-border: var(--n-table-border-lg);
+      --n-table-bw: var(--n-table-bw-lg);
+    }
+    /* No outer border and no lines between rows */
+    &[data-border="none"] {
+      --n-table-border: transparent;
+      --n-table-bw: 0px;
+    }
+
+    &,
+    &[data-size="md"] {
+      --n-table-px: var(--n-table-px-md);
+      --n-table-py: var(--n-table-py-md);
+      --n-table-fs: var(--n-table-fs-md);
+    }
+    &[data-size="sm"] {
+      --n-table-px: var(--n-table-px-sm);
+      --n-table-py: var(--n-table-py-sm);
+      --n-table-fs: var(--n-table-fs-sm);
+    }
+    &[data-size="lg"] {
+      --n-table-px: var(--n-table-px-lg);
+      --n-table-py: var(--n-table-py-lg);
+      --n-table-fs: var(--n-table-fs-lg);
+    }
+  }
+
+  .n-table-scroll {
+    max-height: var(--n-table-max-h, none);
+    overflow: auto;
+    overscroll-behavior-x: contain;
+
+    &:focus-visible {
+      outline: 2px solid var(--ui-primary-500);
+      outline-offset: -2px;
+    }
+  }
+
+  .n-table-el {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: var(--n-table-fs);
+    line-height: 1.5;
+  }
+
+  .n-table-caption {
+    padding: var(--n-table-py) var(--n-table-px);
+    border-bottom: 1px solid var(--n-table-border);
+    font-weight: 600;
+    text-align: start;
+  }
+
+  .n-table-head,
+  .n-table-cell {
+    padding: var(--n-table-py) var(--n-table-px);
+    border-bottom: 1px solid var(--n-table-border);
+    text-align: start;
+    vertical-align: middle;
+
+    &[data-align="center"] {
+      text-align: center;
+    }
+    &[data-align="end"] {
+      text-align: end;
+    }
+    &[data-nowrap] {
+      white-space: nowrap;
+    }
+  }
+
+  .n-table-head {
+    background-color: var(--n-table-head-bg);
+    color: var(--n-table-head-fg);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .n-table-scroll[data-limited] .n-table-head {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+
+  .n-table-tbody > tr:last-child > td {
+    border-bottom-width: 0;
+  }
+
+  .n-table-sort {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--n-table-fg);
+    }
+    &:focus-visible {
+      outline: 2px solid var(--ui-primary-500);
+      outline-offset: 2px;
+      border-radius: 0.25rem;
+    }
+  }
+
+  .n-table-sort-icon {
+    flex-shrink: 0;
+    opacity: 0.45;
+
+    &[data-active] {
+      opacity: 1;
+    }
+  }
+
+  .n-table[data-striped] .n-table-row:nth-child(even) {
+    background-color: var(--n-table-stripe);
+  }
+
+  .n-table[data-hoverable] .n-table-row:hover {
+    background-color: var(--n-table-hover);
+  }
+
+  .n-table[data-clickable] .n-table-row {
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid var(--ui-primary-500);
+      outline-offset: -2px;
+    }
+  }
+
+  .n-table[data-loading] .n-table-row {
+    opacity: 0.5;
+  }
+
+  .n-table-status > td {
+    padding: 2rem var(--n-table-px);
+    color: var(--n-table-muted);
+    text-align: center;
+  }
+
+  .n-table-status-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .n-table-footer {
+    padding: var(--n-table-py) var(--n-table-px);
+    border-top: 1px solid var(--n-table-border);
+  }
+}
+
+/* `stackBelow`: below the breakpoint each row is a card of `label: value` lines, and sortable headers stay as a row of buttons */
+@source inline("{max-sm,max-md,max-lg,max-xl}:n-table-stacked");
+
+@utility n-table-stacked {
+  .n-table-el,
+  .n-table-tbody,
+  .n-table-row,
+  .n-table-cell,
+  .n-table-status > td {
+    display: block;
+  }
+
+  .n-table-thead,
+  .n-table-thead > tr {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .n-table-thead:has(.n-table-head[aria-sort]) {
+    border-bottom: 1px solid var(--n-table-border);
+  }
+
+  .n-table-head {
+    display: none;
+    border-bottom-width: 0;
+
+    &[aria-sort] {
+      display: block;
+    }
+  }
+
+  .n-table-row {
+    padding-block: calc(var(--n-table-py) / 2);
+    border-bottom: 1px solid var(--n-table-border);
+  }
+
+  .n-table-tbody > .n-table-row:last-child {
+    border-bottom-width: 0;
+  }
+
+  .n-table-cell {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: calc(var(--n-table-py) / 2);
+    border-bottom-width: 0;
+    text-align: end;
+
+    &[data-label]::before {
+      flex-shrink: 0;
+      color: var(--n-table-head-fg);
+      content: attr(data-label);
+      font-weight: 600;
+      text-align: start;
+    }
+  }
+
+  .n-table-cell-content {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+}
+
+@layer components {
+  /* Hidden columns win over every other display rule, stacked or not */
+  .n-table {
+    .n-table-head,
+    .n-table-cell {
+      &[data-hide-below="sm"] {
+        @variant max-sm {
+          display: none !important;
+        }
+      }
+      &[data-hide-below="md"] {
+        @variant max-md {
+          display: none !important;
+        }
+      }
+      &[data-hide-below="lg"] {
+        @variant max-lg {
+          display: none !important;
+        }
+      }
+      &[data-hide-below="xl"] {
+        @variant max-xl {
+          display: none !important;
+        }
+      }
+    }
+  }
+}

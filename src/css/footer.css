@@ -1,0 +1,212 @@
+/* Footer tokens: override in your CSS, e.g. `:root { --n-footer-py: 4rem; }` */
+@layer base {
+  :root {
+    --n-footer-max-w: 80rem;
+    --n-footer-px: 1.5rem;
+    --n-footer-py: 3rem;
+    --n-footer-bg: #fff;
+    --n-footer-border: var(--ui-neutral-200);
+
+    @variant dark {
+      --n-footer-bg: var(--ui-neutral-950);
+      --n-footer-border: var(--ui-neutral-800);
+    }
+  }
+}
+
+@layer components {
+  .n-footer {
+    /* The layout follows the footer's own width, not the viewport's */
+    container-type: inline-size;
+    background-color: var(--n-footer-bg);
+    color: var(--ui-neutral-900);
+
+    @variant dark {
+      color: var(--ui-neutral-100);
+    }
+
+    &[data-border] {
+      border-top: 1px solid var(--n-footer-border);
+    }
+
+    .n-footer-main,
+    .n-footer-bottom-inner {
+      box-sizing: border-box;
+      padding-inline: var(--n-footer-px);
+    }
+    &[data-container] .n-footer-main,
+    &[data-container] .n-footer-bottom-inner {
+      max-width: var(--n-footer-max-w);
+      margin-inline: auto;
+    }
+
+    /* Mobile first: everything centered in one column, the brand first and the copyright last */
+    .n-footer-main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2.5rem;
+      padding-block: var(--n-footer-py);
+      text-align: center;
+    }
+    .n-footer-brand-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      max-width: 20rem;
+    }
+    .n-footer-columns {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem 3rem;
+    }
+    /* From 28rem of footer width: the brand at the start edge, the columns ending at the end edge, same padding on both sides */
+    @container (min-width: 28rem) {
+      .n-footer-main {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 2rem;
+        text-align: start;
+      }
+      .n-footer-brand-block {
+        flex: 0 1 auto;
+        align-items: flex-start;
+      }
+      .n-footer-columns {
+        flex: 0 0 auto;
+        justify-content: flex-end;
+        gap: 2rem 2.5rem;
+      }
+      .n-footer-column {
+        align-items: flex-start;
+      }
+      .n-footer-buttons {
+        justify-content: flex-start;
+        margin-inline-start: -0.5rem;
+      }
+      &[data-brand-align="right"] .n-footer-brand-block {
+        order: 1;
+      }
+    }
+
+    .n-footer-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: inherit;
+      text-decoration: none;
+
+      &:focus-visible {
+        outline: 2px solid var(--ui-primary-500);
+        outline-offset: 4px;
+        border-radius: 0.25rem;
+      }
+    }
+    .n-footer-logo {
+      font-size: 1.5rem;
+      color: var(--ui-primary-500);
+    }
+    .n-footer-description {
+      margin: 0;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--ui-neutral-600);
+
+      @variant dark {
+        color: var(--ui-neutral-400);
+      }
+    }
+    .n-footer-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.25rem;
+    }
+
+    .n-footer-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.625rem;
+    }
+    .n-footer-column-title {
+      margin: 0 0 0.25rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+    .n-footer-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      color: var(--ui-neutral-600);
+      text-decoration: none;
+      transition: color 0.15s;
+
+      @variant dark {
+        color: var(--ui-neutral-400);
+      }
+
+      &:hover {
+        color: var(--ui-neutral-900);
+
+        @variant dark {
+          color: var(--ui-neutral-50);
+        }
+      }
+
+      &[data-active] {
+        color: var(--ui-primary-600);
+
+        @variant dark {
+          color: var(--ui-primary-400);
+        }
+      }
+
+      &[aria-disabled="true"] {
+        opacity: 0.5;
+        pointer-events: none;
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--ui-primary-500);
+        outline-offset: 2px;
+        border-radius: 0.25rem;
+      }
+    }
+
+    /* Full-width divider; the text inside follows the container */
+    .n-footer-bottom {
+      border-top: 1px solid var(--n-footer-border);
+
+      &:first-child {
+        border-top: 0;
+      }
+    }
+    .n-footer-bottom-inner {
+      padding-block: 1.25rem;
+      text-align: center;
+    }
+    @container (min-width: 28rem) {
+      .n-footer-bottom-inner {
+        text-align: start;
+      }
+      &[data-copyright-align="center"] .n-footer-bottom-inner {
+        text-align: center;
+      }
+      &[data-copyright-align="right"] .n-footer-bottom-inner {
+        text-align: end;
+      }
+    }
+    .n-footer-copyright {
+      margin: 0;
+      font-size: 0.875rem;
+      color: var(--ui-neutral-500);
+    }
+  }
+}

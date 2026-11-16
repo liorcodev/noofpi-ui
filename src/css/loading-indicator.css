@@ -1,0 +1,143 @@
+/* Loading indicator tokens: override in your CSS, e.g. `:root { --n-loading-indicator-h: 4px; }` */
+@layer base {
+  :root {
+    --n-loading-indicator-h: 3px;
+    --n-loading-indicator-z: 100;
+  }
+}
+
+@layer components {
+  .n-loading-indicator {
+    --n-li-from: var(--n-c-400);
+    --n-li-to: var(--n-c-600);
+    --n-li-glow: var(--n-c-500);
+
+    @variant dark {
+      --n-li-from: var(--n-c-600);
+      --n-li-to: var(--n-c-300);
+    }
+
+    position: fixed;
+    inset-block-start: 0;
+    inset-inline: 0;
+    z-index: var(--n-loading-indicator-z);
+    height: var(--n-loading-indicator-h);
+    pointer-events: none;
+
+    &[data-color="primary"] {
+      --n-c-300: var(--ui-primary-300);
+      --n-c-400: var(--ui-primary-400);
+      --n-c-500: var(--ui-primary-500);
+      --n-c-600: var(--ui-primary-600);
+    }
+    &[data-color="neutral"] {
+      --n-c-300: var(--ui-neutral-300);
+      --n-c-400: var(--ui-neutral-400);
+      --n-c-500: var(--ui-neutral-500);
+      --n-c-600: var(--ui-neutral-600);
+    }
+    &[data-color="success"] {
+      --n-c-300: var(--ui-success-300);
+      --n-c-400: var(--ui-success-400);
+      --n-c-500: var(--ui-success-500);
+      --n-c-600: var(--ui-success-600);
+    }
+    &[data-color="info"] {
+      --n-c-300: var(--ui-info-300);
+      --n-c-400: var(--ui-info-400);
+      --n-c-500: var(--ui-info-500);
+      --n-c-600: var(--ui-info-600);
+    }
+    &[data-color="warning"] {
+      --n-c-300: var(--ui-warning-300);
+      --n-c-400: var(--ui-warning-400);
+      --n-c-500: var(--ui-warning-500);
+      --n-c-600: var(--ui-warning-600);
+    }
+    &[data-color="error"] {
+      --n-c-300: var(--ui-error-300);
+      --n-c-400: var(--ui-error-400);
+      --n-c-500: var(--ui-error-500);
+      --n-c-600: var(--ui-error-600);
+    }
+  }
+
+  .n-loading-indicator-bar {
+    position: relative;
+    height: 100%;
+    border-start-end-radius: 9999px;
+    border-end-end-radius: 9999px;
+    background-image:
+      linear-gradient(
+        100deg,
+        transparent 30%,
+        color-mix(in srgb, white 55%, transparent) 50%,
+        transparent 70%
+      ),
+      linear-gradient(to right, var(--n-li-from), var(--n-li-to));
+    background-size:
+      200% 100%,
+      100% 100%;
+    box-shadow: 0 0 10px var(--n-li-glow);
+    transition: width 0.25s ease-out;
+    animation: n-loading-indicator-shimmer 1.4s linear infinite;
+
+    /* Glowing head at the leading edge */
+    &::after {
+      content: "";
+      position: absolute;
+      inset-block: -3px;
+      inset-inline-end: 0;
+      width: 5rem;
+      border-radius: 9999px;
+      background: radial-gradient(closest-side, var(--n-li-glow), transparent);
+      opacity: 0.7;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+      animation: none;
+    }
+  }
+
+  [dir="rtl"] .n-loading-indicator-bar {
+    background-image:
+      linear-gradient(
+        100deg,
+        transparent 30%,
+        color-mix(in srgb, white 55%, transparent) 50%,
+        transparent 70%
+      ),
+      linear-gradient(to left, var(--n-li-from), var(--n-li-to));
+  }
+
+  @keyframes n-loading-indicator-shimmer {
+    from {
+      background-position:
+        200% 0,
+        0 0;
+    }
+    to {
+      background-position:
+        -100% 0,
+        0 0;
+    }
+  }
+
+  .n-loading-indicator-leave-active {
+    transition: opacity 0.4s ease 0.05s;
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+
+  .n-loading-indicator-enter-active {
+    transition: opacity 0.15s;
+  }
+
+  .n-loading-indicator-enter-from,
+  .n-loading-indicator-leave-to {
+    opacity: 0;
+  }
+}

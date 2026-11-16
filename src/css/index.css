@@ -1,0 +1,52 @@
+@import "./theme.css";
+@import "./accordion.css";
+@import "./alert.css";
+@import "./avatar.css";
+@import "./badge.css";
+@import "./breadcrumb.css";
+@import "./button.css";
+@import "./calendar.css";
+@import "./card.css";
+@import "./chip.css";
+@import "./dashboard.css";
+@import "./data-list.css";
+@import "./date-picker.css";
+@import "./dialog.css";
+@import "./footer.css";
+@import "./form.css";
+@import "./header.css";
+@import "./hero-page.css";
+@import "./icon.css";
+@import "./loading-indicator.css";
+@import "./marquee.css";
+@import "./menu.css";
+@import "./page-header.css";
+@import "./pagination.css";
+@import "./progress.css";
+@import "./scroll-to-top.css";
+@import "./select.css";
+@import "./sidebar.css";
+@import "./skeleton.css";
+@import "./slider.css";
+@import "./stat.css";
+@import "./stepper.css";
+@import "./switch.css";
+@import "./table.css";
+@import "./tabs.css";
+@import "./toast.css";
+@import "./user.css";
+
+/* Iconify icons by name: `i-lucide-plus` (Lucide is bundled). Install `@iconify-json/<set>` and `i-<set>-<icon>` works too. */
+@plugin "./icons.js";
+
+@layer components {
+  :where([class^="i-"], [class*=" i-"]) {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    background-color: currentColor;
+    mask-image: var(--svg);
+    mask-repeat: no-repeat;
+    mask-size: 100% 100%;
+  }
+}

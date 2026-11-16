@@ -1,0 +1,167 @@
+/* Calendar tokens: override in your CSS, e.g. `:root { --n-calendar-day: 2.5rem; }` */
+@layer base {
+  :root {
+    --n-calendar-day: 2.25rem;
+    --n-calendar-fg: var(--ui-neutral-800);
+    --n-calendar-muted: var(--ui-neutral-400);
+    --n-calendar-hover: var(--ui-neutral-100);
+    --n-calendar-range: var(--ui-primary-100);
+    --n-calendar-selected-bg: var(--ui-primary-500);
+    --n-calendar-selected-fg: #fff;
+
+    @variant dark {
+      --n-calendar-fg: var(--ui-neutral-100);
+      --n-calendar-muted: var(--ui-neutral-600);
+      --n-calendar-hover: var(--ui-neutral-800);
+      --n-calendar-range: color-mix(
+        in oklab,
+        var(--ui-primary-500) 25%,
+        transparent
+      );
+      --n-calendar-selected-bg: var(--ui-primary-400);
+      --n-calendar-selected-fg: var(--ui-primary-950);
+    }
+  }
+}
+
+@layer components {
+  .n-calendar {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    color: var(--n-calendar-fg);
+    font-size: 0.875rem;
+
+    &[data-disabled] {
+      opacity: 0.5;
+    }
+  }
+
+  .n-calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .n-calendar-title {
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .n-calendar-nav {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: 0;
+    border-radius: calc(var(--ui-radius, 0.5rem) - 0.125rem);
+    background-color: transparent;
+    color: inherit;
+    cursor: pointer;
+    transition: background-color 0.15s;
+
+    &:hover:not(:disabled) {
+      background-color: var(--n-calendar-hover);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ui-primary-500);
+      outline-offset: 1px;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+
+  .n-calendar-grid {
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  .n-calendar-weekday {
+    width: var(--n-calendar-day);
+    height: var(--n-calendar-day);
+    padding: 0;
+    color: var(--n-calendar-muted);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-align: center;
+  }
+
+  .n-calendar-cell {
+    padding: 0;
+    text-align: center;
+
+    /* The range band runs across the cells, with rounded ends */
+    &[data-in-range],
+    &[data-range-start],
+    &[data-range-end] {
+      background-color: var(--n-calendar-range);
+    }
+
+    &[data-range-start] {
+      border-start-start-radius: var(--ui-radius, 0.5rem);
+      border-end-start-radius: var(--ui-radius, 0.5rem);
+    }
+
+    &[data-range-end] {
+      border-start-end-radius: var(--ui-radius, 0.5rem);
+      border-end-end-radius: var(--ui-radius, 0.5rem);
+    }
+  }
+
+  .n-calendar-day {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--n-calendar-day);
+    height: var(--n-calendar-day);
+    padding: 0;
+    border: 0;
+    border-radius: var(--ui-radius, 0.5rem);
+    background-color: transparent;
+    color: inherit;
+    font: inherit;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    transition: background-color 0.15s;
+
+    &:hover:not([aria-disabled="true"], [data-selected]) {
+      background-color: var(--n-calendar-hover);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ui-primary-500);
+      outline-offset: -2px;
+    }
+
+    &[data-outside] {
+      color: var(--n-calendar-muted);
+    }
+
+    &[data-today]:not([data-selected]) {
+      font-weight: 700;
+      color: var(--ui-primary-600);
+
+      @variant dark {
+        color: var(--ui-primary-400);
+      }
+    }
+
+    &[data-selected] {
+      background-color: var(--n-calendar-selected-bg);
+      color: var(--n-calendar-selected-fg);
+      font-weight: 600;
+    }
+
+    &[aria-disabled="true"] {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+  }
+}

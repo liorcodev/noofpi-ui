@@ -1,0 +1,240 @@
+/* Size tokens: override in your CSS, e.g. `:root { --n-badge-h-md: 1.75rem; }` */
+@layer base {
+  :root {
+    --n-badge-h-xs: 1rem;
+    --n-badge-px-xs: 0.375rem;
+    --n-badge-fs-xs: 0.625rem;
+    --n-badge-icon-xs: 0.625rem;
+
+    --n-badge-h-sm: 1.25rem;
+    --n-badge-px-sm: 0.5rem;
+    --n-badge-fs-sm: 0.6875rem;
+    --n-badge-icon-sm: 0.75rem;
+
+    --n-badge-h-md: 1.5rem;
+    --n-badge-px-md: 0.625rem;
+    --n-badge-fs-md: 0.75rem;
+    --n-badge-icon-md: 0.875rem;
+
+    --n-badge-h-lg: 1.75rem;
+    --n-badge-px-lg: 0.75rem;
+    --n-badge-fs-lg: 0.875rem;
+    --n-badge-icon-lg: 1rem;
+
+    --n-badge-h-xl: 2rem;
+    --n-badge-px-xl: 0.875rem;
+    --n-badge-fs-xl: 1rem;
+    --n-badge-icon-xl: 1.125rem;
+  }
+}
+
+@layer components {
+  .n-badge {
+    --n-tone: var(--n-c-600);
+    --n-edge: var(--n-c-500);
+    --n-edge-soft: color-mix(in oklab, var(--n-tone) 45%, transparent);
+    --n-tint: var(--n-c-50);
+
+    @variant dark {
+      --n-tone: var(--n-c-400);
+      --n-edge: var(--n-c-400);
+      --n-edge-soft: color-mix(in oklab, var(--n-c-500) 25%, transparent);
+      --n-tint: color-mix(in oklab, var(--n-c-500) 10%, transparent);
+    }
+
+    display: inline-flex;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    gap: calc(var(--n-badge-fs, 0.75rem) * 0.4);
+    height: var(--n-badge-h, 1.5rem);
+    padding-inline: var(--n-badge-px, 0.625rem);
+    border-radius: calc(var(--ui-radius, 0.5rem) * 0.75);
+    font-size: var(--n-badge-fs, 0.75rem);
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+    vertical-align: middle;
+    background-color: var(--n-bg, transparent);
+    color: var(--n-fg, inherit);
+    box-shadow: inset 0 0 0 1px var(--n-ring, transparent);
+
+    &[data-pill] {
+      border-radius: 9999px;
+    }
+
+    &[data-size="xs"] {
+      --n-badge-h: var(--n-badge-h-xs);
+      --n-badge-px: var(--n-badge-px-xs);
+      --n-badge-fs: var(--n-badge-fs-xs);
+      --n-badge-icon: var(--n-badge-icon-xs);
+    }
+    &[data-size="sm"] {
+      --n-badge-h: var(--n-badge-h-sm);
+      --n-badge-px: var(--n-badge-px-sm);
+      --n-badge-fs: var(--n-badge-fs-sm);
+      --n-badge-icon: var(--n-badge-icon-sm);
+    }
+    &[data-size="md"] {
+      --n-badge-h: var(--n-badge-h-md);
+      --n-badge-px: var(--n-badge-px-md);
+      --n-badge-fs: var(--n-badge-fs-md);
+      --n-badge-icon: var(--n-badge-icon-md);
+    }
+    &[data-size="lg"] {
+      --n-badge-h: var(--n-badge-h-lg);
+      --n-badge-px: var(--n-badge-px-lg);
+      --n-badge-fs: var(--n-badge-fs-lg);
+      --n-badge-icon: var(--n-badge-icon-lg);
+    }
+    &[data-size="xl"] {
+      --n-badge-h: var(--n-badge-h-xl);
+      --n-badge-px: var(--n-badge-px-xl);
+      --n-badge-fs: var(--n-badge-fs-xl);
+      --n-badge-icon: var(--n-badge-icon-xl);
+    }
+
+    &[data-variant="solid"] {
+      --n-bg: var(--n-c-500);
+      --n-fg: #fff;
+
+      @variant dark {
+        --n-bg: var(--n-c-400);
+        --n-fg: var(--n-c-950);
+      }
+    }
+
+    &[data-variant="outline"] {
+      --n-fg: var(--n-tone);
+      --n-ring: var(--n-edge);
+    }
+
+    &[data-variant="soft"] {
+      --n-bg: var(--n-tint);
+      --n-fg: var(--n-tone);
+    }
+
+    &[data-variant="subtle"] {
+      --n-bg: var(--n-tint);
+      --n-fg: var(--n-tone);
+      --n-ring: var(--n-edge-soft);
+    }
+
+    /* Neutral has no accent: solid is inverted text color, the rest use a grey edge */
+    &[data-color="neutral"] {
+      --n-tone: var(--n-c-700);
+      --n-edge: var(--n-c-300);
+      --n-edge-soft: var(--n-c-300);
+
+      @variant dark {
+        --n-tone: var(--n-c-200);
+        --n-edge: var(--n-c-700);
+        --n-edge-soft: var(--n-c-700);
+        --n-tint: var(--n-c-900);
+      }
+
+      &[data-variant="solid"] {
+        --n-bg: var(--n-c-900);
+        --n-fg: #fff;
+
+        @variant dark {
+          --n-bg: var(--n-c-50);
+          --n-fg: var(--n-c-900);
+        }
+      }
+    }
+
+    &[data-color="primary"] {
+      --n-c-50: var(--ui-primary-50);
+      --n-c-200: var(--ui-primary-200);
+      --n-c-300: var(--ui-primary-300);
+      --n-c-400: var(--ui-primary-400);
+      --n-c-500: var(--ui-primary-500);
+      --n-c-600: var(--ui-primary-600);
+      --n-c-700: var(--ui-primary-700);
+      --n-c-900: var(--ui-primary-900);
+      --n-c-950: var(--ui-primary-950);
+    }
+    &[data-color="neutral"] {
+      --n-c-50: var(--ui-neutral-50);
+      --n-c-200: var(--ui-neutral-200);
+      --n-c-300: var(--ui-neutral-300);
+      --n-c-400: var(--ui-neutral-400);
+      --n-c-500: var(--ui-neutral-500);
+      --n-c-600: var(--ui-neutral-600);
+      --n-c-700: var(--ui-neutral-700);
+      --n-c-900: var(--ui-neutral-900);
+      --n-c-950: var(--ui-neutral-950);
+    }
+    &[data-color="success"] {
+      --n-c-50: var(--ui-success-50);
+      --n-c-200: var(--ui-success-200);
+      --n-c-300: var(--ui-success-300);
+      --n-c-400: var(--ui-success-400);
+      --n-c-500: var(--ui-success-500);
+      --n-c-600: var(--ui-success-600);
+      --n-c-700: var(--ui-success-700);
+      --n-c-900: var(--ui-success-900);
+      --n-c-950: var(--ui-success-950);
+    }
+    &[data-color="info"] {
+      --n-c-50: var(--ui-info-50);
+      --n-c-200: var(--ui-info-200);
+      --n-c-300: var(--ui-info-300);
+      --n-c-400: var(--ui-info-400);
+      --n-c-500: var(--ui-info-500);
+      --n-c-600: var(--ui-info-600);
+      --n-c-700: var(--ui-info-700);
+      --n-c-900: var(--ui-info-900);
+      --n-c-950: var(--ui-info-950);
+    }
+    &[data-color="warning"] {
+      --n-c-50: var(--ui-warning-50);
+      --n-c-200: var(--ui-warning-200);
+      --n-c-300: var(--ui-warning-300);
+      --n-c-400: var(--ui-warning-400);
+      --n-c-500: var(--ui-warning-500);
+      --n-c-600: var(--ui-warning-600);
+      --n-c-700: var(--ui-warning-700);
+      --n-c-900: var(--ui-warning-900);
+      --n-c-950: var(--ui-warning-950);
+    }
+    &[data-color="error"] {
+      --n-c-50: var(--ui-error-50);
+      --n-c-200: var(--ui-error-200);
+      --n-c-300: var(--ui-error-300);
+      --n-c-400: var(--ui-error-400);
+      --n-c-500: var(--ui-error-500);
+      --n-c-600: var(--ui-error-600);
+      --n-c-700: var(--ui-error-700);
+      --n-c-900: var(--ui-error-900);
+      --n-c-950: var(--ui-error-950);
+    }
+  }
+
+  .n-badge-label {
+    min-width: 0;
+    /* Same optical centering as `.n-button-label`: trim the line box to cap-height..baseline, and give
+       `overflow: hidden` room (padding + negative margin) so descenders aren't clipped */
+    line-height: 1.5;
+    text-box: trim-both cap alphabetic;
+    padding-block: 0.4em;
+    margin-block: -0.4em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Labels with no capitals or digits look centered on their x-height instead */
+  .n-badge[data-lowercase] .n-badge-label {
+    text-box-edge: ex alphabetic;
+  }
+
+  .n-badge-icon {
+    display: inline-block;
+    flex-shrink: 0;
+    width: var(--n-badge-icon, 0.875rem);
+    height: var(--n-badge-icon, 0.875rem);
+  }
+}
