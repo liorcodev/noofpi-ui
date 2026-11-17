@@ -25,17 +25,17 @@
 /* `.theme` too, so a theme applied to a subtree re-resolves the shades there */
 :root,
 .theme {
-  --ui-primary-50: var(--color-theme-50, #d6fee7);
-  --ui-primary-100: var(--color-theme-100, #bdfad8);
-  --ui-primary-200: var(--color-theme-200, #9eedc2);
-  --ui-primary-300: var(--color-theme-300, #75daa8);
-  --ui-primary-400: var(--color-theme-400, #4bc78f);
-  --ui-primary-500: var(--color-theme-500, #1ba872);
-  --ui-primary-600: var(--color-theme-600, #007e52);
-  --ui-primary-700: var(--color-theme-700, #005737);
-  --ui-primary-800: var(--color-theme-800, #003620);
-  --ui-primary-900: var(--color-theme-900, #001f10);
-  --ui-primary-950: var(--color-theme-950, #000e06);
+  --ui-primary-50: var(--color-theme-50, #effaf5);
+  --ui-primary-100: var(--color-theme-100, #d7f3e5);
+  --ui-primary-200: var(--color-theme-200, #b0e6cd);
+  --ui-primary-300: var(--color-theme-300, #7fd3b0);
+  --ui-primary-400: var(--color-theme-400, #4cbd8f);
+  --ui-primary-500: var(--color-theme-500, #31b87d);
+  --ui-primary-600: var(--color-theme-600, #1f8f62);
+  --ui-primary-700: var(--color-theme-700, #1a7350);
+  --ui-primary-800: var(--color-theme-800, #185c42);
+  --ui-primary-900: var(--color-theme-900, #144b37);
+  --ui-primary-950: var(--color-theme-950, #0a2a1f);
 
   /* Grays one step darker in light mode and one step lighter in dark mode, so the light shades (borders, hovers, shaded blocks) show up */
   --ui-neutral-50: var(--color-zinc-100);
