@@ -122,6 +122,12 @@
         --n-accent: var(--ui-success-400);
       }
     }
+    &[data-color="secondary"] {
+      --n-accent: var(--ui-secondary-500);
+      @variant dark {
+        --n-accent: var(--ui-secondary-400);
+      }
+    }
     &[data-color="info"] {
       --n-accent: var(--ui-info-500);
       @variant dark {

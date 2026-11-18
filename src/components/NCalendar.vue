@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch, type PropType } from "vue";
-import type { DateRange } from "../types";
+import type { ButtonColor, DateRange } from "../types";
 import {
   addDays,
   addMonths,
@@ -15,6 +15,8 @@ import NIcon from "./NIcon.vue";
 defineOptions({ name: "NCalendar" });
 
 const props = defineProps({
+  /** Accent of the selected dates, today and the focus ring */
+  color: { type: String as PropType<ButtonColor>, default: "primary" },
   /** Selects a start and an end date: `v-model` is a `DateRange` */
   range: { type: Boolean, default: false },
   /** Earliest selectable date (`YYYY-MM-DD`) */
@@ -209,6 +211,7 @@ function onKeydown(event: KeyboardEvent) {
     class="n-calendar"
     role="group"
     :aria-label="label"
+    :data-color="color"
     :data-disabled="disabled ? '' : undefined"
   >
     <div class="n-calendar-header">

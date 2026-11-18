@@ -2,6 +2,18 @@
 
 All notable changes to noofpi-ui are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [1.2.0] - 2026-11-18
+
+### Added
+
+- `secondary` color (blue by default) next to `primary`, `neutral`, `success`, `info`, `warning` and `error`. Set its shades with the `--ui-secondary-50` … `--ui-secondary-950` variables; `bg-secondary-*`, `text-secondary-*` and the other Tailwind color utilities are available.
+- `color="secondary"` on every component that has a `color` prop.
+- `color` prop on `NTabs`, `NPagination`, `NStepper`, `NCheckbox`, `NCalendar` and `NDatePicker` (default `primary`) for the selected or active state. `NCalendar` and `NDatePicker` also color the focus ring and today marker.
+
+### Changed
+
+- The active-state tokens `--n-calendar-range`, `--n-calendar-selected-bg`, `--n-calendar-selected-fg`, `--n-stepper-active-*` and `--n-pagination-active-*` are now defined on `.n-calendar`, `.n-stepper` and `.n-pagination` instead of `:root`. Override them there.
+
 ## [1.1.0] - 2026-11-18
 
 ### Added

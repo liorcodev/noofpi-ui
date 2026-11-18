@@ -74,6 +74,9 @@
     &[data-color="success"] {
       --n-tooltip-color: var(--ui-success-600);
     }
+    &[data-color="secondary"] {
+      --n-tooltip-color: var(--ui-secondary-600);
+    }
     &[data-color="info"] {
       --n-tooltip-color: var(--ui-info-600);
     }

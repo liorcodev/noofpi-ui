@@ -61,6 +61,10 @@
       --n-c-400: var(--ui-success-400);
       --n-c-600: var(--ui-success-600);
     }
+    &[data-color="secondary"] {
+      --n-c-400: var(--ui-secondary-400);
+      --n-c-600: var(--ui-secondary-600);
+    }
     &[data-color="info"] {
       --n-c-400: var(--ui-info-400);
       --n-c-600: var(--ui-info-600);

@@ -26,7 +26,7 @@ defineProps({
   /** Mark invalid without an `NFormField` around it */
   invalid: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false },
-  /** Button mode: look of the buttons, see `NCheckButton` */
+  /** Accent of the checkboxes; in button mode the color of the buttons, see `NCheckButton` */
   color: { type: String as PropType<ButtonColor>, default: undefined },
   size: { type: String as PropType<ButtonSize>, default: undefined },
   variant: { type: String as PropType<ButtonVariant>, default: undefined },
@@ -68,6 +68,7 @@ provide(FIELD_KEY, null);
           v-model="model"
           :value="item.value"
           :name="name"
+          :color="color"
           :label="item.label"
           :disabled="item.disabled"
           :invalid="invalid || field?.invalid.value"

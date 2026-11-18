@@ -7,15 +7,11 @@
     --n-pagination-fg: var(--ui-neutral-800);
     --n-pagination-muted: var(--ui-neutral-400);
     --n-pagination-hover: var(--ui-neutral-100);
-    --n-pagination-active-bg: var(--ui-primary-500);
-    --n-pagination-active-fg: #fff;
 
     @variant dark {
       --n-pagination-fg: var(--ui-neutral-100);
       --n-pagination-muted: var(--ui-neutral-600);
       --n-pagination-hover: var(--ui-neutral-800);
-      --n-pagination-active-bg: var(--ui-primary-400);
-      --n-pagination-active-fg: var(--ui-primary-950);
     }
   }
 }
@@ -25,6 +21,13 @@
     display: inline-flex;
     color: var(--n-pagination-fg);
     font-size: 0.875rem;
+    --n-pagination-active-bg: var(--n-c-500);
+    --n-pagination-active-fg: #fff;
+
+    @variant dark {
+      --n-pagination-active-bg: var(--n-c-400);
+      --n-pagination-active-fg: var(--n-c-950);
+    }
 
     &,
     &[data-size="md"] {
@@ -85,7 +88,7 @@
     }
 
     &:focus-visible {
-      outline: 2px solid var(--ui-primary-500);
+      outline: 2px solid var(--n-c-500);
       outline-offset: 1px;
     }
 

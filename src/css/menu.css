@@ -174,6 +174,10 @@
       --n-menu-accent: var(--ui-success-500);
       --n-menu-item-fg: var(--ui-success-600);
     }
+    &[data-color="secondary"] {
+      --n-menu-accent: var(--ui-secondary-500);
+      --n-menu-item-fg: var(--ui-secondary-600);
+    }
     &[data-color="info"] {
       --n-menu-accent: var(--ui-info-500);
       --n-menu-item-fg: var(--ui-info-600);

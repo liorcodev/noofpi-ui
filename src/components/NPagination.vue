@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, type PropType } from "vue";
-import type { PaginationSize } from "../types";
+import type { ButtonColor, PaginationSize } from "../types";
 import NIcon from "./NIcon.vue";
 
 defineOptions({ name: "NPagination" });
@@ -14,6 +14,7 @@ const props = defineProps({
   boundaries: { type: Number, default: 1 },
   showEdges: { type: Boolean, default: false },
   size: { type: String as PropType<PaginationSize>, default: "md" },
+  color: { type: String as PropType<ButtonColor>, default: "primary" },
   label: { type: String, default: "Pagination" },
   prevLabel: { type: String, default: "Previous page" },
   nextLabel: { type: String, default: "Next page" },
@@ -99,6 +100,7 @@ const atEnd = computed(() => props.disabled || page.value >= count.value);
 <template>
   <nav
     class="n-pagination"
+    :data-color="color"
     :aria-label="label"
     :data-size="size"
     :data-disabled="disabled ? '' : undefined"

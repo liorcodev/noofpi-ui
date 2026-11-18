@@ -44,6 +44,9 @@
     &[data-color="success"] {
       --n-empty-accent: var(--ui-success-500);
     }
+    &[data-color="secondary"] {
+      --n-empty-accent: var(--ui-secondary-500);
+    }
     &[data-color="info"] {
       --n-empty-accent: var(--ui-info-500);
     }

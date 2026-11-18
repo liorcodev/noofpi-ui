@@ -346,7 +346,7 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: 100% 100%;
-    color: var(--ui-primary-500);
+    color: var(--n-c-500);
     cursor: inherit;
 
     @variant dark {
@@ -362,22 +362,22 @@
     }
 
     &[type="checkbox"]:checked {
-      border-color: var(--ui-primary-500);
-      background-color: var(--ui-primary-500);
+      border-color: var(--n-c-500);
+      background-color: var(--n-c-500);
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 8.5l3 3 6-7'/%3E%3C/svg%3E");
     }
 
     &[type="radio"]:checked {
-      border-color: var(--ui-primary-500);
+      border-color: var(--n-c-500);
       background-image: radial-gradient(
         circle,
-        var(--ui-primary-500) 0 35%,
+        var(--n-c-500) 0 35%,
         transparent 40%
       );
     }
 
     &:focus-visible {
-      outline: 2px solid var(--ui-primary-500);
+      outline: 2px solid var(--n-c-500);
       outline-offset: 2px;
     }
 

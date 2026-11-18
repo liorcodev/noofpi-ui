@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, useId, watch, type PropType } from "vue";
 import type {
+  ButtonColor,
   TabItem,
   TabsActivation,
   TabsOrientation,
@@ -17,6 +18,7 @@ const props = defineProps({
     default: "horizontal",
   },
   variant: { type: String as PropType<TabsVariant>, default: "line" },
+  color: { type: String as PropType<ButtonColor>, default: "primary" },
   /** `"automatic"` selects a tab as arrow keys focus it, `"manual"` waits for Enter or Space */
   activation: {
     type: String as PropType<TabsActivation>,
@@ -100,7 +102,12 @@ function onKeydown(event: KeyboardEvent) {
 </script>
 
 <template>
-  <div class="n-tabs" :data-orientation="orientation" :data-variant="variant">
+  <div
+    class="n-tabs"
+    :data-color="color"
+    :data-orientation="orientation"
+    :data-variant="variant"
+  >
     <div
       ref="list"
       class="n-tabs-list"

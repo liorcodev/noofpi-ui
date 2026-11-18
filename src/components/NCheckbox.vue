@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { computed, inject, useAttrs } from "vue";
+import { computed, inject, useAttrs, type PropType } from "vue";
 import { FIELD_KEY } from "../internal/form-context";
+import type { ButtonColor } from "../types";
 
 defineOptions({ name: "NCheckbox", inheritAttrs: false });
 
 defineProps({
   label: { type: String, default: undefined },
+  color: { type: String as PropType<ButtonColor>, default: "primary" },
   /** Mark invalid without an `NFormField` around it */
   invalid: { type: Boolean, default: false },
 });
@@ -21,7 +23,12 @@ const inputAttrs = computed(() => {
 </script>
 
 <template>
-  <label class="n-checkbox" :class="attrs.class" :style="attrs.style">
+  <label
+    class="n-checkbox"
+    :class="attrs.class"
+    :style="attrs.style"
+    :data-color="color"
+  >
     <input
       v-bind="inputAttrs"
       v-model="model"

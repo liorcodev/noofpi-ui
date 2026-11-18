@@ -99,6 +99,16 @@
       --n-c-700: var(--ui-success-700);
       --n-c-900: var(--ui-success-900);
     }
+    &[data-color="secondary"] {
+      --n-c-50: var(--ui-secondary-50);
+      --n-c-100: var(--ui-secondary-100);
+      --n-c-200: var(--ui-secondary-200);
+      --n-c-300: var(--ui-secondary-300);
+      --n-c-500: var(--ui-secondary-500);
+      --n-c-600: var(--ui-secondary-600);
+      --n-c-700: var(--ui-secondary-700);
+      --n-c-900: var(--ui-secondary-900);
+    }
     &[data-color="info"] {
       --n-c-50: var(--ui-info-50);
       --n-c-100: var(--ui-info-100);

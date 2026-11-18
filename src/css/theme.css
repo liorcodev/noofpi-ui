@@ -20,6 +20,18 @@
   --color-primary-800: var(--ui-primary-800);
   --color-primary-900: var(--ui-primary-900);
   --color-primary-950: var(--ui-primary-950);
+
+  --color-secondary-50: var(--ui-secondary-50);
+  --color-secondary-100: var(--ui-secondary-100);
+  --color-secondary-200: var(--ui-secondary-200);
+  --color-secondary-300: var(--ui-secondary-300);
+  --color-secondary-400: var(--ui-secondary-400);
+  --color-secondary-500: var(--ui-secondary-500);
+  --color-secondary-600: var(--ui-secondary-600);
+  --color-secondary-700: var(--ui-secondary-700);
+  --color-secondary-800: var(--ui-secondary-800);
+  --color-secondary-900: var(--ui-secondary-900);
+  --color-secondary-950: var(--ui-secondary-950);
 }
 
 /* `.theme` too, so a theme applied to a subtree re-resolves the shades there */
@@ -36,6 +48,18 @@
   --ui-primary-800: var(--color-theme-800, #185c42);
   --ui-primary-900: var(--color-theme-900, #144b37);
   --ui-primary-950: var(--color-theme-950, #0a2a1f);
+
+  --ui-secondary-50: var(--color-blue-50);
+  --ui-secondary-100: var(--color-blue-100);
+  --ui-secondary-200: var(--color-blue-200);
+  --ui-secondary-300: var(--color-blue-300);
+  --ui-secondary-400: var(--color-blue-400);
+  --ui-secondary-500: var(--color-blue-500);
+  --ui-secondary-600: var(--color-blue-600);
+  --ui-secondary-700: var(--color-blue-700);
+  --ui-secondary-800: var(--color-blue-800);
+  --ui-secondary-900: var(--color-blue-900);
+  --ui-secondary-950: var(--color-blue-950);
 
   /* Grays one step darker in light mode and one step lighter in dark mode, so the light shades (borders, hovers, shaded blocks) show up */
   --ui-neutral-50: var(--color-zinc-100);
@@ -112,4 +136,102 @@
   --ui-error-800: var(--color-red-800);
   --ui-error-900: var(--color-red-900);
   --ui-error-950: var(--color-red-950);
+}
+
+/*
+ * Components that take a `color` prop put `data-color` on their root and read the shades as `--n-c-*`.
+ * In `@layer base` so a component's own `[data-color]` rules (in `@layer components`) still win.
+ */
+@layer base {
+  [data-color="primary"] {
+    --n-c-50: var(--ui-primary-50);
+    --n-c-100: var(--ui-primary-100);
+    --n-c-200: var(--ui-primary-200);
+    --n-c-300: var(--ui-primary-300);
+    --n-c-400: var(--ui-primary-400);
+    --n-c-500: var(--ui-primary-500);
+    --n-c-600: var(--ui-primary-600);
+    --n-c-700: var(--ui-primary-700);
+    --n-c-800: var(--ui-primary-800);
+    --n-c-900: var(--ui-primary-900);
+    --n-c-950: var(--ui-primary-950);
+  }
+  [data-color="secondary"] {
+    --n-c-50: var(--ui-secondary-50);
+    --n-c-100: var(--ui-secondary-100);
+    --n-c-200: var(--ui-secondary-200);
+    --n-c-300: var(--ui-secondary-300);
+    --n-c-400: var(--ui-secondary-400);
+    --n-c-500: var(--ui-secondary-500);
+    --n-c-600: var(--ui-secondary-600);
+    --n-c-700: var(--ui-secondary-700);
+    --n-c-800: var(--ui-secondary-800);
+    --n-c-900: var(--ui-secondary-900);
+    --n-c-950: var(--ui-secondary-950);
+  }
+  [data-color="neutral"] {
+    --n-c-50: var(--ui-neutral-50);
+    --n-c-100: var(--ui-neutral-100);
+    --n-c-200: var(--ui-neutral-200);
+    --n-c-300: var(--ui-neutral-300);
+    --n-c-400: var(--ui-neutral-400);
+    --n-c-500: var(--ui-neutral-500);
+    --n-c-600: var(--ui-neutral-600);
+    --n-c-700: var(--ui-neutral-700);
+    --n-c-800: var(--ui-neutral-800);
+    --n-c-900: var(--ui-neutral-900);
+    --n-c-950: var(--ui-neutral-950);
+  }
+  [data-color="success"] {
+    --n-c-50: var(--ui-success-50);
+    --n-c-100: var(--ui-success-100);
+    --n-c-200: var(--ui-success-200);
+    --n-c-300: var(--ui-success-300);
+    --n-c-400: var(--ui-success-400);
+    --n-c-500: var(--ui-success-500);
+    --n-c-600: var(--ui-success-600);
+    --n-c-700: var(--ui-success-700);
+    --n-c-800: var(--ui-success-800);
+    --n-c-900: var(--ui-success-900);
+    --n-c-950: var(--ui-success-950);
+  }
+  [data-color="info"] {
+    --n-c-50: var(--ui-info-50);
+    --n-c-100: var(--ui-info-100);
+    --n-c-200: var(--ui-info-200);
+    --n-c-300: var(--ui-info-300);
+    --n-c-400: var(--ui-info-400);
+    --n-c-500: var(--ui-info-500);
+    --n-c-600: var(--ui-info-600);
+    --n-c-700: var(--ui-info-700);
+    --n-c-800: var(--ui-info-800);
+    --n-c-900: var(--ui-info-900);
+    --n-c-950: var(--ui-info-950);
+  }
+  [data-color="warning"] {
+    --n-c-50: var(--ui-warning-50);
+    --n-c-100: var(--ui-warning-100);
+    --n-c-200: var(--ui-warning-200);
+    --n-c-300: var(--ui-warning-300);
+    --n-c-400: var(--ui-warning-400);
+    --n-c-500: var(--ui-warning-500);
+    --n-c-600: var(--ui-warning-600);
+    --n-c-700: var(--ui-warning-700);
+    --n-c-800: var(--ui-warning-800);
+    --n-c-900: var(--ui-warning-900);
+    --n-c-950: var(--ui-warning-950);
+  }
+  [data-color="error"] {
+    --n-c-50: var(--ui-error-50);
+    --n-c-100: var(--ui-error-100);
+    --n-c-200: var(--ui-error-200);
+    --n-c-300: var(--ui-error-300);
+    --n-c-400: var(--ui-error-400);
+    --n-c-500: var(--ui-error-500);
+    --n-c-600: var(--ui-error-600);
+    --n-c-700: var(--ui-error-700);
+    --n-c-800: var(--ui-error-800);
+    --n-c-900: var(--ui-error-900);
+    --n-c-950: var(--ui-error-950);
+  }
 }

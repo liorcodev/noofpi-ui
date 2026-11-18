@@ -5,27 +5,27 @@
     --n-calendar-fg: var(--ui-neutral-800);
     --n-calendar-muted: var(--ui-neutral-400);
     --n-calendar-hover: var(--ui-neutral-100);
-    --n-calendar-range: var(--ui-primary-100);
-    --n-calendar-selected-bg: var(--ui-primary-500);
-    --n-calendar-selected-fg: #fff;
 
     @variant dark {
       --n-calendar-fg: var(--ui-neutral-100);
       --n-calendar-muted: var(--ui-neutral-600);
       --n-calendar-hover: var(--ui-neutral-800);
-      --n-calendar-range: color-mix(
-        in oklab,
-        var(--ui-primary-500) 25%,
-        transparent
-      );
-      --n-calendar-selected-bg: var(--ui-primary-400);
-      --n-calendar-selected-fg: var(--ui-primary-950);
     }
   }
 }
 
 @layer components {
   .n-calendar {
+    --n-calendar-range: var(--n-c-100);
+    --n-calendar-selected-bg: var(--n-c-500);
+    --n-calendar-selected-fg: #fff;
+
+    @variant dark {
+      --n-calendar-range: color-mix(in oklab, var(--n-c-500) 25%, transparent);
+      --n-calendar-selected-bg: var(--n-c-400);
+      --n-calendar-selected-fg: var(--n-c-950);
+    }
+
     display: inline-flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -68,7 +68,7 @@
     }
 
     &:focus-visible {
-      outline: 2px solid var(--ui-primary-500);
+      outline: 2px solid var(--n-c-500);
       outline-offset: 1px;
     }
 
@@ -136,7 +136,7 @@
     }
 
     &:focus-visible {
-      outline: 2px solid var(--ui-primary-500);
+      outline: 2px solid var(--n-c-500);
       outline-offset: -2px;
     }
 
@@ -146,10 +146,10 @@
 
     &[data-today]:not([data-selected]) {
       font-weight: 700;
-      color: var(--ui-primary-600);
+      color: var(--n-c-600);
 
       @variant dark {
-        color: var(--ui-primary-400);
+        color: var(--n-c-400);
       }
     }
 

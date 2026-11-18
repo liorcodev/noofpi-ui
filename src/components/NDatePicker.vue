@@ -11,7 +11,7 @@ import {
   type PropType,
 } from "vue";
 import { FIELD_KEY } from "../internal/form-context";
-import type { DateRange } from "../types";
+import type { ButtonColor, DateRange } from "../types";
 import { formatDate, parseISO } from "../utils/date";
 import NCalendar from "./NCalendar.vue";
 import NIcon from "./NIcon.vue";
@@ -19,6 +19,8 @@ import NIcon from "./NIcon.vue";
 defineOptions({ name: "NDatePicker" });
 
 const props = defineProps({
+  /** Accent of the focus ring and of the calendar */
+  color: { type: String as PropType<ButtonColor>, default: "primary" },
   /** Picks a start and an end date: `v-model` is a `DateRange` */
   range: { type: Boolean, default: false },
   /** Shown while no date is selected */
@@ -153,6 +155,7 @@ onBeforeUnmount(() =>
   <div
     ref="root"
     class="n-date-picker"
+    :data-color="color"
     :data-open="open ? '' : undefined"
     :data-side="side"
     :data-disabled="disabled ? '' : undefined"
@@ -211,6 +214,7 @@ onBeforeUnmount(() =>
       >
         <NCalendar
           v-model="model"
+          :color="color"
           :range="range"
           :min="min"
           :max="max"

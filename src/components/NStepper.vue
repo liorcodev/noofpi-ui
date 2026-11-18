@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { computed, type PropType } from "vue";
-import type { StepperItem, StepperOrientation, StepperSize } from "../types";
+import type {
+  ButtonColor,
+  StepperItem,
+  StepperOrientation,
+  StepperSize,
+} from "../types";
 import NIcon from "./NIcon.vue";
 
 defineOptions({ name: "NStepper" });
@@ -15,6 +20,7 @@ const props = defineProps({
     default: "horizontal",
   },
   size: { type: String as PropType<StepperSize>, default: "md" },
+  color: { type: String as PropType<ButtonColor>, default: "primary" },
   /** Lets users click a completed step to go back to it */
   clickable: { type: Boolean, default: true },
   label: { type: String, default: "Progress" },
@@ -43,6 +49,7 @@ function go(index: number) {
 <template>
   <ol
     class="n-stepper"
+    :data-color="color"
     :aria-label="label"
     :data-orientation="orientation"
     :data-size="size"

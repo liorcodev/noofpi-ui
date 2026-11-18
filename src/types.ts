@@ -20,6 +20,7 @@ export const BUTTON_VARIANTS = [
 ] as const;
 export const BUTTON_COLORS = [
   "primary",
+  "secondary",
   "neutral",
   "success",
   "info",

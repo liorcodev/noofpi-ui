@@ -25,7 +25,7 @@ const props = defineProps({
   /** Mark invalid without an `NFormField` around it */
   invalid: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false },
-  /** Button mode: look of the buttons, see `NButton` */
+  /** Accent of the radios; in button mode the color of the buttons, see `NButton` */
   color: { type: String as PropType<ButtonColor>, default: undefined },
   size: { type: String as PropType<ButtonSize>, default: undefined },
   variant: { type: String as PropType<ButtonVariant>, default: "outline" },
@@ -48,6 +48,7 @@ const groupName = `n-radio-${useId()}`;
     :id="field?.id"
     :disabled="disabled"
     role="radiogroup"
+    :data-color="color ?? 'primary'"
     :data-orientation="orientation"
     :aria-invalid="invalid || field?.invalid.value ? 'true' : undefined"
     :aria-describedby="field?.describedBy.value"
