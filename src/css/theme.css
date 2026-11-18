@@ -3,6 +3,8 @@
  *
  * `primary` follows the Color Theme Studio theme: its `theme.css` defines `--color-theme-50` ... `--color-theme-950`
  * (and `.theme.<name>` classes that swap them). Without that file the shades below are noofpi's own green.
+ * `secondary` follows `--color-theme-secondary-50` ... `950` from the same export (when a secondary is set in the
+ * studio), and falls back to Tailwind blue.
  *
  * Override any `--ui-*` variable after importing noofpi-ui, e.g. for a studio export with another prefix:
  *   :root { --ui-primary-500: var(--color-brand-500); }
@@ -49,17 +51,17 @@
   --ui-primary-900: var(--color-theme-900, #144b37);
   --ui-primary-950: var(--color-theme-950, #0a2a1f);
 
-  --ui-secondary-50: var(--color-blue-50);
-  --ui-secondary-100: var(--color-blue-100);
-  --ui-secondary-200: var(--color-blue-200);
-  --ui-secondary-300: var(--color-blue-300);
-  --ui-secondary-400: var(--color-blue-400);
-  --ui-secondary-500: var(--color-blue-500);
-  --ui-secondary-600: var(--color-blue-600);
-  --ui-secondary-700: var(--color-blue-700);
-  --ui-secondary-800: var(--color-blue-800);
-  --ui-secondary-900: var(--color-blue-900);
-  --ui-secondary-950: var(--color-blue-950);
+  --ui-secondary-50: var(--color-theme-secondary-50, var(--color-blue-50));
+  --ui-secondary-100: var(--color-theme-secondary-100, var(--color-blue-100));
+  --ui-secondary-200: var(--color-theme-secondary-200, var(--color-blue-200));
+  --ui-secondary-300: var(--color-theme-secondary-300, var(--color-blue-300));
+  --ui-secondary-400: var(--color-theme-secondary-400, var(--color-blue-400));
+  --ui-secondary-500: var(--color-theme-secondary-500, var(--color-blue-500));
+  --ui-secondary-600: var(--color-theme-secondary-600, var(--color-blue-600));
+  --ui-secondary-700: var(--color-theme-secondary-700, var(--color-blue-700));
+  --ui-secondary-800: var(--color-theme-secondary-800, var(--color-blue-800));
+  --ui-secondary-900: var(--color-theme-secondary-900, var(--color-blue-900));
+  --ui-secondary-950: var(--color-theme-secondary-950, var(--color-blue-950));
 
   /* Grays one step darker in light mode and one step lighter in dark mode, so the light shades (borders, hovers, shaded blocks) show up */
   --ui-neutral-50: var(--color-zinc-100);

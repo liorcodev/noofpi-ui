@@ -2,6 +2,12 @@
 
 All notable changes to noofpi-ui are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [1.3.0] - 2026-11-18
+
+### Added
+
+- `secondary` follows the Color Theme Studio export: `--ui-secondary-*` reads `--color-theme-secondary-50` … `--color-theme-secondary-950` (set via the studio's Secondary Color panel) and switches with `ColorTheme.change()` like `primary`. Without them it stays blue.
+
 ## [1.2.0] - 2026-11-18
 
 ### Added
