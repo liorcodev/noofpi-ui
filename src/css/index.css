@@ -8,10 +8,13 @@
 @import "./calendar.css";
 @import "./card.css";
 @import "./chip.css";
+@import "./command-palette.css";
 @import "./dashboard.css";
 @import "./data-list.css";
 @import "./date-picker.css";
 @import "./dialog.css";
+@import "./empty-state.css";
+@import "./file-upload.css";
 @import "./footer.css";
 @import "./form.css";
 @import "./header.css";
@@ -34,6 +37,7 @@
 @import "./table.css";
 @import "./tabs.css";
 @import "./toast.css";
+@import "./tooltip.css";
 @import "./user.css";
 
 /* Iconify icons by name: `i-lucide-plus` (Lucide is bundled). Install `@iconify-json/<set>` and `i-<set>-<icon>` works too. */

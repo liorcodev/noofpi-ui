@@ -12,11 +12,14 @@ export { default as NCheckbox } from "./components/NCheckbox.vue";
 export { default as NCheckboxGroup } from "./components/NCheckboxGroup.vue";
 export { default as NChip } from "./components/NChip.vue";
 export { default as NCombobox } from "./components/NCombobox.vue";
+export { default as NCommandPalette } from "./components/NCommandPalette.vue";
 export { default as NDashboard } from "./components/NDashboard.vue";
 export { default as NDataList } from "./components/NDataList.vue";
 export { default as NDatePicker } from "./components/NDatePicker.vue";
 export { default as NDialog } from "./components/NDialog.vue";
 export { default as NDrawer } from "./components/NDrawer.vue";
+export { default as NEmptyState } from "./components/NEmptyState.vue";
+export { default as NFileUpload } from "./components/NFileUpload.vue";
 export { default as NFooter } from "./components/NFooter.vue";
 export { default as NForm } from "./components/NForm.vue";
 export { default as NFormField } from "./components/NFormField.vue";
@@ -45,6 +48,7 @@ export { default as NTable } from "./components/NTable.vue";
 export { default as NTabs } from "./components/NTabs.vue";
 export { default as NToast } from "./components/NToast.vue";
 export { default as NToaster } from "./components/NToaster.vue";
+export { default as NTooltip } from "./components/NTooltip.vue";
 export { default as NUser } from "./components/NUser.vue";
 export { toast, useToast } from "./composables/useToast";
 export {
@@ -68,6 +72,7 @@ export {
   DATA_LIST_SIZES,
   DIALOG_PLACEMENTS,
   DIALOG_SIZES,
+  EMPTY_STATE_SIZES,
   FOOTER_BRAND_ALIGNS,
   FOOTER_COPYRIGHT_ALIGNS,
   HEADER_BREAKPOINTS,
@@ -96,6 +101,8 @@ export {
   TABS_ORIENTATIONS,
   TABS_VARIANTS,
   TOAST_POSITIONS,
+  TOOLTIP_PLACEMENTS,
+  TOOLTIP_VARIANTS,
 } from "./types";
 export type {
   AccordionItem,
@@ -141,8 +148,15 @@ export type {
   DialogPlacement,
   DialogProps,
   DialogSize,
+  CommandItem,
+  CommandPaletteProps,
   DrawerPlacement,
   DrawerProps,
+  EmptyStateAction,
+  EmptyStateProps,
+  EmptyStateSize,
+  FileUploadError,
+  FileUploadProps,
   FooterBrandAlign,
   FooterButton,
   FooterColumn,
@@ -212,6 +226,9 @@ export type {
   ToastOptions,
   ToastPosition,
   ToastProps,
+  TooltipPlacement,
+  TooltipProps,
+  TooltipVariant,
   UserProps,
 } from "./types";
 export { BREAKPOINTS } from "./utils/responsive";

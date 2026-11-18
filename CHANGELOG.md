@@ -2,6 +2,19 @@
 
 All notable changes to noofpi-ui are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [1.1.0] - 2026-11-18
+
+### Added
+
+- `NTooltip` with accessible hover and keyboard-focus behavior, collision-aware placement, solid and soft variants, custom content, delays, controlled open state, and reduced-motion support.
+- `NEmptyState` with configurable media, semantic colors, actions, sizes, and slots.
+- `NCommandPalette` with fuzzy-style local search, grouped commands, keyboard navigation, disabled items, shortcuts, and accessible dialog semantics.
+- `NFileUpload` with drag-and-drop, previews, single or multiple selection, accept filters, size/count validation, removal, and form integration.
+
+### Changed
+
+- Soft buttons now use the same light tint as soft badges, with consistent hover and pressed shades.
+
 ## [1.0.1] - 2026-11-17
 
 ### Changed

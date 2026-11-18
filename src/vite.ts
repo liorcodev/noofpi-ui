@@ -18,11 +18,14 @@ export const COMPONENTS = [
   "NCheckboxGroup",
   "NChip",
   "NCombobox",
+  "NCommandPalette",
   "NDashboard",
   "NDataList",
   "NDatePicker",
   "NDialog",
   "NDrawer",
+  "NEmptyState",
+  "NFileUpload",
   "NFooter",
   "NForm",
   "NFormField",
@@ -51,6 +54,7 @@ export const COMPONENTS = [
   "NTabs",
   "NToast",
   "NToaster",
+  "NTooltip",
   "NUser",
 ];
 

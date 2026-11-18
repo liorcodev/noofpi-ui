@@ -207,6 +207,85 @@ export interface CardProps {
   color?: ButtonColor;
 }
 
+export const EMPTY_STATE_SIZES = ["sm", "md", "lg"] as const;
+export type EmptyStateSize = (typeof EMPTY_STATE_SIZES)[number];
+export type EmptyStateAction = ButtonProps & {
+  onClick?: (event: MouseEvent) => void;
+};
+
+export interface EmptyStateProps {
+  /** Element or component to render. Default: `"div"` */
+  as?: string | Component;
+  title?: string;
+  description?: string;
+  /** Leading illustration icon */
+  icon?: ButtonIcon;
+  /** Accent color. Default: `"primary"` */
+  color?: ButtonColor;
+  /** Default: `"md"` */
+  size?: EmptyStateSize;
+  /** Action buttons */
+  actions?: EmptyStateAction[];
+}
+
+export interface CommandItem {
+  /** Stable value used as the default item key */
+  value?: string | number;
+  label: string;
+  description?: string;
+  /** Consecutive items with the same group render under one heading */
+  group?: string;
+  icon?: ButtonIcon;
+  keywords?: string[];
+  shortcut?: string;
+  disabled?: boolean;
+  /** `event.preventDefault()` keeps the palette open */
+  onSelect?: (event: Event) => void;
+}
+
+export interface CommandPaletteProps {
+  items?: readonly CommandItem[];
+  placeholder?: string;
+  label?: string;
+  emptyTitle?: string;
+  emptyDescription?: string;
+  closeLabel?: string;
+  dismissible?: boolean;
+  /** Filter label, description, group and keywords locally. Default: `true` */
+  filter?: boolean;
+  /** Open state (`v-model:open`) */
+  open?: boolean;
+  /** Search text (`v-model:search`) */
+  search?: string;
+}
+
+export interface FileUploadError {
+  type: "accept" | "size" | "count";
+  file?: File;
+  message: string;
+}
+
+export interface FileUploadProps {
+  /** Native `accept` filter */
+  accept?: string;
+  multiple?: boolean;
+  /** Maximum bytes per file */
+  maxSize?: number;
+  /** Maximum accepted files when `multiple` is enabled */
+  maxFiles?: number;
+  disabled?: boolean;
+  name?: string;
+  label?: string;
+  browseLabel?: string;
+  dropLabel?: string;
+  description?: string;
+  invalid?: boolean;
+  removeLabel?: string;
+  icon?: ButtonIcon;
+  /** Selected files (`v-model`) */
+  modelValue?: File[];
+}
+
 export const STAT_TRENDS = ["up", "down", "neutral"] as const;
 
 export type StatTrend = (typeof STAT_TRENDS)[number];
@@ -926,6 +1005,36 @@ export interface MenuProps {
   label?: string;
   /** Doesn't open. Default: `false` */
   disabled?: boolean;
+  /** Open state (`v-model:open`) */
+  open?: boolean;
+}
+
+export const TOOLTIP_PLACEMENTS = ["top", "right", "bottom", "left"] as const;
+export const TOOLTIP_VARIANTS = ["solid", "soft"] as const;
+
+export type TooltipPlacement = (typeof TOOLTIP_PLACEMENTS)[number];
+export type TooltipVariant = (typeof TOOLTIP_VARIANTS)[number];
+
+export interface TooltipProps {
+  /** Tooltip text. The `content` slot replaces it */
+  text?: string;
+  /** Preferred side. Flips to the opposite side when needed. Default: `"top"` */
+  placement?: TooltipPlacement;
+  /** Default: `"solid"` */
+  variant?: TooltipVariant;
+  /** Accent color. Default: `"neutral"` */
+  color?: ButtonColor;
+  /** Hover delay in milliseconds. Focus opens immediately. Default: `350` */
+  delay?: number;
+  /** Delay before closing on hover exit in milliseconds. Default: `100` */
+  hideDelay?: number;
+  disabled?: boolean;
+  /** Default: `true` */
+  arrow?: boolean;
+  /** CSS maximum width. Default: `"16rem"` */
+  maxWidth?: string;
+  /** Teleport target. Use `false` to render in place. Default: `"body"` */
+  to?: string | object | false;
   /** Open state (`v-model:open`) */
   open?: boolean;
 }

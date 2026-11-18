@@ -233,16 +233,11 @@
       --n-bg-active: var(--n-tint-hover);
     }
 
-    /* Rests on the shade it used to only show on hover, so hover and press step darker */
     &[data-variant="soft"] {
-      --n-bg: var(--n-tint-hover);
+      --n-bg: var(--n-tint);
       --n-fg: var(--n-tone);
-      --n-bg-hover: var(--n-tint-active);
-      --n-bg-active: color-mix(
-        in oklab,
-        var(--n-tint-active) 85%,
-        var(--n-tone)
-      );
+      --n-bg-hover: var(--n-tint-hover);
+      --n-bg-active: var(--n-tint-active);
     }
 
     &[data-variant="subtle"] {
