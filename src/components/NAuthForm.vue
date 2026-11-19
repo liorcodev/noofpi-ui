@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T = unknown">
-import { computed, reactive, type PropType } from "vue";
+import { computed, reactive, ref, watch, type PropType } from "vue";
 import type {
   AuthField,
   AuthProvider,
@@ -35,6 +35,8 @@ const props = defineProps({
   loading: { type: Boolean, default: false },
   /** A failure to show above the submit button, e.g. "Wrong email or password" */
   error: { type: String, default: undefined },
+  /** Toggle it (`true` to `false` or back) to empty the inputs and clear the errors, e.g. after a failed sign in. With `form`, calls its `reset()` */
+  clear: { type: Boolean, default: false },
   /** The result of `useDoofpiForm()`; its `values` are the inputs' state */
   form: {
     type: Object as PropType<NoofpiFormLike & { values: object }>,
@@ -51,14 +53,14 @@ const emit = defineEmits<{
   error: [errors: FormErrors];
 }>();
 
-const own = reactive<Record<string, unknown>>(
+const emptyValues = () =>
   Object.fromEntries(
     props.fields.map((field) => [
       field.name,
       field.type === "checkbox" ? false : "",
     ]),
-  ),
-);
+  );
+const own = reactive<Record<string, unknown>>(emptyValues());
 const values = computed(
   () => (props.form?.values ?? own) as Record<string, unknown>,
 );
@@ -66,10 +68,21 @@ const values = computed(
 const passthrough: FormSchema<unknown> = {
   safeParse: (value) => ({ success: true, data: { ...(value as object) } }),
 };
+
+const formRef = ref<InstanceType<typeof NForm>>();
+
+watch(
+  () => props.clear,
+  () => {
+    if (!props.form) Object.assign(own, emptyValues());
+    formRef.value?.reset();
+  },
+);
 </script>
 
 <template>
   <NForm
+    ref="formRef"
     class="n-auth"
     :form="form"
     :schema="schema ?? passthrough"

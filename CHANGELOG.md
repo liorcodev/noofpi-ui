@@ -4,6 +4,10 @@ All notable changes to noofpi-ui are documented here. The format follows [Keep a
 
 ## [Unreleased]
 
+### Added
+
+- `NAuthForm`: a `clear` prop. Toggling it empties the inputs and clears the errors, e.g. after a failed sign in. With `form` it calls that form's `reset()`.
+
 ### Fixed
 
 - `NFileExplorer`: toolbar actions, including Sort and List/Grid view controls, wrap without overflowing on mobile.

@@ -141,6 +141,43 @@ describe("NAuthForm", () => {
     expect(wrapper.emitted("submit")).toBeUndefined();
   });
 
+  it("empties the inputs and the errors when `clear` is toggled", async () => {
+    const wrapper = mount(NAuthForm, {
+      props: { fields: [...fields], schema: loginSchema },
+    });
+    await wrapper.find("input[type=email]").setValue("nope");
+    await wrapper.find("input[type=checkbox]").setValue(true);
+    await wrapper.trigger("submit");
+    expect(wrapper.text()).toContain("Enter a valid email");
+
+    await wrapper.setProps({ clear: true });
+    expect(
+      (wrapper.find("input[type=email]").element as HTMLInputElement).value,
+    ).toBe("");
+    expect(
+      (wrapper.find("input[type=checkbox]").element as HTMLInputElement)
+        .checked,
+    ).toBe(false);
+    expect(wrapper.text()).not.toContain("Enter a valid email");
+  });
+
+  it("calls the form's reset() when `clear` is toggled with a useDoofpiForm result", async () => {
+    const form = {
+      values: reactive({ email: "a@b.co" }),
+      errors: ref({}),
+      failure: ref<string | null>(null),
+      submitting: ref(false),
+      submit: vi.fn(),
+      validate: () => true,
+      reset: vi.fn(),
+    } as unknown as NoofpiFormLike & { values: object };
+    const wrapper = mount(NAuthForm, {
+      props: { fields: [fields[0]], form },
+    });
+    await wrapper.setProps({ clear: true });
+    expect(form.reset).toHaveBeenCalledOnce();
+  });
+
   it("works through a useDoofpiForm result", async () => {
     const form = {
       values: reactive({ email: "", password: "" }),
