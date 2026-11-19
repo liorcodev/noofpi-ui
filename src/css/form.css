@@ -1,4 +1,6 @@
 /* Form tokens: override in your CSS, e.g. `:root { --n-input-h: 3rem; }` */
+@source inline("i-lucide-{eye,eye-off}");
+
 @layer base {
   :root {
     --n-input-h: 2.5rem;
@@ -485,6 +487,24 @@
 
       @variant dark {
         background-color: var(--ui-neutral-800);
+      }
+    }
+  }
+
+  .n-auth-reveal {
+    display: inline-flex;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    color: inherit;
+    background: none;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--ui-neutral-700);
+
+      @variant dark {
+        color: var(--ui-neutral-300);
       }
     }
   }

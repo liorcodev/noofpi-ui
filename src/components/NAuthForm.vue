@@ -69,6 +69,12 @@ const passthrough: FormSchema<unknown> = {
   safeParse: (value) => ({ success: true, data: { ...(value as object) } }),
 };
 
+const revealed = reactive<Record<string, boolean>>({});
+const isRevealable = (field: AuthField) =>
+  field.type === "password" && Boolean(field.revealable);
+const inputType = (field: AuthField) =>
+  isRevealable(field) && revealed[field.name] ? "text" : (field.type ?? "text");
+
 const formRef = ref<InstanceType<typeof NForm>>();
 
 watch(
@@ -141,12 +147,34 @@ watch(
           <NInput
             v-else
             :model-value="values[field.name] as string"
-            :type="field.type ?? 'text'"
+            :type="inputType(field)"
             :name="field.name"
             :placeholder="field.placeholder"
             :autocomplete="field.autocomplete"
+            :icon="field.icon"
+            :trailing-icon="
+              isRevealable(field) ? undefined : field.trailingIcon
+            "
             @update:model-value="values[field.name] = $event"
-          />
+          >
+            <template v-if="isRevealable(field)" #trailing>
+              <button
+                type="button"
+                class="n-auth-reveal"
+                :aria-label="
+                  revealed[field.name] ? 'Hide password' : 'Show password'
+                "
+                :aria-pressed="revealed[field.name] ? 'true' : 'false'"
+                @click="revealed[field.name] = !revealed[field.name]"
+              >
+                <NIcon
+                  :name="
+                    revealed[field.name] ? 'i-lucide-eye-off' : 'i-lucide-eye'
+                  "
+                />
+              </button>
+            </template>
+          </NInput>
         </template>
       </NFormField>
 

@@ -7,6 +7,8 @@ All notable changes to noofpi-ui are documented here. The format follows [Keep a
 ### Added
 
 - `NAuthForm`: a `clear` prop. Toggling it empties the inputs and clears the errors, e.g. after a failed sign in. With `form` it calls that form's `reset()`.
+- `NAuthForm`: `AuthField` accepts `icon` and `trailingIcon`, shown before and after the text of the input.
+- `NAuthForm`: `AuthField` accepts `revealable` on a `password` field, which adds an eye button that shows or hides the text.
 
 ### Fixed
 

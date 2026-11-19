@@ -741,6 +741,12 @@ export interface AuthField {
   description?: string;
   help?: string;
   required?: boolean;
+  /** Icon before the text (an icon class or a component) */
+  icon?: ButtonIcon;
+  /** Icon after the text. Ignored for a `revealable` password field */
+  trailingIcon?: ButtonIcon;
+  /** Adds an eye button that shows or hides the text of a `"password"` field */
+  revealable?: boolean;
 }
 
 export interface AuthProvider {
