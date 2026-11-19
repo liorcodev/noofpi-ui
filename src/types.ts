@@ -562,7 +562,7 @@ export interface HeaderItem {
   /** Link target: `href` of an `<a>`, or `to` of `linkAs` (e.g. `NuxtLink`) */
   to?: string;
   icon?: ButtonIcon;
-  /** Marks the current page (`aria-current="page"`) */
+  /** Fallback current-page marker. A matching URL takes priority, so a stale fallback does not stay active. */
   active?: boolean;
   disabled?: boolean;
   target?: string;
@@ -890,6 +890,120 @@ export interface AccordionProps {
   modelValue?: string | number | (string | number)[];
 }
 
+export type TreeValue = string | number;
+export type TreeSelection = "single" | "multiple";
+
+export interface TreeItem {
+  value: TreeValue;
+  label: string;
+  description?: string;
+  icon?: ButtonIcon;
+  badge?: string | number;
+  disabled?: boolean;
+  children?: TreeItem[];
+}
+
+export interface TreeProps {
+  items?: TreeItem[];
+  /** Selection mode. Default: `"single"` */
+  selection?: TreeSelection;
+  searchable?: boolean;
+  searchPlaceholder?: string;
+  emptyText?: string;
+  /** Shows checkboxes and maintains `v-model:checked` independently from selection */
+  checkable?: boolean;
+  /** Lets rows accept drops; the `drop` event carries the row's item and the native event. Default: `false` */
+  droppable?: boolean;
+  /** Loads children on first expansion for nodes without `children` */
+  loadChildren?: (item: TreeItem) => TreeItem[] | Promise<TreeItem[]>;
+  /** Text announced by assistive technology. Default: `"Tree"` */
+  label?: string;
+  /** Selected value, or values with `selection="multiple"` (`v-model:selected`) */
+  selected?: TreeValue | TreeValue[] | undefined;
+  /** Expanded node values (`v-model:expanded`) */
+  expanded?: TreeValue[];
+  /** Checked node values (`v-model:checked`) */
+  checked?: TreeValue[];
+  /** Search text (`v-model:search`) */
+  search?: string;
+}
+
+export type FileExplorerView = "list" | "grid";
+
+export const FILE_EXPLORER_SORT_KEYS = ["name", "size", "modified"] as const;
+export type FileExplorerSortKey = (typeof FILE_EXPLORER_SORT_KEYS)[number];
+export type FileExplorerSortDirection = "asc" | "desc";
+
+/** Folders always stay before files; the sort applies within each */
+export interface FileExplorerSort {
+  key: FileExplorerSortKey;
+  direction: FileExplorerSortDirection;
+}
+
+/** The built-in actions. `upload` is not one of them: it is switched on with `showUpload` */
+export const FILE_EXPLORER_ACTIONS = [
+  "new-folder",
+  "download",
+  "copy",
+  "cut",
+  "paste",
+  "rename",
+  "delete",
+] as const;
+export type FileExplorerAction = (typeof FILE_EXPLORER_ACTIONS)[number];
+
+export interface FileItem {
+  value: TreeValue;
+  label: string;
+  /** Default: inferred from `children` or `loadChildren` */
+  type?: "file" | "folder";
+  description?: string;
+  icon?: ButtonIcon;
+  size?: number;
+  modified?: string | Date;
+  /** Where the file can be downloaded from. The Download action saves it; without it, only the `download` event is emitted */
+  url?: string;
+  disabled?: boolean;
+  children?: FileItem[];
+}
+
+/**
+ * A file manager. It only displays and reports: every change (`rename`, `delete`, `move`, `copy`, `upload`,
+ * `create-folder`) is an event, and you apply it to the `items` you pass in.
+ */
+export interface FileExplorerProps {
+  /** The top level files and folders */
+  items?: FileItem[];
+  /** The open folder (`v-model:current`). `undefined` is the top level */
+  current?: TreeValue;
+  /** Selected values (`v-model:selected`) */
+  selected?: TreeValue[];
+  /** Default: `"list"` */
+  view?: FileExplorerView;
+  /** How the items are ordered (`v-model:sort`). Default: `{ key: "name", direction: "asc" }` */
+  sort?: FileExplorerSort;
+  /** Which built-in actions are offered. Default: all of them */
+  actions?: readonly FileExplorerAction[];
+  /** Ctrl/Cmd-click and Shift-click select several items. Default: `false` */
+  multiple?: boolean;
+  /** Search box that filters the open folder. Default: `true` */
+  searchable?: boolean;
+  /** Shows the Upload button and accepts files dropped from the computer. Default: `false` */
+  showUpload?: boolean;
+  /** Name of the top level, used by the first breadcrumb and the first entry of the folder tree. Default: `"All files"` */
+  rootLabel?: string;
+  searchPlaceholder?: string;
+  /** Shown in an empty folder. Default: `"This folder is empty"` */
+  emptyText?: string;
+  /** Accessible name. Default: `"File explorer"` */
+  label?: string;
+  /** Loads the content of a folder without `children` the first time it is opened. The `load` event reports the result */
+  loadChildren?: (folder: FileItem) => FileItem[] | Promise<FileItem[]>;
+  /** `accept` of the upload file picker, e.g. `"image/*"` */
+  accept?: string;
+  disabled?: boolean;
+}
+
 export const TABS_ORIENTATIONS = ["horizontal", "vertical"] as const;
 export type TabsOrientation = (typeof TABS_ORIENTATIONS)[number];
 
@@ -1004,6 +1118,67 @@ export interface MenuProps {
   linkAs?: string | Component;
   /** Accessible name of the menu */
   label?: string;
+  /** Doesn't open. Default: `false` */
+  disabled?: boolean;
+  /** Open state (`v-model:open`) */
+  open?: boolean;
+}
+
+export interface ContextMenuProps {
+  /** Items of the menu, as in `NMenu`. An array of arrays is a list of groups, divided by separators */
+  items?: MenuItem[] | MenuItem[][];
+  /** Element or component of the links, e.g. `NuxtLink`. Default: `"a"` */
+  linkAs?: string | Component;
+  /** Accessible name of the menu */
+  label?: string;
+  /** Teleport target. Use `false` to render in place. Default: `"body"` */
+  to?: string | HTMLElement | false;
+  /** Keeps the browser's own context menu. Default: `false` */
+  disabled?: boolean;
+  /** Open state (`v-model:open`) */
+  open?: boolean;
+}
+
+export const POPOVER_PLACEMENTS = [
+  "top-start",
+  "top",
+  "top-end",
+  "right-start",
+  "right",
+  "right-end",
+  "bottom-start",
+  "bottom",
+  "bottom-end",
+  "left-start",
+  "left",
+  "left-end",
+] as const;
+export const POPOVER_TRIGGERS = ["click", "hover", "manual"] as const;
+
+export type PopoverPlacement = (typeof POPOVER_PLACEMENTS)[number];
+export type PopoverTrigger = (typeof POPOVER_TRIGGERS)[number];
+
+export interface PopoverProps {
+  /** Preferred placement. Flips and shifts to stay inside the viewport. Default: `"bottom-start"` */
+  placement?: PopoverPlacement;
+  /** How the popover opens. Default: `"click"` */
+  trigger?: PopoverTrigger;
+  /** Accessible name of the popover */
+  label?: string;
+  /** Closes on `Escape` and pointer interaction outside. Default: `true` */
+  dismissible?: boolean;
+  /** Shows a pointer back to the trigger. Default: `true` */
+  arrow?: boolean;
+  /** Distance from the trigger in pixels. Default: `8` */
+  offset?: number;
+  /** Hover delay in milliseconds. Focus opens immediately. Default: `100` */
+  delay?: number;
+  /** Delay before closing after hover leaves. Default: `100` */
+  hideDelay?: number;
+  /** CSS maximum width. Default: `"20rem"` */
+  maxWidth?: string;
+  /** Teleport target. Use `false` to render in place. Default: `"body"` */
+  to?: string | HTMLElement | false;
   /** Doesn't open. Default: `false` */
   disabled?: boolean;
   /** Open state (`v-model:open`) */

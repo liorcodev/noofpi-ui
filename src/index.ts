@@ -13,6 +13,7 @@ export { default as NCheckboxGroup } from "./components/NCheckboxGroup.vue";
 export { default as NChip } from "./components/NChip.vue";
 export { default as NCombobox } from "./components/NCombobox.vue";
 export { default as NCommandPalette } from "./components/NCommandPalette.vue";
+export { default as NContextMenu } from "./components/NContextMenu.vue";
 export { default as NDashboard } from "./components/NDashboard.vue";
 export { default as NDataList } from "./components/NDataList.vue";
 export { default as NDatePicker } from "./components/NDatePicker.vue";
@@ -20,6 +21,7 @@ export { default as NDialog } from "./components/NDialog.vue";
 export { default as NDrawer } from "./components/NDrawer.vue";
 export { default as NEmptyState } from "./components/NEmptyState.vue";
 export { default as NFileUpload } from "./components/NFileUpload.vue";
+export { default as NFileExplorer } from "./components/NFileExplorer.vue";
 export { default as NFooter } from "./components/NFooter.vue";
 export { default as NForm } from "./components/NForm.vue";
 export { default as NFormField } from "./components/NFormField.vue";
@@ -34,6 +36,7 @@ export { default as NNumberInput } from "./components/NNumberInput.vue";
 export { default as NPageHeader } from "./components/NPageHeader.vue";
 export { default as NPagination } from "./components/NPagination.vue";
 export { default as NPinInput } from "./components/NPinInput.vue";
+export { default as NPopover } from "./components/NPopover.vue";
 export { default as NProgress } from "./components/NProgress.vue";
 export { default as NRadioGroup } from "./components/NRadioGroup.vue";
 export { default as NScrollToTop } from "./components/NScrollToTop.vue";
@@ -49,6 +52,7 @@ export { default as NTabs } from "./components/NTabs.vue";
 export { default as NToast } from "./components/NToast.vue";
 export { default as NToaster } from "./components/NToaster.vue";
 export { default as NTooltip } from "./components/NTooltip.vue";
+export { default as NTree } from "./components/NTree.vue";
 export { default as NUser } from "./components/NUser.vue";
 export { toast, useToast } from "./composables/useToast";
 export {
@@ -73,6 +77,8 @@ export {
   DIALOG_PLACEMENTS,
   DIALOG_SIZES,
   EMPTY_STATE_SIZES,
+  FILE_EXPLORER_ACTIONS,
+  FILE_EXPLORER_SORT_KEYS,
   FOOTER_BRAND_ALIGNS,
   FOOTER_COPYRIGHT_ALIGNS,
   HEADER_BREAKPOINTS,
@@ -84,6 +90,8 @@ export {
   MENU_PLACEMENTS,
   PAGE_HEADER_SIZES,
   PAGINATION_SIZES,
+  POPOVER_PLACEMENTS,
+  POPOVER_TRIGGERS,
   PIN_INPUT_TYPES,
   PROGRESS_SIZES,
   SKELETON_SHAPES,
@@ -150,6 +158,7 @@ export type {
   DialogSize,
   CommandItem,
   CommandPaletteProps,
+  ContextMenuProps,
   DrawerPlacement,
   DrawerProps,
   EmptyStateAction,
@@ -157,6 +166,13 @@ export type {
   EmptyStateSize,
   FileUploadError,
   FileUploadProps,
+  FileExplorerAction,
+  FileExplorerProps,
+  FileExplorerSort,
+  FileExplorerSortDirection,
+  FileExplorerSortKey,
+  FileExplorerView,
+  FileItem,
   FooterBrandAlign,
   FooterButton,
   FooterColumn,
@@ -189,6 +205,9 @@ export type {
   PaginationProps,
   PaginationSize,
   PinInputType,
+  PopoverPlacement,
+  PopoverProps,
+  PopoverTrigger,
   ProgressProps,
   ProgressSize,
   SelectItem,
@@ -229,6 +248,10 @@ export type {
   TooltipPlacement,
   TooltipProps,
   TooltipVariant,
+  TreeItem,
+  TreeProps,
+  TreeSelection,
+  TreeValue,
   UserProps,
 } from "./types";
 export { BREAKPOINTS } from "./utils/responsive";

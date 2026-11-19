@@ -9,12 +9,14 @@
 @import "./card.css";
 @import "./chip.css";
 @import "./command-palette.css";
+@import "./context-menu.css";
 @import "./dashboard.css";
 @import "./data-list.css";
 @import "./date-picker.css";
 @import "./dialog.css";
 @import "./empty-state.css";
 @import "./file-upload.css";
+@import "./file-explorer.css";
 @import "./footer.css";
 @import "./form.css";
 @import "./header.css";
@@ -25,6 +27,7 @@
 @import "./menu.css";
 @import "./page-header.css";
 @import "./pagination.css";
+@import "./popover.css";
 @import "./progress.css";
 @import "./scroll-to-top.css";
 @import "./select.css";
@@ -38,6 +41,7 @@
 @import "./tabs.css";
 @import "./toast.css";
 @import "./tooltip.css";
+@import "./tree.css";
 @import "./user.css";
 
 /* Iconify icons by name: `i-lucide-plus` (Lucide is bundled). Install `@iconify-json/<set>` and `i-<set>-<icon>` works too. */

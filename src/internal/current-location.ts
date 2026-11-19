@@ -1,4 +1,5 @@
 import { onBeforeUnmount, onMounted, ref } from "vue";
+import type { HeaderItem } from "../types";
 
 // Where the page is now, to mark the plain `a` links; a router component marks its own
 export function useCurrentLocation() {
@@ -29,5 +30,15 @@ export function useCurrentLocation() {
     }
   }
 
-  return { isCurrent };
+  function activeItem(items: readonly HeaderItem[], automatic = true) {
+    if (automatic) {
+      const current = items.find(
+        (item) => item.active !== false && isCurrent(item.to),
+      );
+      if (current) return current;
+    }
+    return items.find((item) => item.active);
+  }
+
+  return { activeItem };
 }

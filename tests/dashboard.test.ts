@@ -46,6 +46,24 @@ describe("NSidebar", () => {
     expect(wrapper.find(".n-sidebar-footer").exists()).toBe(false);
   });
 
+  it("keeps only the matching sidebar link active across groups", async () => {
+    history.replaceState(null, "", "/settings");
+    const wrapper = mount(NSidebar, {
+      props: {
+        items: [{ label: "Overview", to: "/", active: true }],
+        groups: [
+          { label: "Account", items: [{ label: "Settings", to: "/settings" }] },
+        ],
+      },
+    });
+    await wrapper.vm.$nextTick();
+    const active = wrapper.findAll(".n-sidebar-link[aria-current='page']");
+    expect(active).toHaveLength(1);
+    expect(active[0]!.text()).toBe("Settings");
+    wrapper.unmount();
+    history.replaceState(null, "", "/");
+  });
+
   it("collapses to a rail with the collapse button", async () => {
     const wrapper = mount(NSidebar, {
       props: {

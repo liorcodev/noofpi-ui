@@ -1,0 +1,121 @@
+/* Popover tokens: override in your CSS, e.g. `:root { --n-popover-min-w: 18rem; }` */
+@layer base {
+  :root {
+    --n-popover-z: 70;
+    --n-popover-min-w: 14rem;
+    --n-popover-bg: #fff;
+    --n-popover-border: var(--ui-neutral-200);
+    --n-popover-fg: var(--ui-neutral-800);
+    --n-popover-shadow:
+      0 14px 28px -8px rgb(0 0 0 / 0.22), 0 6px 12px -6px rgb(0 0 0 / 0.14);
+
+    @variant dark {
+      --n-popover-bg: var(--ui-neutral-900);
+      --n-popover-border: var(--ui-neutral-700);
+      --n-popover-fg: var(--ui-neutral-100);
+      --n-popover-shadow:
+        0 14px 32px -8px rgb(0 0 0 / 0.7), 0 6px 14px -6px rgb(0 0 0 / 0.55);
+    }
+  }
+}
+
+@layer components {
+  .n-popover-trigger {
+    display: inline-flex;
+    vertical-align: middle;
+
+    &[role="button"] {
+      cursor: pointer;
+      border-radius: var(--ui-radius, 0.5rem);
+
+      &:focus-visible {
+        outline: 2px solid var(--ui-primary-500);
+        outline-offset: 2px;
+      }
+    }
+
+    &[data-disabled] {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+  }
+
+  .n-popover {
+    position: fixed;
+    z-index: var(--n-popover-z);
+    box-sizing: border-box;
+    min-width: min(var(--n-popover-min-w), calc(100vw - 1rem));
+    padding: 1rem;
+    border: 1px solid var(--n-popover-border);
+    border-radius: var(--ui-radius, 0.5rem);
+    background-color: var(--n-popover-bg);
+    color: var(--n-popover-fg);
+    box-shadow: var(--n-popover-shadow);
+    outline: none;
+    overflow-wrap: anywhere;
+    transform-origin: center;
+
+    &[data-side="top"] {
+      transform-origin: bottom;
+    }
+    &[data-side="bottom"] {
+      transform-origin: top;
+    }
+    &[data-side="left"] {
+      transform-origin: right;
+    }
+    &[data-side="right"] {
+      transform-origin: left;
+    }
+  }
+
+  .n-popover-arrow {
+    position: absolute;
+    width: 0.625rem;
+    height: 0.625rem;
+    border: inherit;
+    background-color: var(--n-popover-bg);
+    transform: rotate(45deg);
+
+    .n-popover[data-side="top"] & {
+      bottom: -0.34375rem;
+      left: calc(var(--n-popover-arrow-x, 50%) - 0.3125rem);
+      border-width: 0 1px 1px 0;
+    }
+    .n-popover[data-side="bottom"] & {
+      top: -0.34375rem;
+      left: calc(var(--n-popover-arrow-x, 50%) - 0.3125rem);
+      border-width: 1px 0 0 1px;
+    }
+    .n-popover[data-side="left"] & {
+      right: -0.34375rem;
+      top: calc(var(--n-popover-arrow-y, 50%) - 0.3125rem);
+      border-width: 1px 1px 0 0;
+    }
+    .n-popover[data-side="right"] & {
+      left: -0.34375rem;
+      top: calc(var(--n-popover-arrow-y, 50%) - 0.3125rem);
+      border-width: 0 0 1px 1px;
+    }
+  }
+
+  .n-popover-enter-active,
+  .n-popover-leave-active {
+    transition:
+      opacity 0.14s ease,
+      scale 0.14s ease;
+  }
+
+  .n-popover-enter-from,
+  .n-popover-leave-to {
+    opacity: 0;
+    scale: 0.97;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .n-popover-enter-active,
+    .n-popover-leave-active {
+      transition: opacity 0.01ms;
+    }
+  }
+}

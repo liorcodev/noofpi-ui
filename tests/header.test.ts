@@ -104,6 +104,24 @@ describe("NHeader", () => {
     history.replaceState(null, "", "/");
   });
 
+  it("lets a URL match replace a static active fallback", async () => {
+    history.replaceState(null, "", "/#docs");
+    const wrapper = mountHeader({
+      items: [
+        { label: "Home", to: "/", active: true },
+        { label: "Docs", to: "/#docs" },
+      ],
+    });
+    await wrapper.vm.$nextTick();
+    const active = wrapper.findAll(
+      ".n-header-nav .n-header-link[aria-current='page']",
+    );
+    expect(active).toHaveLength(1);
+    expect(active[0]!.text()).toBe("Docs");
+    wrapper.unmount();
+    history.replaceState(null, "", "/");
+  });
+
   it("puts the nav links and buttons in the mobile menu", async () => {
     const wrapper = mountHeader({ buttons: [{ label: "Sign up" }] });
     await wrapper.find(".n-header-toggle").trigger("click");

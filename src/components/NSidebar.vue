@@ -41,11 +41,14 @@ const canCollapse = computed(
 );
 const rail = computed(() => canCollapse.value && collapsed.value);
 
-const { isCurrent } = useCurrentLocation();
+const { activeItem } = useCurrentLocation();
+const allItems = computed(() => [
+  ...props.items,
+  ...props.groups.flatMap((group) => group.items),
+]);
 
 function isActive(item: HeaderItem) {
-  if (item.active !== undefined) return item.active;
-  return props.linkAs === "a" && isCurrent(item.to);
+  return activeItem(allItems.value, props.linkAs === "a") === item;
 }
 
 function linkAttrs(item: HeaderItem) {

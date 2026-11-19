@@ -47,4 +47,26 @@ describe("NFooter", () => {
     expect(wrapper.attributes("data-copyright-align")).toBe("center");
     expect(wrapper.attributes("data-border")).toBeUndefined();
   });
+
+  it("prioritizes the current footer link over an active fallback", async () => {
+    history.replaceState(null, "", "/pricing");
+    const wrapper = mount(NFooter, {
+      props: {
+        columns: [
+          {
+            items: [
+              { label: "Home", to: "/", active: true },
+              { label: "Pricing", to: "/pricing" },
+            ],
+          },
+        ],
+      },
+    });
+    await wrapper.vm.$nextTick();
+    const active = wrapper.findAll(".n-footer-link[aria-current='page']");
+    expect(active).toHaveLength(1);
+    expect(active[0]!.text()).toBe("Pricing");
+    wrapper.unmount();
+    history.replaceState(null, "", "/");
+  });
 });

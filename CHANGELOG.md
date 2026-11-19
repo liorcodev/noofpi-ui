@@ -4,7 +4,20 @@ All notable changes to noofpi-ui are documented here. The format follows [Keep a
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-11-19
+
+### Added
+
+- `NContextMenu`: wraps an area and opens a menu at the pointer on right click, on long press for touch, and with `Shift+F10` or the context menu key. It takes the same `items` as `NMenu` and stays inside the viewport.
+- `NPopover`: anchored floating panel with `click`, `hover` or `manual` triggers, 12 placements that flip and shift to stay in the viewport, optional arrow, `offset`, `delay` and `hideDelay`, `maxWidth`, dismissal on `Escape` or outside interaction, teleport target, and `v-model:open`.
+- `NTree`: accessible, keyboard-navigable tree with single or multiple selection, `checkable` checkboxes, search, lazy `loadChildren`, `droppable` rows, and `v-model` for `selected`, `expanded`, `checked` and `search`. Items support `description`, `icon`, `badge` and `disabled`.
+- `NFileExplorer`: file manager with list and grid views, a folder tree, breadcrumbs, search, sorting by name, size or modified (folders first), multi-select, drag-and-drop moves, lazy folder loading, and an optional Upload button that also accepts files dropped from the computer. Built-in actions (`new-folder`, `download`, `copy`, `cut`, `paste`, `rename`, `delete`) are configurable with `actions`. It only reports changes: `open`, `rename`, `delete`, `download`, `upload`, `move`, `copy`, `create-folder` and `load` are events you apply to `items`.
+- Exported types and constants: `ContextMenuProps`, `PopoverProps`, `PopoverPlacement`, `PopoverTrigger`, `POPOVER_PLACEMENTS`, `POPOVER_TRIGGERS`, `TreeItem`, `TreeProps`, `TreeSelection`, `TreeValue`, `FileItem`, `FileExplorerProps`, `FileExplorerView`, `FileExplorerSort`, `FileExplorerSortKey`, `FileExplorerSortDirection`, `FileExplorerAction`, `FILE_EXPLORER_SORT_KEYS` and `FILE_EXPLORER_ACTIONS`.
+- `NContextMenu`, `NPopover`, `NTree` and `NFileExplorer` are auto-imported by the `noofpi-ui/vite` plugin and their styles are included in `index.css`.
+
 ### Changed
+
+- `NHeader`, `NSidebar` and `NFooter` mark only one link as current. A link matching the current URL takes priority over the `active` fallback, so a stale `active: true` no longer stays highlighted next to the real page. `NFooter` now marks its current link too (`aria-current="page"`, `data-active`).
 
 - `NAuthForm` is generic over its `schema`: the `submit` event carries the schema's output type instead of `unknown`, so a handler typed with `z.infer<typeof schema>` no longer fails type checking. Without a `schema`, or with a `form`, the payload is still `unknown`.
 

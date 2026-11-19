@@ -78,11 +78,10 @@ const hasMenu = computed(
 const toggle = ref<InstanceType<typeof NButton>>();
 const panelId = useId();
 const scrolled = ref(false);
-const { isCurrent } = useCurrentLocation();
+const { activeItem } = useCurrentLocation();
 
 function isActive(item: HeaderItem) {
-  if (item.active !== undefined) return item.active;
-  return props.linkAs === "a" && isCurrent(item.to);
+  return activeItem(props.items, props.linkAs === "a") === item;
 }
 
 // The width of Tailwind's breakpoints, at which the CSS swaps the menu button for the navigation

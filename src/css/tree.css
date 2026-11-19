@@ -1,0 +1,263 @@
+/* Tree tokens: override in your CSS, e.g. `:root { --n-tree-row-radius: 0.25rem; }` */
+@source inline("i-lucide-{search,chevron-right,loader-circle}");
+
+@layer base {
+  :root {
+    --n-tree-row-h: 2.25rem;
+    --n-tree-row-px: 0.5rem;
+    --n-tree-row-radius: var(--ui-radius, 0.5rem);
+    --n-tree-indent: 1.25rem;
+    --n-tree-fg: var(--ui-neutral-800);
+    --n-tree-muted: var(--ui-neutral-500);
+    --n-tree-border: var(--ui-neutral-200);
+    --n-tree-hover: var(--ui-neutral-100);
+    --n-tree-selected: color-mix(
+      in oklab,
+      var(--ui-primary-500) 12%,
+      transparent
+    );
+    --n-tree-selected-fg: var(--ui-primary-700);
+
+    @variant dark {
+      --n-tree-fg: var(--ui-neutral-100);
+      --n-tree-muted: var(--ui-neutral-400);
+      --n-tree-border: var(--ui-neutral-800);
+      --n-tree-hover: var(--ui-neutral-800);
+      --n-tree-selected: color-mix(
+        in oklab,
+        var(--ui-primary-400) 16%,
+        transparent
+      );
+      --n-tree-selected-fg: var(--ui-primary-300);
+    }
+  }
+}
+
+@layer components {
+  .n-tree {
+    width: 100%;
+    color: var(--n-tree-fg);
+    font-size: 0.875rem;
+  }
+
+  .n-tree-search {
+    position: relative;
+    margin-bottom: 0.75rem;
+  }
+
+  .n-tree-search-icon {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 0.75rem;
+    width: 1rem;
+    height: 1rem;
+    color: var(--n-tree-muted);
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  .n-tree-search-input {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 2.5rem;
+    padding: 0.5rem 0.75rem;
+    padding-inline-start: 2.25rem;
+    border: 1px solid var(--n-tree-border);
+    border-radius: var(--ui-radius, 0.5rem);
+    background-color: transparent;
+    color: inherit;
+    font: inherit;
+    outline: none;
+
+    &:focus {
+      border-color: var(--ui-primary-500);
+      box-shadow: 0 0 0 2px
+        color-mix(in oklab, var(--ui-primary-500) 20%, transparent);
+    }
+  }
+
+  .n-tree-branch {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    .n-tree-branch {
+      padding-inline-start: var(--n-tree-indent);
+    }
+  }
+
+  .n-tree-node {
+    margin: 0;
+    padding: 0;
+  }
+
+  .n-tree-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: var(--n-tree-row-h);
+    box-sizing: border-box;
+    padding: 0.25rem var(--n-tree-row-px);
+    border-radius: var(--n-tree-row-radius);
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+    transition:
+      color 0.12s,
+      background-color 0.12s;
+
+    &:hover {
+      background-color: var(--n-tree-hover);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ui-primary-500);
+      outline-offset: -2px;
+    }
+
+    &[data-selected] {
+      background-color: var(--n-tree-selected);
+      color: var(--n-tree-selected-fg);
+    }
+
+    &[data-drop] {
+      background-color: var(--n-tree-selected);
+      outline: 2px dashed var(--ui-primary-500);
+      outline-offset: -2px;
+    }
+
+    &[aria-disabled="true"] {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+  }
+
+  .n-tree-toggle {
+    display: inline-flex;
+    width: 1rem;
+    height: 1rem;
+    flex: 0 0 1rem;
+    align-items: center;
+    justify-content: center;
+    color: var(--n-tree-muted);
+  }
+
+  .n-tree-chevron {
+    width: 1rem;
+    height: 1rem;
+    transition: transform 0.15s;
+
+    &[data-expanded] {
+      transform: rotate(90deg);
+    }
+  }
+
+  .n-tree-loader {
+    width: 1rem;
+    height: 1rem;
+    animation: n-spin 0.8s linear infinite;
+  }
+
+  .n-tree-toggle-placeholder {
+    cursor: default;
+  }
+
+  .n-tree-checkbox {
+    width: 1rem;
+    height: 1rem;
+    margin: 0;
+    flex: 0 0 auto;
+    appearance: none;
+    box-sizing: border-box;
+    border: 1px solid var(--ui-neutral-400);
+    border-radius: 0.25rem;
+    background-color: transparent;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    cursor: pointer;
+
+    &:checked,
+    &:indeterminate {
+      border-color: var(--ui-primary-500);
+      background-color: var(--ui-primary-500);
+    }
+
+    &:checked {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 8.5l3 3 6-7'/%3E%3C/svg%3E");
+    }
+
+    &:indeterminate {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='white' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M4 8h8'/%3E%3C/svg%3E");
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ui-primary-500);
+      outline-offset: 2px;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+
+    @variant dark {
+      border-color: var(--ui-neutral-600);
+    }
+  }
+
+  .n-tree-icon {
+    width: 1rem;
+    height: 1rem;
+    flex: 0 0 auto;
+    color: var(--n-tree-muted);
+  }
+
+  .n-tree-content {
+    display: flex;
+    min-width: 0;
+    flex: 1;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  .n-tree-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .n-tree-description {
+    overflow: hidden;
+    color: var(--n-tree-muted);
+    font-size: 0.75rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .n-tree-badge {
+    flex: 0 0 auto;
+    padding: 0.0625rem 0.375rem;
+    border-radius: 9999px;
+    background-color: var(--n-tree-hover);
+    color: var(--n-tree-muted);
+    font-size: 0.6875rem;
+    font-weight: 600;
+  }
+
+  .n-tree-empty {
+    padding: 2rem 1rem;
+    color: var(--n-tree-muted);
+    text-align: center;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .n-tree-row,
+    .n-tree-chevron {
+      transition: none;
+    }
+
+    .n-tree-loader {
+      animation-duration: 1.5s;
+    }
+  }
+}

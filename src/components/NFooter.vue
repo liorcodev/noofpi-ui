@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, type PropType } from "vue";
+import { useCurrentLocation } from "../internal/current-location";
 import type {
   ButtonIcon,
   FooterBrandAlign,
@@ -54,6 +55,14 @@ const hasBrand = computed(
 const hasMain = computed(
   () => hasBrand.value || props.columns.length > 0 || !!slots.columns,
 );
+const { activeItem } = useCurrentLocation();
+const allItems = computed(() =>
+  props.columns.flatMap((column) => column.items),
+);
+
+function isActive(item: (typeof allItems.value)[number]) {
+  return activeItem(allItems.value, props.linkAs === "a") === item;
+}
 
 function linkAttrs(to?: string, target?: string) {
   if (props.linkAs === "a")
@@ -123,9 +132,9 @@ function buttonAttrs({ to, ...button }: FooterButton) {
               v-for="item in column.items"
               :key="item.label"
               class="n-footer-link"
-              :aria-current="item.active ? 'page' : undefined"
+              :aria-current="isActive(item) ? 'page' : undefined"
               :aria-disabled="item.disabled ? 'true' : undefined"
-              :data-active="item.active ? '' : undefined"
+              :data-active="isActive(item) ? '' : undefined"
               v-bind="linkAttrs(item.to, item.target)"
             >
               <NIcon v-if="item.icon" :name="item.icon" />

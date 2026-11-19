@@ -1,0 +1,44 @@
+/* The context menu uses the `--n-menu-*` tokens and the `.n-menu-item` rows of NMenu; add `--n-context-menu-z` to change its stacking */
+@layer base {
+  :root {
+    --n-context-menu-z: 80;
+  }
+}
+
+@layer components {
+  .n-context-menu {
+    -webkit-touch-callout: none;
+  }
+
+  .n-context-menu-panel {
+    --n-context-menu-origin: left top;
+
+    position: fixed;
+    z-index: var(--n-context-menu-z);
+    box-sizing: border-box;
+    min-width: var(--n-menu-min-w);
+    max-width: calc(100vw - 1rem);
+    padding: 0.25rem;
+    border: 1px solid var(--n-menu-border);
+    border-radius: var(--ui-radius, 0.5rem);
+    background-color: var(--n-menu-bg);
+    color: var(--n-menu-fg);
+    box-shadow: var(--n-menu-shadow);
+    font-size: 0.875rem;
+    outline: none;
+    transform-origin: var(--n-context-menu-origin);
+  }
+
+  .n-context-menu-enter-active,
+  .n-context-menu-leave-active {
+    transition:
+      opacity 0.12s,
+      scale 0.12s;
+  }
+
+  .n-context-menu-enter-from,
+  .n-context-menu-leave-to {
+    opacity: 0;
+    scale: 0.96;
+  }
+}
