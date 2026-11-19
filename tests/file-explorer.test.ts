@@ -41,10 +41,13 @@ function mountExplorer(
       items,
       current: undefined,
       selected: [],
+      selecting: true,
       "onUpdate:current": (current: TreeValue | undefined) =>
         wrapper.setProps({ current }),
       "onUpdate:selected": (selected: TreeValue[]) =>
         wrapper.setProps({ selected }),
+      "onUpdate:selecting": (selecting: boolean) =>
+        wrapper.setProps({ selecting }),
       ...props,
     },
     attachTo: document.body,
@@ -175,6 +178,28 @@ describe("NFileExplorer selection", () => {
     wrapper.unmount();
   });
 
+  it("selects nothing on a plain click until selection mode is on", async () => {
+    const wrapper = mountExplorer({ selecting: false });
+    await row(wrapper, "docs").trigger("click");
+    await row(wrapper, "notes").trigger("click");
+    expect(selectedValues(wrapper)).toEqual([]);
+    expect(wrapper.props("current")).toBeUndefined();
+
+    await tool(wrapper, "Select").trigger("click");
+    expect(wrapper.attributes("data-selecting")).toBeDefined();
+    expect(tool(wrapper, "Done").attributes("aria-pressed")).toBe("true");
+    await row(wrapper, "notes").trigger("click");
+    expect(selectedValues(wrapper)).toEqual(["notes"]);
+    await row(wrapper, "notes").trigger("click");
+    expect(selectedValues(wrapper)).toEqual([]);
+
+    await row(wrapper, "docs").trigger("click");
+    await tool(wrapper, "Done").trigger("click");
+    expect(selectedValues(wrapper)).toEqual([]);
+    expect(wrapper.attributes("data-selecting")).toBeUndefined();
+    wrapper.unmount();
+  });
+
   it("ignores Ctrl and Shift unless multiple", async () => {
     const wrapper = mountExplorer();
     await row(wrapper, "docs").trigger("click");
@@ -228,11 +253,11 @@ describe("NFileExplorer rename and delete", () => {
   it("renames the single selected item, and not several", async () => {
     const wrapper = mountExplorer({ multiple: true });
     await row(wrapper, "readme").trigger("click");
-    await row(wrapper, "notes").trigger("click", { ctrlKey: true });
+    await row(wrapper, "notes").trigger("click");
     const rename = bar(wrapper, "Rename");
     expect(rename.attributes("disabled")).toBeDefined();
 
-    await row(wrapper, "readme").trigger("click");
+    await row(wrapper, "notes").trigger("click");
     await bar(wrapper, "Rename").trigger("click");
     const input = wrapper.get(".n-file-explorer-rename");
     await input.setValue("GUIDE.md");
@@ -375,15 +400,38 @@ describe("NFileExplorer dragging", () => {
 
   it("starts a drag with the selection, or with the item if it isn't selected", async () => {
     const setData = vi.fn();
+    const setDragImage = vi.fn();
     const wrapper = mountExplorer({ multiple: true });
     await row(wrapper, "readme").trigger("click");
     await row(wrapper, "notes").trigger("click", { ctrlKey: true });
-    await row(wrapper, "notes").trigger("dragstart", drag([], { setData }));
+    await row(wrapper, "notes").trigger(
+      "dragstart",
+      drag([], { setData, setDragImage }),
+    );
     expect(setData).toHaveBeenLastCalledWith(MOVE, '["readme","notes"]');
+    expect(setDragImage).toHaveBeenCalledOnce();
+    expect(setDragImage.mock.calls[0]![0].textContent).toBe("2 items");
 
-    await row(wrapper, "docs").trigger("dragstart", drag([], { setData }));
+    await row(wrapper, "docs").trigger(
+      "dragstart",
+      drag([], { setData, setDragImage }),
+    );
     expect(setData).toHaveBeenLastCalledWith(MOVE, '["docs"]');
-    expect(selectedValues(wrapper)).toEqual(["docs"]);
+    expect(setDragImage).toHaveBeenCalledOnce();
+    expect(selectedValues(wrapper)).toEqual(["notes", "readme"]);
+    wrapper.unmount();
+  });
+
+  it("clears the selection when a tool is used", async () => {
+    const wrapper = mountExplorer({ multiple: true });
+    await row(wrapper, "readme").trigger("click");
+    expect(selectedValues(wrapper)).toEqual(["readme"]);
+    await tool(wrapper, "New folder").trigger("click");
+    expect(selectedValues(wrapper)).toEqual([]);
+
+    await row(wrapper, "readme").trigger("click");
+    await wrapper.get('[aria-label="Grid view"]').trigger("click");
+    expect(selectedValues(wrapper)).toEqual([]);
     wrapper.unmount();
   });
 
@@ -747,6 +795,7 @@ describe("NFileExplorer copy, cut and paste", () => {
     await pasteButton(wrapper).trigger("click");
     expect(wrapper.emitted("copy")?.[0]).toEqual([[items[3]], undefined]);
 
+    await row(wrapper, "notes").trigger("click");
     await bar(wrapper, "Cut").trigger("click");
     expect(canPaste(wrapper)).toBe(false);
     wrapper.unmount();
@@ -790,7 +839,6 @@ describe("NFileExplorer copy, cut and paste", () => {
     expect(wrapper.emitted("copy")).toHaveLength(1);
 
     await wrapper.setProps({ current: undefined });
-    await row(wrapper, "readme").trigger("click");
     await row(wrapper, "readme").trigger("keydown", { key: "Escape" });
     expect(wrapper.find(".n-file-explorer-selection").exists()).toBe(false);
     expect(canPaste(wrapper)).toBe(true);

@@ -978,6 +978,8 @@ export interface FileExplorerProps {
   current?: TreeValue;
   /** Selected values (`v-model:selected`) */
   selected?: TreeValue[];
+  /** Selection mode (`v-model:selecting`): a click selects an item. Off, a click selects nothing; Ctrl/Cmd or Shift-click and `Space` still do. Default: `false` */
+  selecting?: boolean;
   /** Default: `"list"` */
   view?: FileExplorerView;
   /** How the items are ordered (`v-model:sort`). Default: `{ key: "name", direction: "asc" }` */

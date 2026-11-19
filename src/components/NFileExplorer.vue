@@ -57,6 +57,7 @@ const view = defineModel<FileExplorerView>("view", { default: "list" });
 const sort = defineModel<FileExplorerSort>("sort", {
   default: () => ({ key: "name", direction: "asc" }),
 });
+const selecting = defineModel<boolean>("selecting", { default: false });
 
 const emit = defineEmits<{
   /** A file was opened (double click, Enter or the menu). Folders are navigated into instead */
@@ -343,6 +344,25 @@ function select(item: FileItem, event: MouseEvent | KeyboardEvent) {
   anchor.value = item.value;
 }
 
+// A plain click selects nothing, unless selection mode is on. Ctrl/Cmd or Shift-click always selects
+function onRowClick(item: FileItem, event: MouseEvent) {
+  if (event.shiftKey || event.ctrlKey || event.metaKey)
+    return select(item, event);
+  if (!selecting.value || item.disabled || props.disabled) return;
+  focusValue.value = item.value;
+  anchor.value = item.value;
+  const on = selected.value.includes(item.value);
+  if (props.multiple)
+    selected.value = on
+      ? selected.value.filter((value) => value !== item.value)
+      : [...selected.value, item.value];
+  else selected.value = on ? [] : [item.value];
+}
+
+watch(selecting, (on) => {
+  if (!on) clearSelection();
+});
+
 function clearSelection() {
   if (selected.value.length) selected.value = [];
   anchor.value = undefined;
@@ -565,15 +585,26 @@ function actions(item: FileItem): MenuItem[][] {
 
 // --- Sorting, from the toolbar of the grid view ----------------------------------------------------------------
 
+// Every row has its own icon so the labels line up; the current choice is colored and ticked at the end
+const SORT_ICONS = {
+  name: "i-lucide-arrow-up-down",
+  size: "i-lucide-hard-drive",
+  modified: "i-lucide-calendar",
+} as const;
+
 const sortItems = computed<MenuItem[][]>(() => [
   (["name", "size", "modified"] as const).map((key) => ({
     label: key[0]!.toUpperCase() + key.slice(1),
-    icon: sort.value.key === key ? "i-lucide-check" : undefined,
+    icon: SORT_ICONS[key],
+    color: sort.value.key === key ? "primary" : undefined,
+    shortcut: sort.value.key === key ? "✓" : undefined,
     onSelect: () => (sort.value = { ...sort.value, key }),
   })),
   (["asc", "desc"] as const).map((direction) => ({
     label: direction === "asc" ? "Ascending" : "Descending",
-    icon: sort.value.direction === direction ? "i-lucide-check" : undefined,
+    icon: direction === "asc" ? "i-lucide-arrow-up" : "i-lucide-arrow-down",
+    color: sort.value.direction === direction ? "primary" : undefined,
+    shortcut: sort.value.direction === direction ? "✓" : undefined,
     onSelect: () => (sort.value = { ...sort.value, direction }),
   })),
 ]);
@@ -688,10 +719,32 @@ function onDragStart(event: DragEvent, item: FileItem) {
   // `selected` only changes once the parent has applied it, so the dragged values are worked out here
   const wasSelected = selected.value.includes(item.value);
   const values = wasSelected ? [...selected.value] : [item.value];
-  if (!wasSelected) selected.value = values;
   dragValues.value = values;
   event.dataTransfer?.setData(MOVE_TYPE, JSON.stringify(dragValues.value));
   if (event.dataTransfer) event.dataTransfer.effectAllowed = "move";
+  if (values.length > 1) setGroupDragImage(event, item, values.length);
+}
+
+// The browser drags a picture of the one row under the pointer; several items get a single stacked badge
+function setGroupDragImage(event: DragEvent, item: FileItem, count: number) {
+  if (!event.dataTransfer?.setDragImage) return;
+  const image = document.createElement("div");
+  image.textContent = `${count} items`;
+  image.style.cssText = [
+    "position:fixed",
+    "top:-1000px",
+    "left:-1000px",
+    "padding:0.5rem 0.875rem",
+    "border-radius:0.5rem",
+    "background:var(--ui-primary-600, #2563eb)",
+    "color:#fff",
+    "font:600 0.875rem system-ui, sans-serif",
+    "box-shadow:0.25rem 0.25rem 0 -0.0625rem var(--ui-primary-400, #60a5fa), 0.5rem 0.5rem 0 -0.125rem var(--ui-primary-300, #93c5fd)",
+  ].join(";");
+  document.body.appendChild(image);
+  // A negative offset puts the badge below and beside the pointer, so the pointer doesn't cover it
+  event.dataTransfer.setDragImage(image, -14, -14);
+  setTimeout(() => image.remove());
 }
 
 function onDragEnd() {
@@ -852,6 +905,7 @@ function sizeOf(item: FileItem) {
     ref="root"
     class="n-file-explorer"
     :data-view="view"
+    :data-selecting="selecting ? '' : undefined"
     :data-disabled="disabled ? '' : undefined"
     :aria-label="label"
     @keydown="onKeydown"
@@ -935,7 +989,7 @@ function sizeOf(item: FileItem) {
             </li>
           </ol>
         </nav>
-        <div class="n-file-explorer-tools">
+        <div class="n-file-explorer-tools" @click="clearSelection">
           <NButton
             v-if="has('new-folder')"
             size="sm"
@@ -963,6 +1017,16 @@ function sizeOf(item: FileItem) {
             label="Upload"
             :disabled="disabled"
             @click="uploadInput?.click()"
+          />
+          <NButton
+            size="sm"
+            :variant="selecting ? 'solid' : 'outline'"
+            :color="selecting ? 'primary' : 'neutral'"
+            :icon="selecting ? 'i-lucide-check' : 'i-lucide-list-checks'"
+            :label="selecting ? 'Done' : 'Select'"
+            :disabled="disabled"
+            :aria-pressed="selecting ? 'true' : 'false'"
+            @click="selecting = !selecting"
           />
           <NMenu
             class="n-file-explorer-sort"
@@ -1227,7 +1291,7 @@ function sizeOf(item: FileItem) {
             :aria-selected="selected.includes(item.value) ? 'true' : 'false'"
             :aria-disabled="item.disabled ? 'true' : undefined"
             :draggable="!disabled && !item.disabled && renaming !== item.value"
-            @click="select(item, $event)"
+            @click="onRowClick(item, $event)"
             @dblclick="open(item)"
             @keydown="onRowKeydown($event, item)"
             @dragstart="onDragStart($event, item)"

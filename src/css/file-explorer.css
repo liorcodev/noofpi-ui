@@ -1,5 +1,5 @@
 /* File explorer tokens: override in your CSS, e.g. `:root { --n-file-explorer-nav-w: 18rem; }` */
-@source inline("i-lucide-{hard-drive,arrow-up,arrow-down,arrow-up-down,chevron-right,search,upload,upload-cloud,list,grid-2x2,x,pencil,trash-2,ellipsis,eye,folder,folder-open,folder-plus,file,loader-circle,refresh-cw,download,copy,scissors,clipboard-paste,check}");
+@source inline("i-lucide-{hard-drive,arrow-up,arrow-down,arrow-up-down,chevron-right,search,upload,upload-cloud,list,grid-2x2,x,pencil,trash-2,ellipsis,eye,folder,folder-open,folder-plus,file,loader-circle,refresh-cw,download,copy,scissors,clipboard-paste,check,list-checks,calendar}");
 
 @layer base {
   :root {
@@ -222,11 +222,6 @@
     gap: 0.5rem;
   }
 
-  /* The list sorts from its column headers; the grid has none, so it gets a menu */
-  .n-file-explorer[data-view="list"] .n-file-explorer-sort {
-    display: none;
-  }
-
   .n-file-explorer-sort-button {
     display: inline-flex;
     align-items: center;
@@ -294,6 +289,15 @@
       &:focus {
         border-color: var(--ui-primary-500);
       }
+    }
+  }
+
+  .n-file-explorer[data-selecting] {
+    outline: 2px solid var(--ui-primary-500);
+    outline-offset: -2px;
+
+    .n-file-explorer-item {
+      cursor: pointer;
     }
   }
 

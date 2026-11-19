@@ -4,6 +4,20 @@ All notable changes to noofpi-ui are documented here. The format follows [Keep a
 
 ## [Unreleased]
 
+## [1.4.1] - 2026-11-19
+
+### Fixed
+
+- `NFileExplorer`: a click no longer selects an item. Folders and files open with a double click or `Enter`. Ctrl/Cmd-click, Shift-click and `Space` still select.
+- `NFileExplorer`: starting a drag no longer selects the dragged item. It still moves that item, or the whole selection if the item is already selected.
+- `NFileExplorer`: dragging several selected items shows one stacked "N items" badge beside the pointer instead of only the row under it.
+- `NFileExplorer`: using any toolbar button (New folder, Paste, Upload, Select, Sort, List or Grid view) clears the selection.
+- `NFileExplorer`: the Sort menu is shown in the list view too, not only in the grid, and every row has its own icon with the current choice in the primary color and a check at the end.
+
+### Added
+
+- `NFileExplorer`: a Select button in the toolbar (`v-model:selecting`) turns on click-to-select. While it is on, the button reads Done in the primary color, the explorer gets a primary outline and rows show a pointer cursor. Turning it off clears the selection.
+
 ## [1.4.0] - 2026-11-19
 
 ### Added
