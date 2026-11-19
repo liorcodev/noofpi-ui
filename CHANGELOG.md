@@ -4,6 +4,10 @@ All notable changes to noofpi-ui are documented here. The format follows [Keep a
 
 ## [Unreleased]
 
+### Fixed
+
+- `NFileExplorer`: toolbar actions, including Sort and List/Grid view controls, wrap without overflowing on mobile.
+
 ## [1.4.1] - 2026-11-19
 
 ### Fixed

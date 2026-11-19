@@ -215,6 +215,7 @@
 
   .n-file-explorer-tools {
     display: flex;
+    min-width: 0;
     flex: 0 0 auto;
     flex-wrap: wrap;
     align-items: center;
@@ -588,6 +589,13 @@
 
     .n-file-explorer-nav {
       display: none;
+    }
+
+    .n-file-explorer-tools {
+      width: 100%;
+      max-width: 100%;
+      flex-basis: 100%;
+      justify-content: flex-start;
     }
 
     .n-file-explorer-head,
