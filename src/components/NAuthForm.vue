@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T = unknown">
 import { computed, reactive, type PropType } from "vue";
 import type {
   AuthField,
@@ -41,12 +41,13 @@ const props = defineProps({
     default: undefined,
   },
   /** A Zod schema validated on submit. Ignored with `form` */
-  schema: { type: Object as PropType<FormSchema<unknown>>, default: undefined },
+  /** A Zod schema validated on submit. Ignored with `form`. Its output type is the type of `submit`'s data */
+  schema: { type: Object as PropType<FormSchema<T>>, default: undefined },
 });
 
 const emit = defineEmits<{
   /** The parsed data (`schema`), what `onSubmit` returned (`form`), or the plain values with neither */
-  submit: [data: unknown];
+  submit: [data: T];
   error: [errors: FormErrors];
 }>();
 
@@ -74,7 +75,7 @@ const passthrough: FormSchema<unknown> = {
     :schema="schema ?? passthrough"
     :state="values"
     :disabled="loading"
-    @submit="emit('submit', $event)"
+    @submit="emit('submit', $event as T)"
     @error="emit('error', $event)"
   >
     <template #default="{ failure, submitting }">

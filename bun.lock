@@ -5,7 +5,7 @@
     "": {
       "name": "noofpi-ui",
       "dependencies": {
-        "@iconify-json/lucide": "^1.2.156",
+        "@iconify-json/lucide": "^1.2.157",
         "@iconify/tailwind4": "^1.2.3",
         "magic-string": "^0.30.21",
       },
@@ -57,7 +57,7 @@
 
     "@emnapi/wasi-threads": ["@emnapi/wasi-threads@2.2.0", "", { "dependencies": { "tslib": "^2.4.0" } }, "sha512-JP7OYH38Q7+pyTAe14raZHLQIK7BDKbdwji+Xi3pcd/6QkJYQH3SX4wu6EplGrGJWRepoNzedfm0G3B9Z4e9Rw=="],
 
-    "@iconify-json/lucide": ["@iconify-json/lucide@1.2.156", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-IOB3g2X+cmpoEPcjEbGfpDWPPzXioeDW2gnYgaNxYSaVEHyM4fQqP2uz29cdRQJbQwo5CTQ8D9NJnATeCQKatQ=="],
+    "@iconify-json/lucide": ["@iconify-json/lucide@1.2.157", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-hFOoLrhzbDkDfWdLhrEWHTyUXUkBxV5jrY00XgtI6zDKrwh5jANu0BLXb6xfCS/FeQ6A/9XDvEk4aJovNbOslg=="],
 
     "@iconify/tailwind4": ["@iconify/tailwind4@1.2.3", "", { "dependencies": { "@iconify/tools": "^5.0.5", "@iconify/types": "^2.0.0", "@iconify/utils": "^3.1.0" }, "peerDependencies": { "tailwindcss": ">= 4.0.0" } }, "sha512-z8SKiMHRASJKF/IY//87MF88lcB7ulxh8vlhQXXLWsBkNtOh6ese9R41MyGpQeqXdRvQVt+/fX2glQtHFjQ+MA=="],
 
