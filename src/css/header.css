@@ -67,7 +67,7 @@
       box-shadow: var(--n-header-shadow-xl);
     }
 
-    /* Mobile first: the menu button shows, the navigation and the right side live in the panel */
+    /* Mobile first: the menu button shows and the navigation lives in the panel. The right side always stays in the bar */
     .n-header-bar {
       display: flex;
       box-sizing: border-box;
@@ -102,50 +102,33 @@
       color: var(--ui-primary-500);
     }
 
-    .n-header-nav,
-    .n-header-right {
-      display: none;
-    }
     .n-header-nav {
+      display: none;
       align-items: center;
       gap: 0.25rem;
     }
     .n-header-right {
+      display: flex;
       align-items: center;
       gap: 0.5rem;
-      margin-inline-start: auto;
-    }
-    .n-header-toggle {
       margin-inline-start: auto;
     }
     .n-header-sidebar-toggle:dir(rtl) {
       scale: -1 1;
     }
-    /* In a dashboard the right side stays in the bar on phones (the menu, if any, only holds the navigation) and the buttons follow it */
-    &[data-sidebar] {
-      .n-header-right {
-        display: flex;
-        margin-inline-start: auto;
-      }
-      /* Closes up the bar's 1.5rem gap to 0.5rem between the buttons at the end */
-      .n-header-toggle,
-      .n-header-sidebar-toggle {
-        margin-inline-start: -1rem;
-      }
+    /* Closes up the bar's 1.5rem gap to 0.5rem between the buttons at the end */
+    .n-header-toggle,
+    .n-header-sidebar-toggle {
+      margin-inline-start: -1rem;
     }
 
-    /* Default (left): the navigation follows the logo and the right side is pushed to the end */
+    /* Default (left): the navigation follows the logo and the right side is pushed to the end. The other alignments only apply
+       from the breakpoint up, where the navigation is in the bar */
     &[data-nav-align="center"] .n-header-nav {
       margin-inline: auto;
     }
-    &[data-nav-align="center"] .n-header-right {
-      margin-inline-start: 0;
-    }
     &[data-nav-align="right"] .n-header-nav {
       margin-inline-start: auto;
-    }
-    &[data-nav-align="right"] .n-header-right {
-      margin-inline-start: 0;
     }
 
     .n-header-link {
@@ -221,22 +204,16 @@
         font-size: 1rem;
       }
     }
-    .n-header-panel-right {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
 
-      &:empty {
-        display: none;
-      }
-    }
-
-    /* From the breakpoint up: navigation and right side in the bar, no menu button or panel */
+    /* From the breakpoint up: the navigation joins the right side in the bar, no menu button or panel */
     &[data-breakpoint="sm"] {
       @variant sm {
-        .n-header-nav,
-        .n-header-right {
+        .n-header-nav {
           display: flex;
+        }
+        &[data-nav-align="center"] .n-header-right,
+        &[data-nav-align="right"] .n-header-right {
+          margin-inline-start: 0;
         }
         .n-header-toggle,
         .n-header-panel {
@@ -246,9 +223,12 @@
     }
     &[data-breakpoint="md"] {
       @variant md {
-        .n-header-nav,
-        .n-header-right {
+        .n-header-nav {
           display: flex;
+        }
+        &[data-nav-align="center"] .n-header-right,
+        &[data-nav-align="right"] .n-header-right {
+          margin-inline-start: 0;
         }
         .n-header-toggle,
         .n-header-panel {
@@ -258,9 +238,12 @@
     }
     &[data-breakpoint="lg"] {
       @variant lg {
-        .n-header-nav,
-        .n-header-right {
+        .n-header-nav {
           display: flex;
+        }
+        &[data-nav-align="center"] .n-header-right,
+        &[data-nav-align="right"] .n-header-right {
+          margin-inline-start: 0;
         }
         .n-header-toggle,
         .n-header-panel {
@@ -270,9 +253,12 @@
     }
     &[data-breakpoint="xl"] {
       @variant xl {
-        .n-header-nav,
-        .n-header-right {
+        .n-header-nav {
           display: flex;
+        }
+        &[data-nav-align="center"] .n-header-right,
+        &[data-nav-align="right"] .n-header-right {
+          margin-inline-start: 0;
         }
         .n-header-toggle,
         .n-header-panel {

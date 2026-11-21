@@ -58,7 +58,7 @@ const slots = defineSlots<{
   logo?: () => unknown;
   /** Replaces the `items` links (desktop bar and mobile menu) */
   nav?: () => unknown;
-  /** Replaces the `buttons` (desktop bar and mobile menu) */
+  /** Replaces the `buttons`. Always in the bar, also on phones, e.g. an avatar menu */
   right?: () => unknown;
   /** Replaces everything in the mobile menu */
   mobile?: () => unknown;
@@ -67,13 +67,9 @@ const slots = defineSlots<{
 const root = ref<HTMLElement>();
 const dashboard = inject(DASHBOARD_KEY, undefined);
 const hasSidebar = computed(() => !!dashboard?.hasSidebar.value);
-// With a sidebar the buttons stay in the bar, so the menu is left with the navigation only. Without anything to show there's no menu button
+// The buttons always stay in the bar, so the menu holds the navigation only. Without anything to show there's no menu button
 const hasMenu = computed(
-  () =>
-    props.items.length > 0 ||
-    !!slots.nav ||
-    !!slots.mobile ||
-    (!hasSidebar.value && (props.buttons.length > 0 || !!slots.right)),
+  () => props.items.length > 0 || !!slots.nav || !!slots.mobile,
 );
 const toggle = ref<InstanceType<typeof NButton>>();
 const panelId = useId();
@@ -273,16 +269,6 @@ onBeforeUnmount(() => {
               </component>
             </slot>
           </nav>
-          <div v-if="!hasSidebar" class="n-header-panel-right">
-            <slot name="right">
-              <NButton
-                v-for="button in buttons"
-                :key="button.label"
-                block
-                v-bind="buttonAttrs(button)"
-              />
-            </slot>
-          </div>
         </slot>
       </div>
     </Transition>

@@ -585,7 +585,7 @@ export interface HeaderProps {
   to?: string;
   /** Navigation links */
   items?: HeaderItem[];
-  /** Buttons on the right (also at the end of the mobile menu) */
+  /** Buttons on the right. They stay in the bar on phones too; only the navigation goes in the mobile menu */
   buttons?: HeaderButton[];
   /** Default: `false`. `true` is `"md"` */
   shadow?: boolean | HeaderShadow;

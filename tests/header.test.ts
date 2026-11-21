@@ -122,12 +122,31 @@ describe("NHeader", () => {
     history.replaceState(null, "", "/");
   });
 
-  it("puts the nav links and buttons in the mobile menu", async () => {
+  it("keeps the buttons in the bar and only puts the nav links in the mobile menu", async () => {
     const wrapper = mountHeader({ buttons: [{ label: "Sign up" }] });
     await wrapper.find(".n-header-toggle").trigger("click");
     const panel = wrapper.find(".n-header-panel");
     expect(panel.findAll(".n-header-link")).toHaveLength(2);
-    expect(panel.find(".n-button").text()).toBe("Sign up");
+    expect(panel.find(".n-button").exists()).toBe(false);
+    expect(wrapper.find(".n-header-right .n-button").text()).toBe("Sign up");
     wrapper.unmount();
+  });
+
+  it("has no menu button for the right side alone", () => {
+    const withButtons = mountHeader({
+      items: [],
+      buttons: [{ label: "Sign in" }],
+    });
+    expect(withButtons.find(".n-header-toggle").exists()).toBe(false);
+    expect(withButtons.find(".n-header-right").text()).toBe("Sign in");
+    withButtons.unmount();
+
+    const withSlot = mount(NHeader, {
+      props: { title: "Acme" },
+      slots: { right: "<span class='avatar'>L</span>" },
+    });
+    expect(withSlot.find(".n-header-toggle").exists()).toBe(false);
+    expect(withSlot.find(".n-header-right .avatar").exists()).toBe(true);
+    withSlot.unmount();
   });
 });
