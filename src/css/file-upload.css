@@ -1,3 +1,5 @@
+@source inline("i-lucide-{upload-cloud,file,x}");
+
 @layer base {
   :root {
     --n-upload-bg: #fff;

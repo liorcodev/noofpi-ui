@@ -1,4 +1,5 @@
 /* Accordion tokens: override in your CSS, e.g. `:root { --n-accordion-border: #ccc; }` */
+@source inline("i-lucide-chevron-down");
 @layer base {
   :root {
     --n-accordion-border: var(--ui-neutral-200);

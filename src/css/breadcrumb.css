@@ -1,3 +1,5 @@
+@source inline("i-lucide-chevron-right");
+
 @layer base {
   :root {
     --n-breadcrumb-fg: var(--ui-neutral-500);

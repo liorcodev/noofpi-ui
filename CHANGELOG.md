@@ -4,6 +4,8 @@ All notable changes to noofpi-ui are documented here. The format follows [Keep a
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-11-22
+
 ### Added
 
 - `NMenu`: a `to` prop sets where the panel is teleported. It defaults to `"body"`; `false` renders it in place.
@@ -11,6 +13,7 @@ All notable changes to noofpi-ui are documented here. The format follows [Keep a
 
 ### Fixed
 
+- `NSelect`, `NCombobox`, `NAccordion`, `NCalendar`, `NDatePicker`, `NPagination`, `NBreadcrumb`, `NDialog`, `NDrawer`, `NNumberInput`, `NStepper`, `NCommandPalette` and `NFileUpload`: the icons they draw themselves (chevrons, check, close, calendar, and so on) are now always generated, as the other components already did. Before, an app that didn't use the same icon class in its own code got a solid gray square instead of the icon.
 - `NMenu`: the panel is teleported to the `body` and positioned with `position: fixed`, so a menu in a table row, card or any other container that clips its overflow is no longer cut off. It follows its trigger on scroll and resize, and Tab continues from the trigger.
 - `NFileExplorer`: downloading a file adds the temporary link with `appendChild` instead of `append`, so apps that load the Cloudflare Workers types next to the DOM types no longer get a type error from the HTMLRewriter `Element.append` overload.
 

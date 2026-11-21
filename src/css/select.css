@@ -1,4 +1,5 @@
 /* Select tokens: override in your CSS, e.g. `:root { --n-select-max-h: 20rem; }` */
+@source inline("i-lucide-{chevron-down,check,x}");
 @layer base {
   :root {
     --n-select-max-h: 16rem;

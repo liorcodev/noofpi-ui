@@ -1,6 +1,6 @@
 {
   "name": "noofpi-ui",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Tailwind-based Vue components for noofpi, themable with Color Theme Studio",
   "license": "MIT",
   "author": "Lior Cohen",

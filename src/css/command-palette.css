@@ -1,3 +1,5 @@
+@source inline("i-lucide-{search,search-x}");
+
 @layer base {
   :root {
     --n-command-bg: #fff;

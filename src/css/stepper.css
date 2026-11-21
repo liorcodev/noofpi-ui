@@ -1,3 +1,5 @@
+@source inline("i-lucide-check");
+
 @layer base {
   :root {
     --n-stepper-indicator-sm: 1.5rem;

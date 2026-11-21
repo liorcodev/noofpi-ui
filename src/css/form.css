@@ -1,5 +1,5 @@
 /* Form tokens: override in your CSS, e.g. `:root { --n-input-h: 3rem; }` */
-@source inline("i-lucide-{eye,eye-off}");
+@source inline("i-lucide-{eye,eye-off,minus,plus}");
 
 @layer base {
   :root {
