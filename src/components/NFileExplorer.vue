@@ -479,7 +479,7 @@ function download(items = selectedItems.value) {
     link.href = item.url;
     link.download = item.label;
     link.rel = "noopener";
-    document.body.append(link);
+    document.body.appendChild(link);
     link.click();
     link.remove();
   }
