@@ -607,6 +607,10 @@ export interface HeaderProps {
   menuLabel?: string;
   /** Accessible name of the sidebar button, shown inside an `NDashboard`. Default: `"Sidebar"` */
   sidebarLabel?: string;
+  /** Icon of the sidebar button while the sidebar is closed, shown inside an `NDashboard`. Default: `"i-lucide-panel-left"` */
+  sidebarIcon?: ButtonIcon;
+  /** Icon of the sidebar button while the sidebar is open. Default: `"i-lucide-panel-left-close"` */
+  sidebarOpenIcon?: ButtonIcon;
   /** Mobile menu state (`v-model:open`) */
   open?: boolean;
 }

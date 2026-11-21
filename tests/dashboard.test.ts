@@ -121,6 +121,38 @@ describe("NDashboard", () => {
     wrapper.unmount();
   });
 
+  it("shows the default sidebar button icons and lets them be replaced", async () => {
+    const mountWith = (headerProps = {}) =>
+      mount(NDashboard, {
+        slots: {
+          header: () => h(NHeader, { title: "Acme", ...headerProps }),
+          sidebar: () => h(NSidebar, { items }),
+        },
+        attachTo: document.body,
+      });
+
+    const defaults = mountWith();
+    const defaultToggle = defaults.find(".n-header-sidebar-toggle");
+    expect(defaultToggle.find(".i-lucide-panel-left").exists()).toBe(true);
+    await defaultToggle.trigger("click");
+    expect(defaultToggle.find(".i-lucide-panel-left-close").exists()).toBe(
+      true,
+    );
+    defaults.unmount();
+
+    const custom = mountWith({
+      sidebarIcon: "i-lucide-menu",
+      sidebarOpenIcon: "i-lucide-x",
+    });
+    const toggle = custom.find(".n-header-sidebar-toggle");
+    expect(toggle.find(".i-lucide-menu").exists()).toBe(true);
+    expect(toggle.find(".i-lucide-panel-left").exists()).toBe(false);
+    await toggle.trigger("click");
+    expect(toggle.find(".i-lucide-x").exists()).toBe(true);
+    expect(toggle.find(".i-lucide-panel-left-close").exists()).toBe(false);
+    custom.unmount();
+  });
+
   it("closes the sidebar on Escape and a backdrop click", async () => {
     const wrapper = mountDashboard({
       open: true,

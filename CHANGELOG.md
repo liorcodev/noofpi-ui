@@ -4,6 +4,10 @@ All notable changes to noofpi-ui are documented here. The format follows [Keep a
 
 ## [Unreleased]
 
+### Added
+
+- `NHeader`: `sidebarIcon` and `sidebarOpenIcon` props replace the icon of the sidebar button shown inside an `NDashboard`, while the sidebar is closed and open. They default to `i-lucide-panel-left` and `i-lucide-panel-left-close`.
+
 ## [1.5.0] - 2026-11-21
 
 ### Added

@@ -49,6 +49,14 @@ const props = defineProps({
   navLabel: { type: String, default: "Main" },
   menuLabel: { type: String, default: "Menu" },
   sidebarLabel: { type: String, default: "Sidebar" },
+  sidebarIcon: {
+    type: [String, Object, Function] as PropType<ButtonIcon>,
+    default: "i-lucide-panel-left",
+  },
+  sidebarOpenIcon: {
+    type: [String, Object, Function] as PropType<ButtonIcon>,
+    default: "i-lucide-panel-left-close",
+  },
 });
 
 const open = defineModel<boolean>("open", { default: false });
@@ -232,11 +240,7 @@ onBeforeUnmount(() => {
         class="n-header-sidebar-toggle"
         variant="ghost"
         color="neutral"
-        :icon="
-          dashboard.open.value
-            ? 'i-lucide-panel-left-close'
-            : 'i-lucide-panel-left'
-        "
+        :icon="dashboard.open.value ? sidebarOpenIcon : sidebarIcon"
         :aria-label="sidebarLabel"
         :aria-expanded="dashboard.open.value ? 'true' : 'false'"
         :aria-controls="dashboard.panelId"
