@@ -1,4 +1,4 @@
-import { mount, type VueWrapper } from "@vue/test-utils";
+import { DOMWrapper, mount, type VueWrapper } from "@vue/test-utils";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { h, nextTick } from "vue";
 import { NFileExplorer } from "../src";
@@ -57,6 +57,11 @@ function mountExplorer(
 
 const row = (wrapper: Wrapper, value: string) =>
   wrapper.get(`.n-file-explorer-item[data-value="${value}"]`);
+// The items of the open menu; its panel is teleported to the body
+const menuItems = () =>
+  Array.from(document.body.querySelectorAll('[role="menuitem"]')).map(
+    (element) => new DOMWrapper(element),
+  );
 const names = (wrapper: Wrapper) =>
   wrapper.findAll(".n-file-explorer-label").map((label) => label.text());
 // A button of the selection bar, by its label
@@ -600,9 +605,7 @@ describe("NFileExplorer sorting", () => {
     const wrapper = mountExplorer({ view: "grid" });
     await wrapper.get(".n-file-explorer-sort button").trigger("click");
     const choose = async (label: string) => {
-      const entry = wrapper
-        .findAll('[role="menuitem"]')
-        .find((item) => item.text() === label)!;
+      const entry = menuItems().find((item) => item.text() === label)!;
       await entry.trigger("click");
     };
     await choose("Modified");
@@ -754,8 +757,7 @@ describe("NFileExplorer download", () => {
     await row(wrapper, "readme")
       .get('[aria-label="Actions for README.md"]')
       .trigger("click");
-    await wrapper
-      .findAll('[role="menuitem"]')
+    await menuItems()
       .find((item) => item.text() === "Download")!
       .trigger("click");
     expect(saved()).toHaveLength(1);
@@ -853,8 +855,7 @@ describe("NFileExplorer copy, cut and paste", () => {
     await row(wrapper, "notes").trigger("click", { ctrlKey: true });
     const menu = async (value: string, label: string) => {
       await row(wrapper, value).get(".n-menu-trigger button").trigger("click");
-      await wrapper
-        .findAll('[role="menuitem"]')
+      await menuItems()
         .find((item) => item.text() === label)!
         .trigger("click");
     };
@@ -898,9 +899,7 @@ describe("NFileExplorer actions and slots", () => {
     ).toEqual(["Rename"]);
 
     await row(wrapper, "readme").get(".n-menu-trigger button").trigger("click");
-    expect(
-      wrapper.findAll('[role="menuitem"]').map((item) => item.text()),
-    ).toEqual(["Open", "Rename"]);
+    expect(menuItems().map((item) => item.text())).toEqual(["Open", "Rename"]);
     wrapper.unmount();
   });
 

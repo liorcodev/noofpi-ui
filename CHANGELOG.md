@@ -6,10 +6,12 @@ All notable changes to noofpi-ui are documented here. The format follows [Keep a
 
 ### Added
 
+- `NMenu`: a `to` prop sets where the panel is teleported. It defaults to `"body"`; `false` renders it in place.
 - `NHeader`: `sidebarIcon` and `sidebarOpenIcon` props replace the icon of the sidebar button shown inside an `NDashboard`, while the sidebar is closed and open. They default to `i-lucide-panel-left` and `i-lucide-panel-left-close`.
 
 ### Fixed
 
+- `NMenu`: the panel is teleported to the `body` and positioned with `position: fixed`, so a menu in a table row, card or any other container that clips its overflow is no longer cut off. It follows its trigger on scroll and resize, and Tab continues from the trigger.
 - `NFileExplorer`: downloading a file adds the temporary link with `appendChild` instead of `append`, so apps that load the Cloudflare Workers types next to the DOM types no longer get a type error from the HTMLRewriter `Element.append` overload.
 
 ## [1.5.0] - 2026-11-21

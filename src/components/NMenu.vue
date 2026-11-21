@@ -10,7 +10,7 @@ import {
   watch,
   type PropType,
 } from "vue";
-import type { MenuItem, MenuPlacement } from "../types";
+import type { MenuItem, MenuPlacement, MenuProps } from "../types";
 import NIcon from "./NIcon.vue";
 
 defineOptions({ name: "NMenu" });
@@ -29,6 +29,10 @@ const props = defineProps({
     default: "a",
   },
   label: { type: String, default: undefined },
+  to: {
+    type: [String, Object, Boolean] as PropType<MenuProps["to"]>,
+    default: "body",
+  },
   disabled: { type: Boolean, default: false },
 });
 
@@ -49,6 +53,9 @@ const root = ref<HTMLElement>();
 const trigger = ref<HTMLElement>();
 const panel = ref<HTMLElement>();
 const panelId = useId();
+// Rendered only after mounting, so the server and the first client render match (a `Teleport` can't be hydrated)
+const mounted = ref(false);
+const panelStyle = ref<Record<string, string>>({});
 
 // An array of arrays is a list of groups, which get a separator between them
 const entries = computed<MenuItem[]>(() => {
@@ -115,12 +122,13 @@ watch(
   (placement) => (resolvedPlacement.value = placement),
 );
 
-// Keeps the menu inside the viewport: opens on the other side when there's no room, and aligns to the other
-// edge of the trigger when it would overflow sideways
+// Places the menu next to its trigger and keeps it inside the viewport: opens on the other side when there's no
+// room, and aligns to the other edge of the trigger when it would overflow sideways. The panel is `fixed`
+// (and teleported), so no ancestor's `overflow` clips it
 function fit() {
   const panelEl = panel.value;
   const anchor = root.value?.getBoundingClientRect();
-  if (!panelEl || !anchor) return;
+  if (!panelEl || !anchor || !open.value) return;
 
   const requested = props.placement;
   const width = panelEl.offsetWidth;
@@ -160,11 +168,28 @@ function fit() {
   const suffix =
     align === "center" ? "" : (align === "left") !== rtl ? "-start" : "-end";
   resolvedPlacement.value = `${side}${suffix}` as MenuPlacement;
+
+  const x = Math.min(
+    Math.max(EDGE_GAP, left[align as keyof typeof left]),
+    Math.max(EDGE_GAP, window.innerWidth - width - EDGE_GAP),
+  );
+  const y = side === "top" ? anchor.top - height : anchor.bottom;
+  panelStyle.value = {
+    left: `${Math.round(x)}px`,
+    top: `${Math.round(y)}px`,
+    minWidth: `max(var(--n-menu-min-w), ${Math.round(anchor.width)}px)`,
+  };
 }
 
 watch(open, async (isOpen) => {
-  if (!isOpen) return;
+  if (!isOpen) {
+    window.removeEventListener("resize", fit);
+    window.removeEventListener("scroll", fit, true);
+    return;
+  }
   resolvedPlacement.value = props.placement;
+  window.addEventListener("resize", fit);
+  window.addEventListener("scroll", fit, true);
   await nextTick();
   fit();
   await nextTick();
@@ -233,6 +258,8 @@ function onKeydown(event: KeyboardEvent) {
 
   if (!panel.value?.contains(target)) return;
   if (key === "Tab") {
+    // The panel can be teleported away from the trigger, so Tab continues from the trigger instead
+    triggerElement()?.focus();
     close();
     return;
   }
@@ -248,6 +275,11 @@ function onKeydown(event: KeyboardEvent) {
   else return;
   event.preventDefault();
   next?.focus();
+}
+
+// A panel rendered in place (`:to="false"`) also bubbles its keys to the root, which the panel has handled already
+function onRootKeydown(event: KeyboardEvent) {
+  if (!panel.value?.contains(event.target as Node)) onKeydown(event);
 }
 
 function onItemClick(item: MenuItem, event: MouseEvent) {
@@ -266,13 +298,30 @@ function onItemHover(item: MenuItem, event: MouseEvent) {
 }
 
 function onPointerDown(event: PointerEvent) {
-  if (open.value && !root.value?.contains(event.target as Node)) close();
+  const target = event.target as Node;
+  if (
+    open.value &&
+    !root.value?.contains(target) &&
+    !panel.value?.contains(target)
+  )
+    close();
 }
 
-onMounted(() => document.addEventListener("pointerdown", onPointerDown));
-onBeforeUnmount(() =>
-  document.removeEventListener("pointerdown", onPointerDown),
-);
+onMounted(async () => {
+  mounted.value = true;
+  document.addEventListener("pointerdown", onPointerDown);
+  if (open.value) {
+    window.addEventListener("resize", fit);
+    window.addEventListener("scroll", fit, true);
+    await nextTick();
+    fit();
+  }
+});
+onBeforeUnmount(() => {
+  document.removeEventListener("pointerdown", onPointerDown);
+  window.removeEventListener("resize", fit);
+  window.removeEventListener("scroll", fit, true);
+});
 </script>
 
 <template>
@@ -282,59 +331,64 @@ onBeforeUnmount(() =>
     :data-placement="resolvedPlacement"
     :data-open="open ? '' : undefined"
     :data-disabled="disabled ? '' : undefined"
-    @keydown="onKeydown"
+    @keydown="onRootKeydown"
   >
     <span ref="trigger" class="n-menu-trigger" @click="onTriggerClick">
       <slot :open="open" />
     </span>
-    <Transition name="n-menu">
-      <div
-        v-if="open"
-        :id="panelId"
-        ref="panel"
-        class="n-menu-panel"
-        role="menu"
-        tabindex="-1"
-        :aria-label="label"
-      >
-        <div v-if="$slots.header" class="n-menu-header">
-          <slot name="header" />
-        </div>
-        <template v-for="(item, index) in entries" :key="index">
-          <div
-            v-if="item.type === 'separator'"
-            class="n-menu-separator"
-            role="separator"
-          />
-          <div v-else-if="item.type === 'label'" class="n-menu-label">
-            <span class="n-menu-label-text">{{ item.label }}</span>
-            <span v-if="item.description" class="n-menu-label-description">{{
-              item.description
-            }}</span>
+    <Teleport v-if="mounted" :to="to || 'body'" :disabled="to === false">
+      <Transition name="n-menu">
+        <div
+          v-if="open"
+          :id="panelId"
+          ref="panel"
+          class="n-menu-panel"
+          role="menu"
+          tabindex="-1"
+          :aria-label="label"
+          :data-placement="resolvedPlacement"
+          :style="panelStyle"
+          @keydown="onKeydown"
+        >
+          <div v-if="$slots.header" class="n-menu-header">
+            <slot name="header" />
           </div>
-          <component
-            :is="item.to ? linkAs : 'button'"
-            v-else
-            class="n-menu-item"
-            role="menuitem"
-            tabindex="-1"
-            :type="item.to ? undefined : 'button'"
-            :aria-disabled="item.disabled ? 'true' : undefined"
-            :data-color="item.color"
-            v-bind="item.to ? linkAttrs(item.to, item.target) : undefined"
-            @click="onItemClick(item, $event)"
-            @mouseenter="onItemHover(item, $event)"
-          >
-            <slot name="item" :item="item">
-              <NIcon v-if="item.icon" :name="item.icon" class="n-menu-icon" />
-              <span class="n-menu-item-label">{{ item.label }}</span>
-              <span v-if="item.shortcut" class="n-menu-shortcut">{{
-                item.shortcut
+          <template v-for="(item, index) in entries" :key="index">
+            <div
+              v-if="item.type === 'separator'"
+              class="n-menu-separator"
+              role="separator"
+            />
+            <div v-else-if="item.type === 'label'" class="n-menu-label">
+              <span class="n-menu-label-text">{{ item.label }}</span>
+              <span v-if="item.description" class="n-menu-label-description">{{
+                item.description
               }}</span>
-            </slot>
-          </component>
-        </template>
-      </div>
-    </Transition>
+            </div>
+            <component
+              :is="item.to ? linkAs : 'button'"
+              v-else
+              class="n-menu-item"
+              role="menuitem"
+              tabindex="-1"
+              :type="item.to ? undefined : 'button'"
+              :aria-disabled="item.disabled ? 'true' : undefined"
+              :data-color="item.color"
+              v-bind="item.to ? linkAttrs(item.to, item.target) : undefined"
+              @click="onItemClick(item, $event)"
+              @mouseenter="onItemHover(item, $event)"
+            >
+              <slot name="item" :item="item">
+                <NIcon v-if="item.icon" :name="item.icon" class="n-menu-icon" />
+                <span class="n-menu-item-label">{{ item.label }}</span>
+                <span v-if="item.shortcut" class="n-menu-shortcut">{{
+                  item.shortcut
+                }}</span>
+              </slot>
+            </component>
+          </template>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>

@@ -1130,6 +1130,8 @@ export interface MenuProps {
   linkAs?: string | Component;
   /** Accessible name of the menu */
   label?: string;
+  /** Teleport target of the panel, so a clipping ancestor (a table, a card) can't hide it. Use `false` to render in place. Default: `"body"` */
+  to?: string | HTMLElement | false;
   /** Doesn't open. Default: `false` */
   disabled?: boolean;
   /** Open state (`v-model:open`) */

@@ -57,13 +57,14 @@
     }
   }
 
+  /* Fixed and teleported to the body, positioned by NMenu next to its trigger */
   .n-menu-panel {
     --n-menu-shift: -0.25rem;
 
-    position: absolute;
+    position: fixed;
     z-index: var(--n-menu-z);
     box-sizing: border-box;
-    min-width: max(var(--n-menu-min-w), 100%);
+    min-width: var(--n-menu-min-w);
     max-width: 90vw;
     padding: 0.25rem;
     border: 1px solid var(--n-menu-border);
@@ -74,25 +75,14 @@
     font-size: 0.875rem;
     outline: none;
 
-    .n-menu[data-placement^="bottom"] > & {
-      top: calc(100% + var(--n-menu-offset));
+    &[data-placement^="bottom"] {
+      margin-top: var(--n-menu-offset);
       transform-origin: top;
     }
-    .n-menu[data-placement^="top"] > & {
-      bottom: calc(100% + var(--n-menu-offset));
+    &[data-placement^="top"] {
+      margin-top: calc(-1 * var(--n-menu-offset));
       transform-origin: bottom;
       --n-menu-shift: 0.25rem;
-    }
-    .n-menu[data-placement$="start"] > & {
-      inset-inline-start: 0;
-    }
-    .n-menu[data-placement$="end"] > & {
-      inset-inline-end: 0;
-    }
-    .n-menu[data-placement="bottom"] > &,
-    .n-menu[data-placement="top"] > & {
-      left: 50%;
-      transform: translateX(-50%);
     }
   }
 

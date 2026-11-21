@@ -10,6 +10,8 @@ const mountMenu = (
   mount(NMenu, {
     props: {
       items: [{ label: "Profile", to: "/me" }, { label: "Out" }],
+      // In place, so the panel is inside the wrapper; the teleport has its own tests
+      to: false,
       ...props,
     },
     slots: { default: slot as never },
@@ -139,6 +141,53 @@ describe("NMenu", () => {
     const wrapper = mountMenu({ disabled: true });
     await wrapper.get("button").trigger("click");
     expect(wrapper.find('[role="menu"]').exists()).toBe(false);
+    wrapper.unmount();
+  });
+});
+
+describe("NMenu teleport", () => {
+  const panel = () => document.body.querySelector<HTMLElement>('[role="menu"]');
+
+  it("renders the panel in the body, outside a clipping ancestor", async () => {
+    const wrapper = mountMenu({ to: "body" });
+    await wrapper.get("button").trigger("click");
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('[role="menu"]').exists()).toBe(false);
+    expect(panel()?.closest(".n-menu")).toBeNull();
+    expect(document.body.contains(panel())).toBe(true);
+    expect(panel()?.style.left).not.toBe("");
+    expect(panel()?.style.top).not.toBe("");
+    wrapper.unmount();
+    expect(panel()).toBeNull();
+  });
+
+  it("handles keys and outside clicks of the teleported panel", async () => {
+    const wrapper = mountMenu({
+      to: "body",
+      items: [{ label: "A" }, { label: "B" }],
+    });
+    await wrapper.get("button").trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    // A click inside the panel isn't an outside click
+    panel()!.dispatchEvent(new Event("pointerdown", { bubbles: true }));
+    expect(panel()).not.toBeNull();
+
+    const items = panel()!.querySelectorAll('[role="menuitem"]');
+    // A click without a pointer opens the menu on its first item
+    expect(document.activeElement).toBe(items[0]);
+    panel()!.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true }),
+    );
+    expect(document.activeElement).toBe(items[1]);
+
+    panel()!.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "Escape", bubbles: true }),
+    );
+    await wrapper.vm.$nextTick();
+    expect(panel()).toBeNull();
+    expect(document.activeElement).toBe(wrapper.get("button").element);
     wrapper.unmount();
   });
 });
