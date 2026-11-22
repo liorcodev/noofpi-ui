@@ -4,6 +4,10 @@ All notable changes to noofpi-ui are documented here. The format follows [Keep a
 
 ## [Unreleased]
 
+### Fixed
+
+- `NPageHeader`: on phones the header wraps, so the `actions` move to their own line, right-aligned, instead of squeezing the title and description into a narrow column.
+
 ## [1.6.0] - 2026-11-22
 
 ### Added

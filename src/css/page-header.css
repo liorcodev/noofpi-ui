@@ -31,8 +31,19 @@
 
     @media (max-width: 40rem) {
       align-items: flex-start;
+      flex-wrap: wrap;
       --n-page-header-tile: 2.75rem;
       --n-page-header-title-size: 1.5rem;
+
+      .n-page-header-text {
+        flex-basis: 10rem;
+      }
+      .n-page-header-actions {
+        flex-basis: 100%;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        margin-inline-start: 0;
+      }
 
       &[data-size="sm"] {
         --n-page-header-tile: 2.25rem;
