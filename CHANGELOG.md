@@ -4,6 +4,8 @@ All notable changes to noofpi-ui are documented here. The format follows [Keep a
 
 ## [Unreleased]
 
+## [1.8.0] - 2026-11-23
+
 ### Added
 
 - `NToggleGroup`: a group of toggle buttons for a single choice (list/grid, day/week/month) or, with `multiple`, any number of them. It is lighter than `NTabs` and `NRadioGroup`, and `NFileExplorer` uses it for its view toggle.
