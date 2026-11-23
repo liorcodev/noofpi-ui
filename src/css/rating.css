@@ -1,0 +1,105 @@
+/* Size tokens: override in your CSS, e.g. `:root { --n-rating-size-md: 2rem; }` */
+@layer base {
+  :root {
+    --n-rating-size-sm: 1rem;
+    --n-rating-size-md: 1.5rem;
+    --n-rating-size-lg: 2rem;
+  }
+}
+
+@layer components {
+  .n-rating {
+    --n-rating-size: var(--n-rating-size-md);
+    --n-rating-empty: var(--ui-neutral-300);
+    --n-rating-on: var(--n-c-500);
+
+    @variant dark {
+      --n-rating-empty: var(--ui-neutral-700);
+    }
+
+    display: inline-flex;
+    box-sizing: border-box;
+    align-items: center;
+    gap: 0.125rem;
+    border-radius: 0.25rem;
+
+    &[data-size="sm"] {
+      --n-rating-size: var(--n-rating-size-sm);
+    }
+    &[data-size="lg"] {
+      --n-rating-size: var(--n-rating-size-lg);
+    }
+
+    &[data-disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &[data-invalid] {
+      --n-rating-on: var(--ui-error-500);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--n-rating-on);
+      outline-offset: 2px;
+    }
+
+    &,
+    &[data-color="primary"] {
+      --n-c-500: var(--ui-primary-500);
+    }
+    &[data-color="neutral"] {
+      --n-c-500: var(--ui-neutral-500);
+    }
+    &[data-color="success"] {
+      --n-c-500: var(--ui-success-500);
+    }
+    &[data-color="secondary"] {
+      --n-c-500: var(--ui-secondary-500);
+    }
+    &[data-color="info"] {
+      --n-c-500: var(--ui-info-500);
+    }
+    &[data-color="warning"] {
+      --n-c-500: var(--ui-warning-500);
+    }
+    &[data-color="error"] {
+      --n-c-500: var(--ui-error-500);
+    }
+  }
+
+  .n-rating-item {
+    position: relative;
+    display: inline-flex;
+    width: var(--n-rating-size);
+    height: var(--n-rating-size);
+    flex: none;
+
+    .n-rating[data-interactive] & {
+      cursor: pointer;
+    }
+  }
+
+  .n-rating-empty {
+    display: inline-flex;
+    color: var(--n-rating-empty);
+  }
+
+  /* The filled star is clipped to the share of the star that is on, from the start edge (so right to left in RTL) */
+  .n-rating-filled {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    display: inline-flex;
+    width: calc(var(--n-rating-fill, 0) * 100%);
+    overflow: hidden;
+    color: var(--n-rating-on);
+  }
+
+  .n-rating-icon {
+    display: block;
+    width: var(--n-rating-size);
+    height: var(--n-rating-size);
+    flex: none;
+  }
+}

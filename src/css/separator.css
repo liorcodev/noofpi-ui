@@ -1,0 +1,79 @@
+/* Separator tokens: override in your CSS, e.g. `:root { --n-separator-color: #ccc; }` */
+@layer base {
+  :root {
+    --n-separator-color: var(--ui-neutral-200);
+    --n-separator-fg: var(--ui-neutral-500);
+
+    @variant dark {
+      --n-separator-color: var(--ui-neutral-800);
+      --n-separator-fg: var(--ui-neutral-400);
+    }
+  }
+}
+
+@layer components {
+  .n-separator {
+    --n-separator-style: solid;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 0.75rem;
+    box-sizing: border-box;
+    color: var(--n-separator-fg);
+
+    &[data-variant="dashed"] {
+      --n-separator-style: dashed;
+    }
+
+    &[data-variant="dotted"] {
+      --n-separator-style: dotted;
+    }
+
+    &[data-orientation="horizontal"] {
+      width: 100%;
+
+      &:not([data-labeled]) {
+        border-top: 1px var(--n-separator-style) var(--n-separator-color);
+      }
+    }
+
+    &[data-orientation="vertical"] {
+      flex-direction: column;
+      align-self: stretch;
+      min-height: 1.25rem;
+
+      &:not([data-labeled]) {
+        border-inline-start: 1px var(--n-separator-style)
+          var(--n-separator-color);
+      }
+    }
+
+    /* The lines on both sides of the label */
+    &[data-labeled]::before,
+    &[data-labeled]::after {
+      content: "";
+      flex: 1;
+    }
+
+    &[data-orientation="horizontal"][data-labeled]::before,
+    &[data-orientation="horizontal"][data-labeled]::after {
+      border-top: 1px var(--n-separator-style) var(--n-separator-color);
+    }
+
+    &[data-orientation="vertical"][data-labeled]::before,
+    &[data-orientation="vertical"][data-labeled]::after {
+      border-inline-start: 1px var(--n-separator-style) var(--n-separator-color);
+    }
+
+    &[data-labeled][data-align="start"]::before,
+    &[data-labeled][data-align="end"]::after {
+      display: none;
+    }
+  }
+
+  .n-separator-label {
+    flex-shrink: 0;
+    font-size: 0.8125rem;
+    line-height: 1;
+  }
+}

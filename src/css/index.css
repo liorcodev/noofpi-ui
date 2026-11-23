@@ -9,7 +9,10 @@
 @import "./button.css";
 @import "./calendar.css";
 @import "./card.css";
+@import "./carousel.css";
 @import "./chip.css";
+@import "./collapsible.css";
+@import "./color-picker.css";
 @import "./command-palette.css";
 @import "./context-menu.css";
 @import "./dashboard.css";
@@ -31,8 +34,10 @@
 @import "./pagination.css";
 @import "./popover.css";
 @import "./progress.css";
+@import "./rating.css";
 @import "./scroll-to-top.css";
 @import "./select.css";
+@import "./separator.css";
 @import "./shapes.css";
 @import "./sidebar.css";
 @import "./skeleton.css";
@@ -42,7 +47,9 @@
 @import "./switch.css";
 @import "./table.css";
 @import "./tabs.css";
+@import "./timeline.css";
 @import "./toast.css";
+@import "./toggle-group.css";
 @import "./tooltip.css";
 @import "./tree.css";
 @import "./user.css";

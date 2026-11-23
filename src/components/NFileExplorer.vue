@@ -23,6 +23,7 @@ import {
 import NButton from "./NButton.vue";
 import NIcon from "./NIcon.vue";
 import NMenu from "./NMenu.vue";
+import NToggleGroup from "./NToggleGroup.vue";
 import NTree from "./NTree.vue";
 
 defineOptions({ name: "NFileExplorer" });
@@ -54,6 +55,10 @@ const props = defineProps({
 const current = defineModel<TreeValue | undefined>("current");
 const selected = defineModel<TreeValue[]>("selected", { default: () => [] });
 const view = defineModel<FileExplorerView>("view", { default: "list" });
+const viewItems = [
+  { value: "list", icon: "i-lucide-list", ariaLabel: "List view" },
+  { value: "grid", icon: "i-lucide-grid-2x2", ariaLabel: "Grid view" },
+];
 const sort = defineModel<FileExplorerSort>("sort", {
   default: () => ({ key: "name", direction: "asc" }),
 });
@@ -1042,28 +1047,17 @@ function sizeOf(item: FileItem) {
               label="Sort"
             />
           </NMenu>
-          <div class="n-file-explorer-views" role="group" aria-label="View">
-            <NButton
-              size="sm"
-              shape="circle"
-              color="neutral"
-              icon="i-lucide-list"
-              aria-label="List view"
-              :variant="view === 'list' ? 'soft' : 'ghost'"
-              :aria-pressed="view === 'list' ? 'true' : 'false'"
-              @click="view = 'list'"
-            />
-            <NButton
-              size="sm"
-              shape="circle"
-              color="neutral"
-              icon="i-lucide-grid-2x2"
-              aria-label="Grid view"
-              :variant="view === 'grid' ? 'soft' : 'ghost'"
-              :aria-pressed="view === 'grid' ? 'true' : 'false'"
-              @click="view = 'grid'"
-            />
-          </div>
+          <NToggleGroup
+            v-model="view"
+            class="n-file-explorer-views"
+            label="View"
+            :items="viewItems"
+            :bordered="false"
+            size="sm"
+            shape="circle"
+            color="neutral"
+            checked-variant="soft"
+          />
         </div>
       </div>
 

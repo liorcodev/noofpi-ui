@@ -159,6 +159,56 @@ export interface MarqueeProps {
   label?: string;
 }
 
+export interface CarouselItem {
+  /** Image URL */
+  src?: string;
+  /** Alt text of the image. Default: `""` (decorative) */
+  alt?: string;
+  /** Caption title, shown over the bottom of the slide */
+  title?: string;
+  /** Caption text below the title */
+  description?: string;
+}
+
+export interface CarouselProps {
+  /** Index of the first visible slide, starting at `0` (`v-model`) */
+  modelValue?: number;
+  /** Slides to show. Use the `slide` slot for custom content */
+  items?: CarouselItem[];
+  /** Slides visible at once. Default: `1` */
+  perView?: number;
+  /** Space between slides, any CSS length. Default: `"1rem"` */
+  gap?: string;
+  /** CSS `aspect-ratio` of a slide, `"auto"` lets the content decide. Default: `"16 / 9"` */
+  aspect?: string;
+  /** Wrap around from the last slide to the first and back. Default: `false` */
+  loop?: boolean;
+  /** Milliseconds between automatic slides, `0` turns it off. Default: `0` */
+  autoplay?: number;
+  /** Pause the autoplay while hovered or focused. Default: `true` */
+  pauseOnHover?: boolean;
+  /** Show the previous and next buttons. Default: `true` */
+  arrows?: boolean;
+  /** Show a dot for every position. Default: `true` */
+  indicators?: boolean;
+  /** Color of the active dot and the focus ring. Default: `"primary"` */
+  color?: ButtonColor;
+  /** Accessible name of the carousel */
+  label?: string;
+  /** Default: `"Previous slide"` */
+  prevLabel?: string;
+  /** Default: `"Next slide"` */
+  nextLabel?: string;
+  /** Default: `"Pause slideshow"` */
+  pauseLabel?: string;
+  /** Default: `"Start slideshow"` */
+  playLabel?: string;
+  /** Accessible name of a dot. Default: `` (n) => `Go to slide ${n}` `` */
+  indicatorLabel?: (position: number, total: number) => string;
+  /** Accessible name of a slide. Default: `` (n, total) => `${n} of ${total}` `` */
+  slideLabel?: (position: number, total: number) => string;
+}
+
 export const BLOB_BLENDS = [
   "normal",
   "multiply",
@@ -888,6 +938,34 @@ export type ChoiceOrientation = (typeof CHOICE_ORIENTATIONS)[number];
 export const PIN_INPUT_TYPES = ["numeric", "alphanumeric"] as const;
 export type PinInputType = (typeof PIN_INPUT_TYPES)[number];
 
+export interface TagsInputProps {
+  /** Shown while there are no tags and nothing is typed */
+  placeholder?: string;
+  /** Native `name`: one hidden input per tag submits them with a surrounding `<form>` */
+  name?: string;
+  /** Mark invalid without an `NFormField` around it */
+  invalid?: boolean;
+  disabled?: boolean;
+  /** Accessible name when there is no `NFormField` label */
+  label?: string;
+  /** Maximum number of tags. Further ones are refused */
+  max?: number;
+  /** Typing (or pasting) one of these characters ends a tag. `Enter` always does. Default: `[","]` */
+  delimiters?: readonly string[];
+  /** Accept the same tag twice. Default: `false` */
+  allowDuplicates?: boolean;
+  /** Turn the text left in the field into a tag when it loses focus. Default: `false` */
+  addOnBlur?: boolean;
+  /** Return `false` to refuse a tag. A refused tag stays in the field */
+  validate?: (tag: string) => boolean;
+  /** Default: `"subtle"` */
+  variant?: BadgeVariant;
+  /** Default: `"primary"` */
+  color?: ButtonColor;
+  /** Prefix of the accessible name of a remove button, followed by the tag. Default: `"Remove"` */
+  removeLabel?: string;
+}
+
 /** One option of `NCheckboxGroup` or `NRadioGroup` */
 export interface ChoiceItem {
   label: string;
@@ -895,6 +973,46 @@ export interface ChoiceItem {
   /** Text under the label (ignored with `buttons`) */
   description?: string;
   disabled?: boolean;
+}
+
+/** One item of `NToggleGroup` */
+export interface ToggleGroupItem {
+  /** What the `v-model` holds when this item is on */
+  value: unknown;
+  label?: string;
+  icon?: ButtonIcon;
+  /** Accessible name. Needed for an item with an `icon` and no `label` */
+  ariaLabel?: string;
+  disabled?: boolean;
+}
+
+export interface ToggleGroupProps {
+  items: readonly ToggleGroupItem[];
+  /** The selected value, or an array of them with `multiple` (`v-model`) */
+  modelValue?: unknown;
+  /** Any number of items can be on. Default: `false` (exactly one) */
+  multiple?: boolean;
+  /** Default: `"horizontal"` */
+  orientation?: ChoiceOrientation;
+  /** Default: `"md"` */
+  size?: ButtonSize;
+  /** Default: `"primary"` */
+  color?: ButtonColor;
+  /** Default: `"rounded"` */
+  shape?: ButtonShape;
+  /** Default: `"ghost"` */
+  variant?: ButtonVariant;
+  /** The variant of a selected segment. Default: `"solid"` */
+  checkedVariant?: ButtonVariant;
+  /** Draw the border and padding around the segments. Default: `true` */
+  bordered?: boolean;
+  /** Fill the width, the segments sharing it equally. Default: `false` */
+  block?: boolean;
+  /** Mark invalid without an `NFormField` around it */
+  invalid?: boolean;
+  disabled?: boolean;
+  /** Accessible name of the group */
+  label?: string;
 }
 
 /** One option of `NSelect` and `NCombobox` */
@@ -993,6 +1111,44 @@ export interface DatePickerProps extends Omit<
   open?: boolean;
 }
 
+export const COLOR_PICKER_FORMATS = ["hex", "rgb", "hsl"] as const;
+
+export type ColorPickerFormat = (typeof COLOR_PICKER_FORMATS)[number];
+
+export interface ColorPickerProps {
+  /** The color (`v-model`) as a CSS string: `#rrggbb`, `rgb()` or `hsl()`. Empty until one is picked */
+  modelValue?: string | null;
+  /** Accent of the focus ring and of the panel. Default: `"primary"` */
+  color?: ButtonColor;
+  /** Syntax of the `v-model` value. Default: `"hex"` */
+  format?: ColorPickerFormat;
+  /** Adds an opacity slider: the value then carries an alpha (`#rrggbbaa`, `rgba()`, `hsla()`). Default: `false` */
+  alpha?: boolean;
+  /** Colors to pick with one click (any CSS color the picker reads) */
+  swatches?: string[];
+  /** Renders the panel in place, without the trigger and popover. Default: `false` */
+  inline?: boolean;
+  /** Shown while no color is selected */
+  placeholder?: string;
+  /** Native `name`: a hidden input submits the color with a surrounding `<form>` */
+  name?: string;
+  /** Mark invalid without an `NFormField` around it. Default: `false` */
+  invalid?: boolean;
+  disabled?: boolean;
+  /** Accessible name when there is no `NFormField` label */
+  label?: string;
+  /** Open state (`v-model:open`) */
+  open?: boolean;
+  /** Accessible name of the saturation and brightness area. Default: `"Color"` */
+  areaLabel?: string;
+  /** Accessible name of the hue slider. Default: `"Hue"` */
+  hueLabel?: string;
+  /** Accessible name of the opacity slider. Default: `"Opacity"` */
+  alphaLabel?: string;
+  /** Accessible name of the text field. Default: `"Color value"` */
+  inputLabel?: string;
+}
+
 export const ACCORDION_TYPES = ["single", "multiple"] as const;
 export type AccordionType = (typeof ACCORDION_TYPES)[number];
 
@@ -1020,6 +1176,64 @@ export interface AccordionProps {
   variant?: AccordionVariant;
   /** Open sections (`v-model`): a `value` with `type="single"`, an array of values with `type="multiple"` */
   modelValue?: string | number | (string | number)[];
+}
+
+export interface CopyButtonProps extends Omit<
+  ButtonProps,
+  "as" | "type" | "icon" | "trailingIcon" | "loading" | "loadingIcon"
+> {
+  /** The text put on the clipboard */
+  text: string;
+  /** Shown next to the icon. Without it the button is icon-only */
+  label?: string;
+  /** The label while copied. Default: `"Copied"` */
+  copiedLabel?: string;
+  /** Accessible name of an icon-only button. Default: `"Copy"` */
+  ariaLabel?: string;
+  /** Default: `"ghost"` */
+  variant?: ButtonVariant;
+  /** Default: `"i-lucide-copy"` */
+  icon?: ButtonIcon;
+  /** Shown after copying. Default: `"i-lucide-check"` */
+  copiedIcon?: ButtonIcon;
+  /** Milliseconds the check stays. Default: `2000` */
+  duration?: number;
+}
+
+export const COLLAPSIBLE_VARIANTS = ["plain", "outline"] as const;
+export type CollapsibleVariant = (typeof COLLAPSIBLE_VARIANTS)[number];
+
+export interface CollapsibleProps {
+  /** Text of the trigger */
+  label?: string;
+  icon?: ButtonIcon;
+  /** Default: `"plain"` */
+  variant?: CollapsibleVariant;
+  disabled?: boolean;
+  /** Whether the content is shown (`v-model`). Default: `false` */
+  modelValue?: boolean;
+}
+
+export const SEPARATOR_ORIENTATIONS = ["horizontal", "vertical"] as const;
+export type SeparatorOrientation = (typeof SEPARATOR_ORIENTATIONS)[number];
+
+export const SEPARATOR_ALIGNS = ["start", "center", "end"] as const;
+export type SeparatorAlign = (typeof SEPARATOR_ALIGNS)[number];
+
+export const SEPARATOR_VARIANTS = ["solid", "dashed", "dotted"] as const;
+export type SeparatorVariant = (typeof SEPARATOR_VARIANTS)[number];
+
+export interface SeparatorProps {
+  /** Default: `"horizontal"` */
+  orientation?: SeparatorOrientation;
+  /** Text shown in the line. The default slot replaces it */
+  label?: string;
+  /** Where the label sits on the line. Default: `"center"` */
+  align?: SeparatorAlign;
+  /** Default: `"solid"` */
+  variant?: SeparatorVariant;
+  /** Purely visual: hidden from assistive technology */
+  decorative?: boolean;
 }
 
 export type TreeValue = string | number;
@@ -1482,6 +1696,35 @@ export interface StepperProps {
   label?: string;
 }
 
+export const TIMELINE_ORIENTATIONS = ["vertical", "horizontal"] as const;
+export type TimelineOrientation = (typeof TIMELINE_ORIENTATIONS)[number];
+
+export const TIMELINE_SIZES = ["sm", "md", "lg"] as const;
+export type TimelineSize = (typeof TIMELINE_SIZES)[number];
+
+export interface TimelineItem {
+  title?: string;
+  description?: string;
+  /** Date or time shown above the title, e.g. `"Mar 2026"` */
+  date?: string;
+  /** Lucide-style icon name shown in the indicator instead of a dot */
+  icon?: string;
+  /** Overrides the timeline `color` for this item */
+  color?: ButtonColor;
+}
+
+export interface TimelineProps {
+  items?: TimelineItem[];
+  /** Default: `"vertical"` */
+  orientation?: TimelineOrientation;
+  /** Default: `"md"` */
+  size?: TimelineSize;
+  /** Default: `"primary"` (the Color Theme Studio theme) */
+  color?: ButtonColor;
+  /** Accessible name of the list. Default: `"Timeline"` */
+  label?: string;
+}
+
 export const SWITCH_SIZES = ["sm", "md", "lg"] as const;
 export type SwitchSize = (typeof SWITCH_SIZES)[number];
 
@@ -1587,6 +1830,35 @@ export interface AccessibilityProps {
   storageKey?: string | false;
   /** Texts of the menu, any of them. Default: English; `ACCESSIBILITY_LABELS_HE` is Hebrew */
   labels?: Partial<AccessibilityLabels>;
+}
+
+export const RATING_SIZES = ["sm", "md", "lg"] as const;
+export type RatingSize = (typeof RATING_SIZES)[number];
+
+export interface RatingProps {
+  /** Current value (`v-model`). Default: `0` */
+  modelValue?: number;
+  /** Number of stars. Default: `5` */
+  max?: number;
+  /** A click on the half of a star picks half a point. Default: `false` */
+  allowHalf?: boolean;
+  /** Clicking the current value again resets it to `0`. Default: `false` */
+  clearable?: boolean;
+  /** Replaces the built-in star */
+  icon?: ButtonIcon;
+  /** Accessible name */
+  label?: string;
+  /** Native `name`: a hidden input submits the value with a surrounding `<form>` */
+  name?: string;
+  /** Default: `"warning"` */
+  color?: ButtonColor;
+  /** Default: `"md"` */
+  size?: RatingSize;
+  /** Shows the value without letting it change. Default: `false` */
+  readonly?: boolean;
+  /** Mark invalid without an `NFormField` around it. Default: `false` */
+  invalid?: boolean;
+  disabled?: boolean;
 }
 
 export const SLIDER_SIZES = ["sm", "md", "lg"] as const;

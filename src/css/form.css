@@ -1,5 +1,5 @@
 /* Form tokens: override in your CSS, e.g. `:root { --n-input-h: 3rem; }` */
-@source inline("i-lucide-{eye,eye-off,minus,plus}");
+@source inline("i-lucide-{eye,eye-off,minus,plus,x}");
 
 @layer base {
   :root {
@@ -220,6 +220,78 @@
     }
   }
 
+  .n-textarea-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .n-textarea {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: var(--n-input-h);
+    padding: 0.5rem var(--n-input-px);
+    border: 0;
+    border-radius: var(--ui-radius, 0.5rem);
+    font: inherit;
+    font-size: var(--n-input-fs);
+    line-height: 1.5;
+    color: inherit;
+    background-color: transparent;
+    box-shadow: inset 0 0 0 1px var(--ui-neutral-300);
+    resize: vertical;
+    transition: box-shadow 0.15s;
+
+    @variant dark {
+      box-shadow: inset 0 0 0 1px var(--ui-neutral-700);
+    }
+
+    &::placeholder {
+      color: var(--ui-neutral-400);
+    }
+
+    &:hover:not(:disabled) {
+      box-shadow: inset 0 0 0 1px var(--ui-neutral-400);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: inset 0 0 0 2px var(--ui-primary-500);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &[aria-invalid="true"] {
+      box-shadow: inset 0 0 0 1px var(--ui-error-500);
+
+      &:focus-visible {
+        box-shadow: inset 0 0 0 2px var(--ui-error-500);
+      }
+    }
+
+    &[data-autoresize] {
+      overflow-y: hidden;
+      resize: none;
+
+      &[style*="--n-textarea-max-rows"] {
+        max-height: calc(var(--n-textarea-max-rows) * 1lh + 1rem);
+        overflow-y: auto;
+      }
+    }
+  }
+
+  .n-textarea-counter {
+    align-self: flex-end;
+    font-size: 0.8125rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--ui-neutral-500);
+  }
+
   /* The ring is a pseudo-element so the buttons' hover background can't cover it */
   .n-number {
     position: relative;
@@ -321,6 +393,100 @@
     padding-inline: 0;
     text-align: center;
     font-variant-numeric: tabular-nums;
+  }
+
+  /* The ring is a pseudo-element so the tags can't cover it */
+  .n-tags {
+    position: relative;
+    display: flex;
+    box-sizing: border-box;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem;
+    width: 100%;
+    min-height: var(--n-input-h);
+    padding: 0.25rem calc(var(--n-input-px) - 0.25rem);
+    border-radius: var(--ui-radius, 0.5rem);
+    font-size: var(--n-input-fs);
+    cursor: text;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      box-shadow: inset 0 0 0 1px var(--ui-neutral-300);
+      pointer-events: none;
+      transition: box-shadow 0.15s;
+
+      @variant dark {
+        box-shadow: inset 0 0 0 1px var(--ui-neutral-700);
+      }
+    }
+
+    &:hover:not([data-disabled])::after {
+      box-shadow: inset 0 0 0 1px var(--ui-neutral-400);
+    }
+
+    &:focus-within::after {
+      box-shadow: inset 0 0 0 2px var(--ui-primary-500);
+    }
+
+    &[data-invalid]::after {
+      box-shadow: inset 0 0 0 1px var(--ui-error-500);
+    }
+
+    &[data-invalid]:focus-within::after {
+      box-shadow: inset 0 0 0 2px var(--ui-error-500);
+    }
+
+    &[data-disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .n-tags-input {
+    flex: 1;
+    min-width: 6rem;
+    height: 1.75rem;
+    padding-inline: 0.25rem;
+    border: 0;
+    font: inherit;
+    color: inherit;
+    background-color: transparent;
+    outline: none;
+
+    &::placeholder {
+      color: var(--ui-neutral-400);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  .n-tags-remove {
+    display: inline-flex;
+    padding: 0;
+    border: 0;
+    border-radius: 9999px;
+    font: inherit;
+    color: inherit;
+    background: none;
+    opacity: 0.7;
+    cursor: pointer;
+    transition: opacity 0.15s;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    &:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 1px;
+      opacity: 1;
+    }
   }
 
   .n-checkbox {

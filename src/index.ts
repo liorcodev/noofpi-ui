@@ -9,13 +9,17 @@ export { default as NBreadcrumb } from "./components/NBreadcrumb.vue";
 export { default as NButton } from "./components/NButton.vue";
 export { default as NCalendar } from "./components/NCalendar.vue";
 export { default as NCard } from "./components/NCard.vue";
+export { default as NCarousel } from "./components/NCarousel.vue";
 export { default as NCheckButton } from "./components/NCheckButton.vue";
 export { default as NCheckbox } from "./components/NCheckbox.vue";
 export { default as NCheckboxGroup } from "./components/NCheckboxGroup.vue";
 export { default as NChip } from "./components/NChip.vue";
+export { default as NCollapsible } from "./components/NCollapsible.vue";
+export { default as NColorPicker } from "./components/NColorPicker.vue";
 export { default as NCombobox } from "./components/NCombobox.vue";
 export { default as NCommandPalette } from "./components/NCommandPalette.vue";
 export { default as NContextMenu } from "./components/NContextMenu.vue";
+export { default as NCopyButton } from "./components/NCopyButton.vue";
 export { default as NDashboard } from "./components/NDashboard.vue";
 export { default as NDataList } from "./components/NDataList.vue";
 export { default as NDatePicker } from "./components/NDatePicker.vue";
@@ -41,8 +45,10 @@ export { default as NPinInput } from "./components/NPinInput.vue";
 export { default as NPopover } from "./components/NPopover.vue";
 export { default as NProgress } from "./components/NProgress.vue";
 export { default as NRadioGroup } from "./components/NRadioGroup.vue";
+export { default as NRating } from "./components/NRating.vue";
 export { default as NScrollToTop } from "./components/NScrollToTop.vue";
 export { default as NSelect } from "./components/NSelect.vue";
+export { default as NSeparator } from "./components/NSeparator.vue";
 export { default as NShapes } from "./components/NShapes.vue";
 export { default as NSidebar } from "./components/NSidebar.vue";
 export { default as NSkeleton } from "./components/NSkeleton.vue";
@@ -52,8 +58,12 @@ export { default as NStepper } from "./components/NStepper.vue";
 export { default as NSwitch } from "./components/NSwitch.vue";
 export { default as NTable } from "./components/NTable.vue";
 export { default as NTabs } from "./components/NTabs.vue";
+export { default as NTagsInput } from "./components/NTagsInput.vue";
+export { default as NTextarea } from "./components/NTextarea.vue";
+export { default as NTimeline } from "./components/NTimeline.vue";
 export { default as NToast } from "./components/NToast.vue";
 export { default as NToaster } from "./components/NToaster.vue";
+export { default as NToggleGroup } from "./components/NToggleGroup.vue";
 export { default as NTooltip } from "./components/NTooltip.vue";
 export { default as NTree } from "./components/NTree.vue";
 export { default as NUser } from "./components/NUser.vue";
@@ -81,6 +91,8 @@ export {
   CHIP_POSITIONS,
   CHIP_SIZES,
   CHOICE_ORIENTATIONS,
+  COLLAPSIBLE_VARIANTS,
+  COLOR_PICKER_FORMATS,
   DASHBOARD_BREAKPOINTS,
   DATA_LIST_SIZES,
   DIALOG_PLACEMENTS,
@@ -103,10 +115,14 @@ export {
   POPOVER_TRIGGERS,
   PIN_INPUT_TYPES,
   PROGRESS_SIZES,
+  SEPARATOR_ALIGNS,
+  SEPARATOR_ORIENTATIONS,
+  SEPARATOR_VARIANTS,
   SHAPE_ANIMATIONS,
   SHAPE_KINDS,
   SHAPE_LAYOUTS,
   SHAPE_VARIANTS,
+  RATING_SIZES,
   SKELETON_SHAPES,
   SLIDER_SIZES,
   STAT_TRENDS,
@@ -121,6 +137,8 @@ export {
   TABS_ACTIVATIONS,
   TABS_ORIENTATIONS,
   TABS_VARIANTS,
+  TIMELINE_ORIENTATIONS,
+  TIMELINE_SIZES,
   TOAST_POSITIONS,
   TOOLTIP_PLACEMENTS,
   TOOLTIP_VARIANTS,
@@ -164,13 +182,20 @@ export type {
   ButtonVariant,
   CalendarProps,
   CardProps,
+  CarouselItem,
+  CarouselProps,
   CardVariant,
   ChipPosition,
   ChipProps,
   ChipSize,
   ChoiceItem,
   ChoiceOrientation,
+  CollapsibleProps,
+  CollapsibleVariant,
+  ColorPickerFormat,
+  ColorPickerProps,
   ComboboxProps,
+  CopyButtonProps,
   DashboardBreakpoint,
   DashboardProps,
   DataListItem,
@@ -237,6 +262,12 @@ export type {
   ProgressSize,
   SelectItem,
   SelectProps,
+  RatingProps,
+  RatingSize,
+  SeparatorAlign,
+  SeparatorOrientation,
+  SeparatorProps,
+  SeparatorVariant,
   ShapeAnimation,
   ShapeKind,
   ShapeLayout,
@@ -269,12 +300,19 @@ export type {
   TabsActivation,
   TabsOrientation,
   TabsProps,
+  TagsInputProps,
   TabsVariant,
+  TimelineItem,
+  TimelineOrientation,
+  TimelineProps,
+  TimelineSize,
   Toast,
   ToastAction,
   ToastOptions,
   ToastPosition,
   ToastProps,
+  ToggleGroupItem,
+  ToggleGroupProps,
   TooltipPlacement,
   TooltipProps,
   TooltipVariant,

@@ -6,8 +6,18 @@ All notable changes to noofpi-ui are documented here. The format follows [Keep a
 
 ### Added
 
-- `NBlobs`: an automatic blob background. Set the `count`, size range (`minSize`, `maxSize`), `colors` (theme color names or any CSS color), `blur`, `opacity`, `blend` mode, `form`, `gradient`, `seed` and a slow `animate` drift. The same `seed` always gives the same layout, also on the server.
-- `NShapes`: an automatic background of modern shapes (`SHAPE_KINDS`: circle, ring, squircle, triangle, hexagon, star, sparkle, plus, wave, zigzag, dots and more). Set the `shapes`, `count`, size range, `colors`, `variant` (fill, outline or mixed), `strokeWidth`, `opacity`, `blur`, `layout`, `seed` and `animation` (float, spin, pulse or none).
+- `NToggleGroup`: a group of toggle buttons for a single choice (list/grid, day/week/month) or, with `multiple`, any number of them. It is lighter than `NTabs` and `NRadioGroup`, and `NFileExplorer` uses it for its view toggle.
+- `NTagsInput`: a field that turns typed text into removable tags. `v-model` is a string array.
+- `NTimeline`: a list of events along a line, `vertical` or `horizontal`.
+- `NSeparator`: a divider line, `horizontal` or `vertical`, with an optional label.
+- `NCollapsible`: a single show/hide section, the lighter alternative to `NAccordion`.
+- `NColorPicker`: a color field with a panel for picking a color, as `hex`, `rgb` or `hsl`.
+- `NTextarea`: a multiline text field that matches `NInput`, with `autoresize` and `counter`.
+- `NBlobs`: an automatic blob background.
+- `NShapes`: an automatic background of modern shapes.
+- `NCarousel`: a swipeable slideshow with `autoplay`, `arrows` and `indicators`.
+- `NCopyButton`: copies `text` to the clipboard and shows a check for a moment, handy for code and API keys. It emits `copy` and `error`.
+- `NRating`: a star rating, `v-model` is a number. It has `max`, `allow-half`, `clearable`, `readonly`, a custom `icon`, and works with the keyboard and inside `NFormField`.
 
 ## [1.7.0] - 2026-11-23
 

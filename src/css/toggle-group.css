@@ -1,0 +1,65 @@
+/* Toggle group tokens: override in your CSS, e.g. `:root { --n-toggle-group-border: #ccc; }` */
+@layer base {
+  :root {
+    --n-toggle-group-border: var(--ui-neutral-200);
+    --n-toggle-group-bg: transparent;
+    --n-toggle-group-invalid: var(--ui-error-500);
+
+    @variant dark {
+      --n-toggle-group-border: var(--ui-neutral-800);
+      --n-toggle-group-invalid: var(--ui-error-400);
+    }
+  }
+}
+
+@layer components {
+  .n-toggle-group {
+    --n-toggle-group-pad: 0.1875rem;
+    display: inline-flex;
+    box-sizing: border-box;
+    gap: 0.125rem;
+    max-width: 100%;
+    vertical-align: middle;
+
+    &[data-orientation="vertical"] {
+      flex-direction: column;
+    }
+
+    &[data-bordered] {
+      padding: var(--n-toggle-group-pad);
+      border: 1px solid var(--n-toggle-group-border);
+      background-color: var(--n-toggle-group-bg);
+      border-radius: calc(var(--ui-radius, 0.5rem) + var(--n-toggle-group-pad));
+
+      &[data-shape="square"] {
+        border-radius: 0;
+      }
+      &[data-shape="pill"],
+      &[data-shape="circle"] {
+        border-radius: 9999px;
+      }
+    }
+
+    &[data-invalid] {
+      --n-toggle-group-border: var(--n-toggle-group-invalid);
+    }
+
+    &[aria-disabled="true"] {
+      opacity: 0.6;
+    }
+
+    &[data-block] {
+      display: flex;
+      width: 100%;
+
+      > .n-button {
+        flex: 1 1 0;
+        min-width: 0;
+      }
+    }
+
+    > .n-button {
+      min-width: 0;
+    }
+  }
+}

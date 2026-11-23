@@ -8,8 +8,8 @@
     "start": "noofpi start"
   },
   "dependencies": {
-    "noofpi": "^1.0.0",
+    "noofpi": "^1.2.0",
     "noofpi-ui": "workspace:*",
-    "vue": "^3.5.45"
+    "vue": "^3.5.46"
   }
 }

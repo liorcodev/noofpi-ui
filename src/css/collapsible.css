@@ -1,0 +1,130 @@
+/* Collapsible tokens: override in your CSS, e.g. `:root { --n-collapsible-border: #ccc; }` */
+@source inline("i-lucide-chevron-down");
+@layer base {
+  :root {
+    --n-collapsible-border: var(--ui-neutral-200);
+    --n-collapsible-fg: var(--ui-neutral-900);
+    --n-collapsible-muted: var(--ui-neutral-500);
+    --n-collapsible-hover: var(--ui-neutral-50);
+
+    @variant dark {
+      --n-collapsible-border: var(--ui-neutral-800);
+      --n-collapsible-fg: var(--ui-neutral-50);
+      --n-collapsible-muted: var(--ui-neutral-400);
+      --n-collapsible-hover: var(--ui-neutral-800);
+    }
+  }
+}
+
+@layer components {
+  .n-collapsible {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    &[data-variant="outline"] {
+      border: 1px solid var(--n-collapsible-border);
+      border-radius: calc(var(--ui-radius, 0.5rem) + 0.25rem);
+      overflow: hidden;
+    }
+  }
+
+  .n-collapsible-trigger {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.5rem 0.25rem;
+    border: 0;
+    background: none;
+    color: var(--n-collapsible-fg);
+    font: inherit;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-align: start;
+    cursor: pointer;
+    transition:
+      color 0.15s,
+      background-color 0.15s;
+
+    .n-collapsible[data-variant="outline"] & {
+      padding: 0.75rem 1rem;
+
+      &:hover:not(:disabled) {
+        background-color: var(--n-collapsible-hover);
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ui-primary-500);
+      outline-offset: -2px;
+      border-radius: var(--ui-radius, 0.5rem);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .n-collapsible-label {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .n-collapsible-icon {
+    flex-shrink: 0;
+    width: 1.125rem;
+    height: 1.125rem;
+    color: var(--n-collapsible-muted);
+  }
+
+  .n-collapsible-chevron {
+    flex-shrink: 0;
+    width: 1.125rem;
+    height: 1.125rem;
+    margin-inline-start: auto;
+    color: var(--n-collapsible-muted);
+    transition: transform 0.2s;
+
+    .n-collapsible[data-open] > .n-collapsible-trigger & {
+      transform: rotate(180deg);
+    }
+  }
+
+  .n-collapsible-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    visibility: hidden;
+    transition:
+      grid-template-rows 0.2s ease,
+      visibility 0.2s;
+
+    .n-collapsible[data-open] > & {
+      grid-template-rows: 1fr;
+      visibility: visible;
+    }
+  }
+
+  .n-collapsible-panel-inner {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .n-collapsible-content {
+    padding: 0.25rem 0.25rem 0.5rem;
+    color: var(--n-collapsible-muted);
+    font-size: 0.875rem;
+    line-height: 1.5;
+
+    .n-collapsible[data-variant="outline"] & {
+      padding: 0.25rem 1rem 1rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .n-collapsible-panel,
+    .n-collapsible-chevron {
+      transition: none;
+    }
+  }
+}

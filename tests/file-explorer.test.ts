@@ -98,7 +98,7 @@ describe("NFileExplorer navigation", () => {
     const grid = wrapper.get('[aria-label="Grid view"]');
     await grid.trigger("click");
     expect(wrapper.attributes("data-view")).toBe("grid");
-    expect(grid.attributes("aria-pressed")).toBe("true");
+    expect(grid.attributes("aria-checked")).toBe("true");
     wrapper.unmount();
   });
 
