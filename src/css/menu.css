@@ -129,6 +129,7 @@
   .n-menu-item {
     --n-menu-item-fg: var(--n-menu-fg);
     --n-menu-item-bg: var(--n-menu-hover);
+    --n-menu-accent: var(--ui-neutral-500);
 
     display: flex;
     box-sizing: border-box;
@@ -189,6 +190,74 @@
 
       @variant dark {
         --n-menu-item-fg: color-mix(in oklab, var(--n-menu-accent) 70%, white);
+      }
+    }
+
+    /* variants: how the row looks at rest. `ghost` (the default) is plain and tinted on hover */
+    &[data-variant="soft"],
+    &[data-variant="subtle"] {
+      background-color: color-mix(
+        in oklab,
+        var(--n-menu-accent) 12%,
+        transparent
+      );
+
+      &:focus {
+        background-color: color-mix(
+          in oklab,
+          var(--n-menu-accent) 22%,
+          transparent
+        );
+      }
+    }
+
+    &[data-variant="subtle"] {
+      box-shadow: inset 0 0 0 1px
+        color-mix(in oklab, var(--n-menu-accent) 30%, transparent);
+    }
+
+    &[data-variant="outline"] {
+      box-shadow: inset 0 0 0 1px
+        color-mix(in oklab, var(--n-menu-accent) 60%, transparent);
+    }
+
+    &[data-variant="solid"] {
+      background-color: var(--n-menu-accent);
+      color: #fff;
+
+      &:focus {
+        background-color: color-mix(in oklab, var(--n-menu-accent) 85%, black);
+      }
+
+      @variant dark {
+        background-color: color-mix(in oklab, var(--n-menu-accent) 80%, white);
+        color: var(--ui-neutral-950);
+
+        &:focus {
+          background-color: color-mix(
+            in oklab,
+            var(--n-menu-accent) 65%,
+            white
+          );
+        }
+      }
+
+      /* Neutral has no accent: the solid row is the inverted text color */
+      &:not([data-color]),
+      &[data-color="neutral"] {
+        --n-menu-accent: var(--ui-neutral-900);
+
+        @variant dark {
+          --n-menu-accent: var(--ui-neutral-200);
+        }
+      }
+    }
+
+    &[data-variant="link"] {
+      &:focus {
+        background: none;
+        text-decoration: underline;
+        text-underline-offset: 4px;
       }
     }
   }

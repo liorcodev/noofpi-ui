@@ -1,3 +1,4 @@
+export { default as NAccessibility } from "./components/NAccessibility.vue";
 export { default as NAccordion } from "./components/NAccordion.vue";
 export { default as NAlert } from "./components/NAlert.vue";
 export { default as NAuthForm } from "./components/NAuthForm.vue";
@@ -56,6 +57,10 @@ export { default as NTree } from "./components/NTree.vue";
 export { default as NUser } from "./components/NUser.vue";
 export { toast, useToast } from "./composables/useToast";
 export {
+  ACCESSIBILITY_CONTRASTS,
+  ACCESSIBILITY_FONT_SIZES,
+  ACCESSIBILITY_PLACEMENTS,
+  ACCESSIBILITY_TOGGLES,
   ACCORDION_TYPES,
   ACCORDION_VARIANTS,
   ALERT_VARIANTS,
@@ -113,6 +118,15 @@ export {
   TOOLTIP_VARIANTS,
 } from "./types";
 export type {
+  AccessibilityContrast,
+  AccessibilityFeature,
+  AccessibilityFontSize,
+  AccessibilityLabel,
+  AccessibilityLabels,
+  AccessibilityPlacement,
+  AccessibilityProps,
+  AccessibilitySettings,
+  AccessibilityToggle,
   AccordionItem,
   AccordionProps,
   AccordionType,
@@ -254,5 +268,9 @@ export type {
   TreeValue,
   UserProps,
 } from "./types";
+export {
+  ACCESSIBILITY_LABELS,
+  ACCESSIBILITY_LABELS_HE,
+} from "./utils/accessibility";
 export { BREAKPOINTS } from "./utils/responsive";
 export type { Breakpoint, Responsive } from "./utils/responsive";

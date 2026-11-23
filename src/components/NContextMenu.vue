@@ -343,6 +343,7 @@ onBeforeUnmount(() => {
             :type="item.to ? undefined : 'button'"
             :aria-disabled="item.disabled ? 'true' : undefined"
             :data-color="item.color"
+            :data-variant="item.variant"
             v-bind="item.to ? linkAttrs(item.to, item.target) : undefined"
             @click="onItemClick(item, $event)"
             @mouseenter="onItemHover(item, $event)"

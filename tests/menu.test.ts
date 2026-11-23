@@ -54,7 +54,7 @@ describe("NMenu", () => {
         [{ type: "label", label: "Jane", description: "jane@example.com" }],
         [
           { label: "Docs", to: "/docs", target: "_blank", shortcut: "D" },
-          { label: "Delete", color: "error", disabled: true },
+          { label: "Delete", color: "error", variant: "soft", disabled: true },
         ],
       ],
     });
@@ -70,6 +70,7 @@ describe("NMenu", () => {
     expect(link?.get(".n-menu-shortcut").text()).toBe("D");
     expect(button?.attributes("aria-disabled")).toBe("true");
     expect(button?.attributes("data-color")).toBe("error");
+    expect(button?.attributes("data-variant")).toBe("soft");
     wrapper.unmount();
   });
 

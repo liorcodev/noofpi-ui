@@ -1114,6 +1114,8 @@ export interface MenuItem {
   target?: string;
   /** `"error"` marks a destructive action. Default: `"neutral"` */
   color?: ButtonColor;
+  /** How the row looks at rest, as on `NButton`. Default: `"ghost"` (plain, tinted on hover) */
+  variant?: ButtonVariant;
   /** Hint shown at the end of the row, e.g. `"⌘K"` (display only) */
   shortcut?: string;
   disabled?: boolean;
@@ -1372,6 +1374,97 @@ export interface SwitchProps {
   size?: SwitchSize;
   /** Mark invalid without an `NFormField` around it. Default: `false` */
   invalid?: boolean;
+}
+
+export const ACCESSIBILITY_CONTRASTS = [
+  "none",
+  "dark",
+  "light",
+  "invert",
+] as const;
+export const ACCESSIBILITY_FONT_SIZES = [100, 110, 125, 150, 175, 200] as const;
+export const ACCESSIBILITY_PLACEMENTS = [
+  "bottom-start",
+  "bottom-end",
+  "top-start",
+  "top-end",
+] as const;
+export const ACCESSIBILITY_TOGGLES = [
+  "grayscale",
+  "highlightLinks",
+  "highlightHeadings",
+  "readableFont",
+  "textSpacing",
+  "largeCursor",
+  "highlightFocus",
+  "readingGuide",
+  "stopAnimations",
+  "hideImages",
+] as const;
+
+export type AccessibilityContrast = (typeof ACCESSIBILITY_CONTRASTS)[number];
+export type AccessibilityFontSize = (typeof ACCESSIBILITY_FONT_SIZES)[number];
+export type AccessibilityPlacement = (typeof ACCESSIBILITY_PLACEMENTS)[number];
+export type AccessibilityToggle = (typeof ACCESSIBILITY_TOGGLES)[number];
+/** An adjustment the menu offers */
+export type AccessibilityFeature =
+  "fontSize" | "contrast" | AccessibilityToggle;
+
+export interface AccessibilitySettings {
+  /** Text size in percent of the page's own size, one of `ACCESSIBILITY_FONT_SIZES` */
+  fontSize: AccessibilityFontSize;
+  contrast: AccessibilityContrast;
+  grayscale: boolean;
+  highlightLinks: boolean;
+  highlightHeadings: boolean;
+  /** Replaces the fonts of the page with a plain sans-serif */
+  readableFont: boolean;
+  /** Letter, word, line and paragraph spacing of WCAG 1.4.12 */
+  textSpacing: boolean;
+  largeCursor: boolean;
+  /** A thick outline around the element that has the keyboard focus */
+  highlightFocus: boolean;
+  /** A bar that follows the pointer and the focus */
+  readingGuide: boolean;
+  /** Stops CSS animations and transitions */
+  stopAnimations: boolean;
+  hideImages: boolean;
+}
+
+export type AccessibilityLabel =
+  | AccessibilityFeature
+  | "open"
+  | "title"
+  | "close"
+  | "reset"
+  | "statement"
+  | "skip"
+  | "increaseFontSize"
+  | "decreaseFontSize"
+  | "contrastDark"
+  | "contrastLight"
+  | "contrastInvert";
+export type AccessibilityLabels = Record<AccessibilityLabel, string>;
+
+export interface AccessibilityProps {
+  /** Open state of the menu (`v-model:open`) */
+  open?: boolean;
+  /** Current adjustments (`v-model:settings`). They are also applied to the page (as `data-n-a11y-*` attributes on `<html>`) */
+  settings?: AccessibilitySettings;
+  /** Adjustments to offer. Default: all of them */
+  features?: AccessibilityFeature[];
+  /** Corner of the screen, `start` and `end` follow the text direction. Default: `"bottom-start"` */
+  placement?: AccessibilityPlacement;
+  /** Link to the accessibility statement (הצהרת נגישות), which Israeli regulations require every website to have */
+  statementUrl?: string;
+  /** Adds a "skip to the main content" link, the first thing a keyboard user reaches, to the element it points to, e.g. `"#main"` */
+  skipTo?: string;
+  /** Key that opens and closes the menu. Use `""` for none. Default: `"Alt+A"` */
+  shortcut?: string;
+  /** `localStorage` key the adjustments are kept in between visits. Use `false` to not keep them. Default: `"n-accessibility"` */
+  storageKey?: string | false;
+  /** Texts of the menu, any of them. Default: English; `ACCESSIBILITY_LABELS_HE` is Hebrew */
+  labels?: Partial<AccessibilityLabels>;
 }
 
 export const SLIDER_SIZES = ["sm", "md", "lg"] as const;

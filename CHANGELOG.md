@@ -4,6 +4,13 @@ All notable changes to noofpi-ui are documented here. The format follows [Keep a
 
 ## [Unreleased]
 
+## [1.7.0] - 2026-11-23
+
+### Added
+
+- `NMenu` and `NContextMenu`: a menu item has a `variant` (`solid`, `outline`, `soft`, `subtle`, `ghost` or `link`, as on `NButton`) that sets how the row looks at rest. It defaults to `ghost`, the current look.
+- `NAccessibility`: an accessibility button and menu (text size, contrast, grayscale, link and heading highlight, readable font, text spacing, cursor, focus, reading guide, no animations, hide images). It has `statementUrl` and `skipTo` props, and `ACCESSIBILITY_LABELS_HE` for Hebrew.
+
 ### Fixed
 
 - `NPageHeader`: on phones the header wraps, so the `actions` move to their own line, right-aligned, instead of squeezing the title and description into a narrow column.
