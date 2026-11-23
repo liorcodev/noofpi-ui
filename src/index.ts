@@ -4,6 +4,7 @@ export { default as NAlert } from "./components/NAlert.vue";
 export { default as NAuthForm } from "./components/NAuthForm.vue";
 export { default as NAvatar } from "./components/NAvatar.vue";
 export { default as NBadge } from "./components/NBadge.vue";
+export { default as NBlobs } from "./components/NBlobs.vue";
 export { default as NBreadcrumb } from "./components/NBreadcrumb.vue";
 export { default as NButton } from "./components/NButton.vue";
 export { default as NCalendar } from "./components/NCalendar.vue";
@@ -42,6 +43,7 @@ export { default as NProgress } from "./components/NProgress.vue";
 export { default as NRadioGroup } from "./components/NRadioGroup.vue";
 export { default as NScrollToTop } from "./components/NScrollToTop.vue";
 export { default as NSelect } from "./components/NSelect.vue";
+export { default as NShapes } from "./components/NShapes.vue";
 export { default as NSidebar } from "./components/NSidebar.vue";
 export { default as NSkeleton } from "./components/NSkeleton.vue";
 export { default as NSlider } from "./components/NSlider.vue";
@@ -68,6 +70,8 @@ export {
   AVATAR_SIZES,
   BADGE_SIZES,
   BADGE_VARIANTS,
+  BLOB_BLENDS,
+  BLOB_FORMS,
   BUTTON_COLORS,
   BUTTON_SHAPES,
   BUTTON_SIZES,
@@ -99,6 +103,10 @@ export {
   POPOVER_TRIGGERS,
   PIN_INPUT_TYPES,
   PROGRESS_SIZES,
+  SHAPE_ANIMATIONS,
+  SHAPE_KINDS,
+  SHAPE_LAYOUTS,
+  SHAPE_VARIANTS,
   SKELETON_SHAPES,
   SLIDER_SIZES,
   STAT_TRENDS,
@@ -142,6 +150,9 @@ export type {
   BadgeProps,
   BadgeSize,
   BadgeVariant,
+  BlobBlend,
+  BlobForm,
+  BlobsProps,
   BreadcrumbItem,
   BreadcrumbProps,
   BreadcrumbSize,
@@ -226,6 +237,11 @@ export type {
   ProgressSize,
   SelectItem,
   SelectProps,
+  ShapeAnimation,
+  ShapeKind,
+  ShapeLayout,
+  ShapesProps,
+  ShapeVariant,
   SidebarGroup,
   SidebarProps,
   SkeletonProps,

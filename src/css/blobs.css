@@ -1,0 +1,64 @@
+@layer components {
+  .n-blobs {
+    --n-blobs-blur: 60px;
+    --n-blobs-opacity: 0.6;
+    --n-blobs-blend: normal;
+
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+
+    /* Used alone as a background (no content), it must not catch clicks meant for what's under it */
+    &[data-empty] {
+      pointer-events: none;
+    }
+  }
+
+  .n-blobs-layer {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .n-blobs-content {
+    position: relative;
+  }
+
+  .n-blob {
+    position: absolute;
+    translate: -50% -50%;
+    background: var(--n-blob-color);
+    opacity: var(--n-blobs-opacity);
+    filter: blur(var(--n-blobs-blur));
+    mix-blend-mode: var(--n-blobs-blend);
+    will-change: transform;
+
+    .n-blobs[data-gradient] & {
+      background: linear-gradient(
+        135deg,
+        color-mix(in oklab, var(--n-blob-color) 55%, white),
+        var(--n-blob-color) 60%,
+        color-mix(in oklab, var(--n-blob-color) 80%, black)
+      );
+    }
+
+    .n-blobs[data-animate] & {
+      animation: n-blob-drift var(--n-blob-duration, 24s) ease-in-out
+        var(--n-blob-delay, 0s) infinite alternate;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .n-blob {
+      animation: none !important;
+    }
+  }
+
+  @keyframes n-blob-drift {
+    to {
+      transform: translate(var(--n-blob-dx), var(--n-blob-dy))
+        rotate(var(--n-blob-rotate)) scale(var(--n-blob-scale));
+    }
+  }
+}

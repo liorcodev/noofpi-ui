@@ -4,6 +4,7 @@
 @import "./alert.css";
 @import "./avatar.css";
 @import "./badge.css";
+@import "./blobs.css";
 @import "./breadcrumb.css";
 @import "./button.css";
 @import "./calendar.css";
@@ -32,6 +33,7 @@
 @import "./progress.css";
 @import "./scroll-to-top.css";
 @import "./select.css";
+@import "./shapes.css";
 @import "./sidebar.css";
 @import "./skeleton.css";
 @import "./slider.css";

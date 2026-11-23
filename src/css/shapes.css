@@ -1,0 +1,84 @@
+@layer components {
+  .n-shapes {
+    --n-shapes-stroke: 2px;
+    --n-shapes-blur: 0px;
+
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+
+    /* Used alone as a background (no content), it must not catch clicks meant for what's under it */
+    &[data-empty] {
+      pointer-events: none;
+    }
+  }
+
+  .n-shapes-layer {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .n-shapes-content {
+    position: relative;
+  }
+
+  .n-shape {
+    position: absolute;
+    display: block;
+    translate: -50% -50%;
+    color: var(--n-shape-color);
+    filter: blur(var(--n-shapes-blur));
+
+    & svg {
+      display: block;
+      overflow: visible;
+      width: 100%;
+      height: 100%;
+    }
+
+    & path {
+      stroke-width: var(--n-shapes-stroke);
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .n-shapes[data-animation="float"] & {
+      animation: n-shape-float var(--n-shape-duration, 14s) ease-in-out
+        var(--n-shape-delay, 0s) infinite alternate;
+    }
+    .n-shapes[data-animation="spin"] & {
+      animation: n-shape-spin var(--n-shape-duration, 14s) linear
+        var(--n-shape-delay, 0s) infinite;
+    }
+    .n-shapes[data-animation="pulse"] & {
+      animation: n-shape-pulse var(--n-shape-duration, 14s) ease-in-out
+        var(--n-shape-delay, 0s) infinite alternate;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .n-shape {
+      animation: none !important;
+    }
+  }
+
+  @keyframes n-shape-float {
+    to {
+      transform: translate(var(--n-shape-dx), var(--n-shape-dy))
+        rotate(var(--n-shape-sway));
+    }
+  }
+  @keyframes n-shape-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes n-shape-pulse {
+    to {
+      transform: scale(1.3);
+    }
+  }
+}

@@ -159,6 +159,128 @@ export interface MarqueeProps {
   label?: string;
 }
 
+export const BLOB_BLENDS = [
+  "normal",
+  "multiply",
+  "screen",
+  "overlay",
+  "soft-light",
+  "lighten",
+  "color-dodge",
+  "plus-lighter",
+] as const;
+
+export type BlobBlend = (typeof BLOB_BLENDS)[number];
+
+export const BLOB_FORMS = ["organic", "circle"] as const;
+
+export type BlobForm = (typeof BLOB_FORMS)[number];
+
+export interface BlobsProps {
+  /** Element or component to render, e.g. `"section"`. Default: `"div"` */
+  as?: string | Component;
+  /** How many blobs, 0 to 60. Default: `5` */
+  count?: number;
+  /** Colors the blobs cycle through: a `ButtonColor` name (`"primary"`, `"secondary"`, ...) or any CSS color. Default: `["primary", "secondary"]` */
+  colors?: string[];
+  /** Shade (50 to 950) used for color names. Default: `500` */
+  shade?: number;
+  /** Smallest blob, as a percentage of the width. Default: `30` */
+  minSize?: number;
+  /** Biggest blob, as a percentage of the width. Default: `60` */
+  maxSize?: number;
+  /** Blur in px. Default: `60` */
+  blur?: number;
+  /** 0 to 1. Default: `0.6` */
+  opacity?: number;
+  /** How blobs mix with what's behind them (CSS `mix-blend-mode`). Default: `"normal"` */
+  blend?: BlobBlend;
+  /** `"organic"` gives each blob its own irregular outline. Default: `"organic"` */
+  form?: BlobForm;
+  /** Fill each blob with a soft gradient instead of a flat color. Default: `false` */
+  gradient?: boolean;
+  /** Same seed, same layout (also on the server). Change it to roll a new design. Default: `1` */
+  seed?: number;
+  /** Drift slowly. Stopped by `prefers-reduced-motion`. Default: `true` */
+  animate?: boolean;
+  /** Seconds of one drift, a bigger number is slower. Default: `24` */
+  duration?: number;
+}
+
+export const SHAPE_KINDS = [
+  "circle",
+  "ring",
+  "square",
+  "squircle",
+  "triangle",
+  "diamond",
+  "pentagon",
+  "hexagon",
+  "octagon",
+  "star",
+  "sparkle",
+  "plus",
+  "cross",
+  "asterisk",
+  "semicircle",
+  "quarter",
+  "crescent",
+  "arc",
+  "wave",
+  "zigzag",
+  "bars",
+  "dots",
+] as const;
+
+export type ShapeKind = (typeof SHAPE_KINDS)[number];
+
+export const SHAPE_VARIANTS = ["fill", "outline", "mixed"] as const;
+
+export type ShapeVariant = (typeof SHAPE_VARIANTS)[number];
+
+export const SHAPE_ANIMATIONS = ["float", "spin", "pulse", "none"] as const;
+
+export type ShapeAnimation = (typeof SHAPE_ANIMATIONS)[number];
+
+export const SHAPE_LAYOUTS = ["even", "random"] as const;
+
+export type ShapeLayout = (typeof SHAPE_LAYOUTS)[number];
+
+export interface ShapesProps {
+  /** Element or component to render, e.g. `"section"`. Default: `"div"` */
+  as?: string | Component;
+  /** Shapes to pick from. Default: all of `SHAPE_KINDS` */
+  shapes?: ShapeKind[];
+  /** How many shapes, 0 to 200. Default: `14` */
+  count?: number;
+  /** Colors the shapes cycle through: a `ButtonColor` name or any CSS color. Default: `["primary", "secondary"]` */
+  colors?: string[];
+  /** Shade (50 to 950) used for color names. Default: `500` */
+  shade?: number;
+  /** Smallest shape, in px. Default: `24` */
+  minSize?: number;
+  /** Biggest shape, in px. Default: `72` */
+  maxSize?: number;
+  /** `"mixed"` picks fill or outline per shape. Lines (`wave`, `zigzag`, ...) are always strokes. Default: `"outline"` */
+  variant?: ShapeVariant;
+  /** Outline thickness in px. Default: `2` */
+  strokeWidth?: number;
+  /** 0 to 1. Default: `0.5` */
+  opacity?: number;
+  /** Blur in px, for a depth-of-field look. Default: `0` */
+  blur?: number;
+  /** Turn each shape to a random angle. Default: `true` */
+  rotate?: boolean;
+  /** `"even"` spreads the shapes over the area, `"random"` scatters them freely. Default: `"even"` */
+  layout?: ShapeLayout;
+  /** Same seed, same layout (also on the server). Default: `1` */
+  seed?: number;
+  /** Default: `"float"`. Stopped by `prefers-reduced-motion` */
+  animation?: ShapeAnimation;
+  /** Seconds of one cycle, a bigger number is slower. Default: `14` */
+  duration?: number;
+}
+
 export interface UserProps {
   /** Element or component to render, e.g. `"li"` or `NoofpiLink`. Default: `"div"` */
   as?: string | Component;

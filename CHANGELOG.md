@@ -4,6 +4,11 @@ All notable changes to noofpi-ui are documented here. The format follows [Keep a
 
 ## [Unreleased]
 
+### Added
+
+- `NBlobs`: an automatic blob background. Set the `count`, size range (`minSize`, `maxSize`), `colors` (theme color names or any CSS color), `blur`, `opacity`, `blend` mode, `form`, `gradient`, `seed` and a slow `animate` drift. The same `seed` always gives the same layout, also on the server.
+- `NShapes`: an automatic background of modern shapes (`SHAPE_KINDS`: circle, ring, squircle, triangle, hexagon, star, sparkle, plus, wave, zigzag, dots and more). Set the `shapes`, `count`, size range, `colors`, `variant` (fill, outline or mixed), `strokeWidth`, `opacity`, `blur`, `layout`, `seed` and `animation` (float, spin, pulse or none).
+
 ## [1.7.0] - 2026-11-23
 
 ### Added
