@@ -6,7 +6,9 @@
 
 Tailwind (v4) components for [noofpi](https://www.npmjs.com/package/noofpi)
 
-Built like Nuxt UI: auto-imported `N*` components, styled by CSS variables you can override, themed by [Color Theme Studio](https://liorcodev.github.io/color-theme-studio/docs).
+Built like Nuxt UI: auto-imported `N*` components, styled by CSS variables you can override, themed by
+
+[Color Theme Studio](https://liorcodev.github.io/color-theme-studio/docs).
 
 [![npm version](https://img.shields.io/npm/v/noofpi-ui.svg)](https://www.npmjs.com/package/noofpi-ui) [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
