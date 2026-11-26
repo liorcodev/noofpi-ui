@@ -1,0 +1,85 @@
+/* Infinite scroll tokens: override in your CSS, e.g. `:root { --n-infinite-scroll-status-py: 1.5rem; }` */
+@layer base {
+  :root {
+    --n-infinite-scroll-status-py: 1rem;
+    --n-infinite-scroll-gap: 0.5rem;
+  }
+}
+
+/* Icons used by NInfiniteScroll itself; Tailwind can't see them in a package it doesn't scan */
+@source inline("i-lucide-{loader-circle,circle-x}");
+
+@layer components {
+  .n-infinite-scroll {
+    --n-infinite-scroll-text: var(--ui-neutral-500);
+    --n-infinite-scroll-error: var(--ui-error-600);
+
+    @variant dark {
+      --n-infinite-scroll-text: var(--ui-neutral-400);
+      --n-infinite-scroll-error: var(--ui-error-400);
+    }
+
+    /* The scroll position is restored by hand when items are prepended */
+    &[data-direction="up"] {
+      overflow-anchor: none;
+    }
+
+    &[data-scroller] {
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+  }
+
+  .n-infinite-scroll-footer {
+    position: relative;
+  }
+
+  .n-infinite-scroll-sentinel {
+    position: absolute;
+    inset-inline: 0;
+    height: 1px;
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  .n-infinite-scroll[data-direction="up"] .n-infinite-scroll-sentinel {
+    inset-block-start: 0;
+  }
+
+  .n-infinite-scroll[data-direction="down"] .n-infinite-scroll-sentinel {
+    inset-block-end: 0;
+  }
+
+  .n-infinite-scroll-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--n-infinite-scroll-gap);
+    padding-block: var(--n-infinite-scroll-status-py);
+    font-size: 0.875rem;
+    color: var(--n-infinite-scroll-text);
+
+    /* Keeps the live region in the page, only collapsing its space */
+    &:empty {
+      padding-block: 0;
+    }
+  }
+
+  .n-infinite-scroll[data-state="error"] .n-infinite-scroll-status {
+    color: var(--n-infinite-scroll-error);
+  }
+
+  .n-infinite-scroll-spinner {
+    animation: n-infinite-scroll-spin 0.8s linear infinite;
+
+    @media (prefers-reduced-motion: reduce) {
+      animation-duration: 2.4s;
+    }
+  }
+
+  @keyframes n-infinite-scroll-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}

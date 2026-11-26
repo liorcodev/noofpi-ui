@@ -1,0 +1,306 @@
+/* Inbox tokens: override in your CSS, e.g. `:root { --n-inbox-list-w: 28rem; }` */
+@layer base {
+  :root {
+    --n-inbox-height: 100%;
+    --n-inbox-rail-w: 15rem;
+    --n-inbox-list-w: 24rem;
+    /* Width the reader keeps while it opens and closes, so its content slides in instead of reflowing */
+    --n-inbox-reader-min: 24rem;
+    --n-inbox-duration: 0.3s;
+    --n-inbox-bg: #fff;
+    --n-inbox-border: var(--ui-neutral-200);
+
+    @variant dark {
+      --n-inbox-bg: var(--ui-neutral-950);
+      --n-inbox-border: var(--ui-neutral-800);
+    }
+  }
+}
+
+/* Icons used by NInbox itself; Tailwind can't see them in a package it doesn't scan */
+@source inline("i-lucide-{panel-left-close,panel-left-open,arrow-left,x,maximize-2,minimize-2}");
+
+@layer components {
+  /*
+   * Three panes: the rail (folders), the list and the reader. The list fills the inbox until a message opens;
+   * then the reader grows out of the list's right edge. The panes stay mounted and only animate their size,
+   * and everything responds to the width of the inbox itself (a container query), not to the viewport.
+   */
+  .n-inbox {
+    container-type: inline-size;
+    box-sizing: border-box;
+    height: var(--n-inbox-height);
+    min-height: 0;
+    overflow: hidden;
+    background-color: var(--n-inbox-bg);
+    color: var(--ui-neutral-900);
+
+    @variant dark {
+      color: var(--ui-neutral-100);
+    }
+
+    &[data-border] {
+      border: 1px solid var(--n-inbox-border);
+      border-radius: calc(var(--ui-radius, 0.5rem) + 0.25rem);
+    }
+
+    /* Mobile first: one pane at a time, no rail. The container queries below widen it */
+    .n-inbox-body {
+      --_narrow-display: inline-flex;
+      --_wide-display: none;
+      --_split-basis: 0px;
+      --_split-vis: hidden;
+      --_split-min: 0px;
+      --_reader-min: 0px;
+      --_rail-w: 0px;
+      --_rail-vis: hidden;
+      --_rail-show-display: none;
+
+      display: flex;
+      height: 100%;
+      min-height: 0;
+    }
+
+    @container (min-width: 40rem) {
+      &[data-breakpoint="sm"] .n-inbox-body {
+        --_narrow-display: none;
+        --_wide-display: inline-flex;
+        --_split-basis: var(--n-inbox-list-w);
+        --_split-vis: visible;
+        --_split-min: var(--n-inbox-list-w);
+        --_reader-min: var(--n-inbox-reader-min);
+      }
+      &[data-rail-breakpoint="sm"] .n-inbox-body {
+        --_rail-w: var(--n-inbox-rail-w);
+        --_rail-vis: visible;
+        --_rail-show-display: inline-flex;
+      }
+    }
+    @container (min-width: 48rem) {
+      &[data-breakpoint="md"] .n-inbox-body {
+        --_narrow-display: none;
+        --_wide-display: inline-flex;
+        --_split-basis: var(--n-inbox-list-w);
+        --_split-vis: visible;
+        --_split-min: var(--n-inbox-list-w);
+        --_reader-min: var(--n-inbox-reader-min);
+      }
+      &[data-rail-breakpoint="md"] .n-inbox-body {
+        --_rail-w: var(--n-inbox-rail-w);
+        --_rail-vis: visible;
+        --_rail-show-display: inline-flex;
+      }
+    }
+    @container (min-width: 64rem) {
+      &[data-breakpoint="lg"] .n-inbox-body {
+        --_narrow-display: none;
+        --_wide-display: inline-flex;
+        --_split-basis: var(--n-inbox-list-w);
+        --_split-vis: visible;
+        --_split-min: var(--n-inbox-list-w);
+        --_reader-min: var(--n-inbox-reader-min);
+      }
+      &[data-rail-breakpoint="lg"] .n-inbox-body {
+        --_rail-w: var(--n-inbox-rail-w);
+        --_rail-vis: visible;
+        --_rail-show-display: inline-flex;
+      }
+    }
+    @container (min-width: 80rem) {
+      &[data-breakpoint="xl"] .n-inbox-body {
+        --_narrow-display: none;
+        --_wide-display: inline-flex;
+        --_split-basis: var(--n-inbox-list-w);
+        --_split-vis: visible;
+        --_split-min: var(--n-inbox-list-w);
+        --_reader-min: var(--n-inbox-reader-min);
+      }
+      &[data-rail-breakpoint="xl"] .n-inbox-body {
+        --_rail-w: var(--n-inbox-rail-w);
+        --_rail-vis: visible;
+        --_rail-show-display: inline-flex;
+      }
+    }
+
+    /* After the container queries, so a hidden rail wins at every width */
+    &[data-rail-closed] .n-inbox-body {
+      --_rail-w: 0px;
+      --_rail-vis: hidden;
+    }
+
+    /* The rail: a column that animates its width to nothing. `visibility` keeps a closed pane out of the tab order */
+    .n-inbox-rail {
+      position: relative;
+      flex: none;
+      width: var(--_rail-w);
+      overflow: hidden;
+      visibility: var(--_rail-vis);
+      transition:
+        width var(--n-inbox-duration) ease,
+        visibility var(--n-inbox-duration);
+    }
+    .n-inbox-rail-inner {
+      display: flex;
+      flex-direction: column;
+      width: var(--n-inbox-rail-w);
+      height: 100%;
+    }
+    .n-inbox-rail-top {
+      flex: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem;
+    }
+    .n-inbox-rail-header {
+      flex: 1;
+      min-width: 0;
+    }
+    .n-inbox-rail-content {
+      flex: 1;
+      min-height: 0;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+    .n-inbox-rail-footer {
+      flex: none;
+      border-top: 1px solid var(--n-inbox-border);
+    }
+
+    /* The dividers are drawn inside the panes so a collapsed pane leaves no stray line behind */
+    .n-inbox-rail::after,
+    .n-inbox-list::after {
+      content: "";
+      position: absolute;
+      inset-block: 0;
+      inset-inline-end: 0;
+      width: 1px;
+      background-color: var(--n-inbox-border);
+      pointer-events: none;
+    }
+    .n-inbox-list::after {
+      opacity: 0;
+      transition: opacity var(--n-inbox-duration);
+    }
+
+    /* The list fills the inbox, makes room for the reader when a message opens, and steps aside when it is expanded */
+    .n-inbox-list {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      flex: 0 1 100%;
+      min-width: 0;
+      overflow: hidden;
+      transition:
+        flex-basis var(--n-inbox-duration) ease,
+        visibility var(--n-inbox-duration);
+    }
+    &[data-open] .n-inbox-list {
+      flex-basis: var(--_split-basis);
+      visibility: var(--_split-vis);
+    }
+    &[data-open] .n-inbox-list::after {
+      opacity: 1;
+    }
+    &[data-expanded] .n-inbox-list {
+      flex-basis: 0;
+      visibility: hidden;
+    }
+    .n-inbox-list-inner {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: var(--_split-min);
+      min-height: 0;
+    }
+    .n-inbox-list-header {
+      flex: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem;
+      border-bottom: 1px solid var(--n-inbox-border);
+    }
+    .n-inbox-list-header-content {
+      flex: 1;
+      min-width: 0;
+    }
+    .n-inbox-list-content {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+    }
+
+    /* The button that brings the rail back, only where a rail can be shown */
+    .n-inbox-rail-show {
+      display: none;
+    }
+    &[data-rail-closed] .n-inbox-rail-show {
+      display: var(--_rail-show-display);
+    }
+
+    /* The reader takes whatever the list leaves, which is nothing until a message opens */
+    .n-inbox-reader {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 0%;
+      min-width: 0;
+      overflow: hidden;
+      visibility: hidden;
+      transition: visibility var(--n-inbox-duration);
+    }
+    &[data-open] .n-inbox-reader {
+      visibility: visible;
+    }
+    .n-inbox-reader-inner {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: var(--_reader-min);
+      min-height: 0;
+    }
+    .n-inbox-reader-top {
+      flex: none;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.25rem;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid var(--n-inbox-border);
+    }
+    .n-inbox-reader-header {
+      flex: 1;
+      align-self: center;
+      min-width: 0;
+    }
+    .n-inbox-reader-content {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+    }
+
+    /* Back to the list where only one pane fits, full width and close where both do */
+    .n-inbox-back {
+      display: var(--_narrow-display);
+    }
+    .n-inbox-expand,
+    .n-inbox-close {
+      display: var(--_wide-display);
+    }
+
+    /* The arrows and panel icons point the other way when the text runs right to left */
+    .n-inbox-back:dir(rtl),
+    .n-inbox-rail-show:dir(rtl),
+    .n-inbox-rail-top > .n-button:dir(rtl) {
+      scale: -1 1;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .n-inbox-rail,
+      .n-inbox-list,
+      .n-inbox-list::after,
+      .n-inbox-reader {
+        transition: none;
+      }
+    }
+  }
+}

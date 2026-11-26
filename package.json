@@ -1,6 +1,6 @@
 {
   "name": "noofpi-ui",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "description": "Tailwind-based Vue components for noofpi, themable with Color Theme Studio",
   "license": "MIT",
   "author": "Lior Cohen",
@@ -52,7 +52,7 @@
     "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
-    "@iconify-json/lucide": "^1.2.158",
+    "@iconify-json/lucide": "^1.2.160",
     "@iconify/tailwind4": "^1.2.3",
     "magic-string": "^0.30.21"
   },
@@ -62,14 +62,14 @@
     "vue": "^3.5.0"
   },
   "devDependencies": {
-    "@types/node": "^24.19.2",
+    "@types/node": "^24.19.4",
     "@vitejs/plugin-vue": "^6.0.11",
     "@vue/test-utils": "^2.6.0",
     "happy-dom": "^20.14.6",
     "prettier": "^3.10.1",
     "tailwindcss": "^4.3.5",
     "typescript": "~6.0.3",
-    "vite": "^8.3.8",
+    "vite": "^8.4.0",
     "vitest": "^4.1.12",
     "vue": "^3.5.46",
     "vue-tsc": "^3.3.14",

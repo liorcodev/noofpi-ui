@@ -1,0 +1,61 @@
+/* Tokens: override in your CSS, e.g. `:root { --n-qr-code-bg: #f5f5f4; }`. They stay the same in dark mode, since a QR code needs dark modules on a light plate to scan */
+@layer base {
+  :root {
+    --n-qr-code-fg: #0a0a0a;
+    --n-qr-code-bg: #ffffff;
+    --n-qr-code-logo-radius: 0.25rem;
+  }
+}
+
+@source inline("i-lucide-download");
+
+@layer components {
+  .n-qr-code {
+    display: inline-flex;
+    box-sizing: border-box;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    width: var(--n-qr-code-size);
+    max-width: 100%;
+    vertical-align: middle;
+  }
+
+  .n-qr-code-figure {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    line-height: 0;
+  }
+
+  .n-qr-code-svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .n-qr-code-plate {
+    fill: var(--n-qr-code-bg);
+  }
+
+  .n-qr-code-modules {
+    fill: var(--n-qr-code-fg);
+  }
+
+  .n-qr-code-logo {
+    position: absolute;
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 8%;
+    border-radius: var(--n-qr-code-logo-radius);
+  }
+
+  .n-qr-code-logo-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+}

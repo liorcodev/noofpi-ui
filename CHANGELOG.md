@@ -4,6 +4,20 @@ All notable changes to noofpi-ui are documented here. The format follows [Keep a
 
 ## [Unreleased]
 
+## [1.9.0] - 2026-11-27
+
+### Added
+
+- `NKanban`: a board of draggable cards in columns, moved by pointer or keyboard. `v-model:columns` holds the columns, a column `limit` can be enforced with `enforceLimit`, and it emits `move` and `add`.
+- `NChat`: a chat thread with a composer, with grouped messages, day separators, a typing indicator and smart auto-scroll. `v-model` is the draft, and it emits `send`, `attach`, `loadMore` and `retry`.
+- `NDateTimePicker`: `NDatePicker` with a time section. `v-model` is a `YYYY-MM-DDTHH:mm` string, and it has `hour12`, `minuteStep`, `seconds`, `min` and `max`.
+- `NBanner`: a dismissible, full-width announcement bar with the colors and variants of `NAlert`, an optional link and `actions`. `v-model:open` controls it, and `persistKey` remembers a dismissal.
+- `NFieldArray`: a repeatable group of form fields with add, remove and optional `sortable` reordering. `v-model` is an array, and per-row errors work inside `NForm`.
+- `NInbox`: a three-pane mail layout of a collapsible folder rail, a message list and a reader. The list fills the inbox until a message opens, then the reader grows out of its edge (and can take the full width). It responds to its own width instead of the viewport, so it works inside a dashboard, and shows one pane at a time when narrow. Slots: `rail-header`, `rail`, `rail-footer`, `list-header`, `list`, `reader-header` and the default one for the message. `v-model:open`, `v-model:expanded` and `v-model:rail` control it, and `hideRailIcon` and `showRailIcon` change the rail buttons' icons.
+- `NFilterBar`: a toolbar of search, filters, sort and saved views that produces a typed `v-model` (`{ search, filters, sort }`) and leaves the filtering to you. Active filters show as removable chips.
+- `NInfiniteScroll`: emits `load` when its edge scrolls into view, with `loading`, `finished` and `error` states and a retry button. `direction="up"` loads at the start, for a chat history.
+- `NQRCode`: an inline SVG QR code from a built-in encoder with no dependency. It has `errorCorrection`, `logo` and `downloadable`, and stays dark on light in both themes so it scans.
+
 ## [1.8.0] - 2026-11-23
 
 ### Added

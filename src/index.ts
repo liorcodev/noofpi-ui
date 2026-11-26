@@ -4,12 +4,14 @@ export { default as NAlert } from "./components/NAlert.vue";
 export { default as NAuthForm } from "./components/NAuthForm.vue";
 export { default as NAvatar } from "./components/NAvatar.vue";
 export { default as NBadge } from "./components/NBadge.vue";
+export { default as NBanner } from "./components/NBanner.vue";
 export { default as NBlobs } from "./components/NBlobs.vue";
 export { default as NBreadcrumb } from "./components/NBreadcrumb.vue";
 export { default as NButton } from "./components/NButton.vue";
 export { default as NCalendar } from "./components/NCalendar.vue";
 export { default as NCard } from "./components/NCard.vue";
 export { default as NCarousel } from "./components/NCarousel.vue";
+export { default as NChat } from "./components/NChat.vue";
 export { default as NCheckButton } from "./components/NCheckButton.vue";
 export { default as NCheckbox } from "./components/NCheckbox.vue";
 export { default as NCheckboxGroup } from "./components/NCheckboxGroup.vue";
@@ -23,18 +25,24 @@ export { default as NCopyButton } from "./components/NCopyButton.vue";
 export { default as NDashboard } from "./components/NDashboard.vue";
 export { default as NDataList } from "./components/NDataList.vue";
 export { default as NDatePicker } from "./components/NDatePicker.vue";
+export { default as NDateTimePicker } from "./components/NDateTimePicker.vue";
 export { default as NDialog } from "./components/NDialog.vue";
 export { default as NDrawer } from "./components/NDrawer.vue";
 export { default as NEmptyState } from "./components/NEmptyState.vue";
+export { default as NFieldArray } from "./components/NFieldArray.vue";
 export { default as NFileUpload } from "./components/NFileUpload.vue";
 export { default as NFileExplorer } from "./components/NFileExplorer.vue";
+export { default as NFilterBar } from "./components/NFilterBar.vue";
 export { default as NFooter } from "./components/NFooter.vue";
 export { default as NForm } from "./components/NForm.vue";
 export { default as NFormField } from "./components/NFormField.vue";
 export { default as NHeader } from "./components/NHeader.vue";
 export { default as NHeroPage } from "./components/NHeroPage.vue";
 export { default as NIcon } from "./components/NIcon.vue";
+export { default as NInbox } from "./components/NInbox.vue";
+export { default as NInfiniteScroll } from "./components/NInfiniteScroll.vue";
 export { default as NInput } from "./components/NInput.vue";
+export { default as NKanban } from "./components/NKanban.vue";
 export { default as NLoadingIndicator } from "./components/NLoadingIndicator.vue";
 export { default as NMarquee } from "./components/NMarquee.vue";
 export { default as NMenu } from "./components/NMenu.vue";
@@ -44,6 +52,7 @@ export { default as NPagination } from "./components/NPagination.vue";
 export { default as NPinInput } from "./components/NPinInput.vue";
 export { default as NPopover } from "./components/NPopover.vue";
 export { default as NProgress } from "./components/NProgress.vue";
+export { default as NQRCode } from "./components/NQRCode.vue";
 export { default as NRadioGroup } from "./components/NRadioGroup.vue";
 export { default as NRating } from "./components/NRating.vue";
 export { default as NScrollToTop } from "./components/NScrollToTop.vue";
@@ -80,6 +89,11 @@ export {
   AVATAR_SIZES,
   BADGE_SIZES,
   BADGE_VARIANTS,
+  BANNER_ALIGNS,
+  BANNER_PLACEMENTS,
+  BANNER_POSITIONS,
+  BANNER_SIZES,
+  BANNER_VARIANTS,
   BLOB_BLENDS,
   BLOB_FORMS,
   BUTTON_COLORS,
@@ -88,6 +102,7 @@ export {
   BUTTON_VARIANTS,
   CARD_VARIANTS,
   BREADCRUMB_SIZES,
+  CHAT_MESSAGE_STATUSES,
   CHIP_POSITIONS,
   CHIP_SIZES,
   CHOICE_ORIENTATIONS,
@@ -98,14 +113,22 @@ export {
   DIALOG_PLACEMENTS,
   DIALOG_SIZES,
   EMPTY_STATE_SIZES,
+  FIELD_ARRAY_ALIGNS,
+  FIELD_ARRAY_SIZES,
+  FIELD_ARRAY_VARIANTS,
   FILE_EXPLORER_ACTIONS,
   FILE_EXPLORER_SORT_KEYS,
+  FILTER_BAR_FILTER_TYPES,
   FOOTER_BRAND_ALIGNS,
   FOOTER_COPYRIGHT_ALIGNS,
   HEADER_BREAKPOINTS,
   HEADER_NAV_ALIGNS,
   HEADER_SHADOWS,
   HERO_PAGE_LAYOUTS,
+  INBOX_BREAKPOINTS,
+  INFINITE_SCROLL_DIRECTIONS,
+  KANBAN_SIZES,
+  KANBAN_VARIANTS,
   MARQUEE_ORIENTATIONS,
   MARQUEE_SIZES,
   MENU_PLACEMENTS,
@@ -115,6 +138,8 @@ export {
   POPOVER_TRIGGERS,
   PIN_INPUT_TYPES,
   PROGRESS_SIZES,
+  QR_CODE_ERROR_CORRECTIONS,
+  QR_CODE_FORMATS,
   SEPARATOR_ALIGNS,
   SEPARATOR_ORIENTATIONS,
   SEPARATOR_VARIANTS,
@@ -168,6 +193,13 @@ export type {
   BadgeProps,
   BadgeSize,
   BadgeVariant,
+  BannerAction,
+  BannerAlign,
+  BannerPlacement,
+  BannerPosition,
+  BannerProps,
+  BannerSize,
+  BannerVariant,
   BlobBlend,
   BlobForm,
   BlobsProps,
@@ -185,6 +217,11 @@ export type {
   CarouselItem,
   CarouselProps,
   CardVariant,
+  ChatAttachment,
+  ChatMessage,
+  ChatMessageStatus,
+  ChatParticipant,
+  ChatProps,
   ChipPosition,
   ChipProps,
   ChipSize,
@@ -203,6 +240,7 @@ export type {
   DataListSize,
   DatePickerProps,
   DateRange,
+  DateTimePickerProps,
   DialogPlacement,
   DialogProps,
   DialogSize,
@@ -214,6 +252,11 @@ export type {
   EmptyStateAction,
   EmptyStateProps,
   EmptyStateSize,
+  FieldArrayAlign,
+  FieldArrayErrors,
+  FieldArrayProps,
+  FieldArraySize,
+  FieldArrayVariant,
   FileUploadError,
   FileUploadProps,
   FileExplorerAction,
@@ -223,6 +266,14 @@ export type {
   FileExplorerSortKey,
   FileExplorerView,
   FileItem,
+  FilterBarFilter,
+  FilterBarFilterType,
+  FilterBarOption,
+  FilterBarProps,
+  FilterBarSort,
+  FilterBarSortOption,
+  FilterBarValue,
+  FilterBarView,
   FooterBrandAlign,
   FooterButton,
   FooterColumn,
@@ -241,6 +292,18 @@ export type {
   HeroPageLayout,
   HeroPageProps,
   IconProps,
+  InboxBreakpoint,
+  InboxProps,
+  InfiniteScrollDirection,
+  InfiniteScrollProps,
+  KanbanColumn,
+  KanbanItem,
+  KanbanLabels,
+  KanbanMoveEvent,
+  KanbanPosition,
+  KanbanProps,
+  KanbanSize,
+  KanbanVariant,
   LoadingIndicatorProps,
   MarqueeItem,
   MarqueeOrientation,
@@ -260,6 +323,9 @@ export type {
   PopoverTrigger,
   ProgressProps,
   ProgressSize,
+  QRCodeErrorCorrection,
+  QRCodeFormat,
+  QRCodeProps,
   SelectItem,
   SelectProps,
   RatingProps,
@@ -326,5 +392,7 @@ export {
   ACCESSIBILITY_LABELS,
   ACCESSIBILITY_LABELS_HE,
 } from "./utils/accessibility";
+export { encodeQR, qrRuns, qrToPath } from "./utils/qrcode";
+export type { QRMatrix, QRMode, QROptions } from "./utils/qrcode";
 export { BREAKPOINTS } from "./utils/responsive";
 export type { Breakpoint, Responsive } from "./utils/responsive";

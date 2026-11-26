@@ -1,0 +1,336 @@
+/* Banner tokens: override in your CSS, e.g. `:root { --n-banner-px: 1.5rem; --n-banner-z: 60; }` */
+@layer base {
+  :root {
+    --n-banner-px: 1rem;
+    --n-banner-py: 0.625rem;
+    --n-banner-z: 40;
+  }
+}
+
+/* Icons used by NBanner itself; Tailwind can't see them in a package it doesn't scan */
+@source inline("i-lucide-{x,arrow-right}");
+
+@layer components {
+  .n-banner {
+    --n-banner-tone: var(--n-c-700);
+    --n-banner-edge: var(--n-c-300);
+    --n-banner-tint: var(--n-c-50);
+    --n-banner-scale: 1;
+    --n-banner-close-size: 2rem;
+
+    @variant dark {
+      --n-banner-tone: var(--n-c-300);
+      --n-banner-edge: color-mix(in oklab, var(--n-c-500) 35%, transparent);
+      --n-banner-tint: color-mix(in oklab, var(--n-c-500) 10%, transparent);
+    }
+
+    display: grid;
+    grid-template-rows: 1fr;
+    box-sizing: border-box;
+    width: 100%;
+    background-color: var(--n-banner-bg, transparent);
+    color: var(--n-banner-fg, inherit);
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+
+    &[data-size="sm"] {
+      --n-banner-scale: 0.6;
+      font-size: 0.8125rem;
+      line-height: 1.125rem;
+    }
+
+    &[data-size="lg"] {
+      --n-banner-scale: 1.4;
+      font-size: 1rem;
+      line-height: 1.5rem;
+    }
+
+    &[data-position="sticky"] {
+      position: sticky;
+      z-index: var(--n-banner-z);
+    }
+
+    &[data-position="fixed"] {
+      position: fixed;
+      inset-inline: 0;
+      z-index: var(--n-banner-z);
+    }
+
+    &[data-position="sticky"][data-placement="top"],
+    &[data-position="fixed"][data-placement="top"] {
+      inset-block-start: 0;
+    }
+
+    &[data-position="sticky"][data-placement="bottom"],
+    &[data-position="fixed"][data-placement="bottom"] {
+      inset-block-end: 0;
+    }
+
+    &[data-variant="solid"] {
+      --n-banner-bg: var(--n-c-600);
+      --n-banner-fg: #fff;
+
+      @variant dark {
+        --n-banner-bg: var(--n-c-400);
+        --n-banner-fg: var(--n-c-950);
+      }
+    }
+
+    &[data-variant="outline"] {
+      --n-banner-fg: var(--n-banner-tone);
+      --n-banner-ring: var(--n-banner-edge);
+    }
+
+    &[data-variant="soft"] {
+      --n-banner-bg: var(--n-banner-tint);
+      --n-banner-fg: var(--n-banner-tone);
+    }
+
+    &[data-variant="subtle"] {
+      --n-banner-bg: var(--n-banner-tint);
+      --n-banner-fg: var(--n-banner-tone);
+      --n-banner-ring: var(--n-banner-edge);
+    }
+
+    /* Neutral has no accent: solid is the inverted text color, the rest are grey */
+    &[data-color="neutral"] {
+      --n-banner-tone: var(--n-c-700);
+      --n-banner-edge: var(--n-c-300);
+
+      @variant dark {
+        --n-banner-tone: var(--n-c-200);
+        --n-banner-edge: var(--n-c-700);
+        --n-banner-tint: var(--n-c-900);
+      }
+
+      &[data-variant="solid"] {
+        --n-banner-bg: var(--n-c-900);
+        --n-banner-fg: #fff;
+
+        @variant dark {
+          --n-banner-bg: var(--n-c-50);
+          --n-banner-fg: var(--n-c-900);
+        }
+      }
+    }
+
+    &[data-color="primary"] {
+      --n-c-50: var(--ui-primary-50);
+      --n-c-200: var(--ui-primary-200);
+      --n-c-300: var(--ui-primary-300);
+      --n-c-400: var(--ui-primary-400);
+      --n-c-500: var(--ui-primary-500);
+      --n-c-600: var(--ui-primary-600);
+      --n-c-700: var(--ui-primary-700);
+      --n-c-900: var(--ui-primary-900);
+      --n-c-950: var(--ui-primary-950);
+    }
+    &[data-color="neutral"] {
+      --n-c-50: var(--ui-neutral-50);
+      --n-c-200: var(--ui-neutral-200);
+      --n-c-300: var(--ui-neutral-300);
+      --n-c-400: var(--ui-neutral-400);
+      --n-c-500: var(--ui-neutral-500);
+      --n-c-600: var(--ui-neutral-600);
+      --n-c-700: var(--ui-neutral-700);
+      --n-c-900: var(--ui-neutral-900);
+      --n-c-950: var(--ui-neutral-950);
+    }
+    &[data-color="success"] {
+      --n-c-50: var(--ui-success-50);
+      --n-c-200: var(--ui-success-200);
+      --n-c-300: var(--ui-success-300);
+      --n-c-400: var(--ui-success-400);
+      --n-c-500: var(--ui-success-500);
+      --n-c-600: var(--ui-success-600);
+      --n-c-700: var(--ui-success-700);
+      --n-c-900: var(--ui-success-900);
+      --n-c-950: var(--ui-success-950);
+    }
+    &[data-color="secondary"] {
+      --n-c-50: var(--ui-secondary-50);
+      --n-c-200: var(--ui-secondary-200);
+      --n-c-300: var(--ui-secondary-300);
+      --n-c-400: var(--ui-secondary-400);
+      --n-c-500: var(--ui-secondary-500);
+      --n-c-600: var(--ui-secondary-600);
+      --n-c-700: var(--ui-secondary-700);
+      --n-c-900: var(--ui-secondary-900);
+      --n-c-950: var(--ui-secondary-950);
+    }
+    &[data-color="info"] {
+      --n-c-50: var(--ui-info-50);
+      --n-c-200: var(--ui-info-200);
+      --n-c-300: var(--ui-info-300);
+      --n-c-400: var(--ui-info-400);
+      --n-c-500: var(--ui-info-500);
+      --n-c-600: var(--ui-info-600);
+      --n-c-700: var(--ui-info-700);
+      --n-c-900: var(--ui-info-900);
+      --n-c-950: var(--ui-info-950);
+    }
+    &[data-color="warning"] {
+      --n-c-50: var(--ui-warning-50);
+      --n-c-200: var(--ui-warning-200);
+      --n-c-300: var(--ui-warning-300);
+      --n-c-400: var(--ui-warning-400);
+      --n-c-500: var(--ui-warning-500);
+      --n-c-600: var(--ui-warning-600);
+      --n-c-700: var(--ui-warning-700);
+      --n-c-900: var(--ui-warning-900);
+      --n-c-950: var(--ui-warning-950);
+    }
+    &[data-color="error"] {
+      --n-c-50: var(--ui-error-50);
+      --n-c-200: var(--ui-error-200);
+      --n-c-300: var(--ui-error-300);
+      --n-c-400: var(--ui-error-400);
+      --n-c-500: var(--ui-error-500);
+      --n-c-600: var(--ui-error-600);
+      --n-c-700: var(--ui-error-700);
+      --n-c-900: var(--ui-error-900);
+      --n-c-950: var(--ui-error-950);
+    }
+  }
+
+  /* The inner box clips the content while the grid row collapses; the divider line sits on the edge facing the page */
+  .n-banner-inner {
+    position: relative;
+    min-height: 0;
+    padding: calc(var(--n-banner-py) * var(--n-banner-scale)) var(--n-banner-px);
+    box-shadow: inset 0 -1px 0 0 var(--n-banner-ring, transparent);
+
+    .n-banner[data-placement="bottom"] & {
+      box-shadow: inset 0 1px 0 0 var(--n-banner-ring, transparent);
+    }
+
+    /* Room for the close button, mirrored on the start side so centered content stays centered */
+    .n-banner[data-closable] & {
+      padding-inline-end: calc(var(--n-banner-px) + var(--n-banner-close-size));
+    }
+
+    .n-banner[data-closable][data-align="center"] & {
+      padding-inline-start: calc(
+        var(--n-banner-px) + var(--n-banner-close-size)
+      );
+    }
+  }
+
+  .n-banner-content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem 0.75rem;
+    min-width: 0;
+
+    .n-banner[data-align="start"] & {
+      justify-content: flex-start;
+    }
+  }
+
+  .n-banner-icon {
+    font-size: 1.25em;
+  }
+
+  .n-banner-message {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: inherit;
+    gap: 0 0.5rem;
+    min-width: 0;
+    color: inherit;
+    overflow-wrap: anywhere;
+    text-align: center;
+
+    .n-banner[data-align="start"] & {
+      text-align: start;
+    }
+  }
+
+  .n-banner-link {
+    border-radius: 0.25rem;
+    text-decoration: none;
+
+    &:hover .n-banner-title,
+    &:hover .n-banner-description {
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
+    }
+
+    &:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 2px;
+    }
+  }
+
+  .n-banner-title {
+    font-weight: 500;
+  }
+
+  .n-banner-description {
+    opacity: 0.85;
+  }
+
+  .n-banner-link-icon {
+    transition: translate 0.15s;
+
+    .n-banner-link:hover > & {
+      translate: 0.125rem 0;
+    }
+
+    &:dir(rtl) {
+      scale: -1 1;
+    }
+
+    .n-banner-link:hover > &:dir(rtl) {
+      translate: -0.125rem 0;
+    }
+  }
+
+  .n-banner-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .n-banner-close {
+    position: absolute;
+    inset-inline-end: var(--n-banner-px);
+    inset-block: 0;
+    display: flex;
+    align-items: center;
+
+    .n-button {
+      color: inherit;
+    }
+  }
+
+  .n-banner-enter-active,
+  .n-banner-leave-active {
+    transition:
+      grid-template-rows 0.25s ease,
+      opacity 0.25s ease;
+
+    & .n-banner-inner {
+      overflow: hidden;
+    }
+  }
+
+  .n-banner-enter-from,
+  .n-banner-leave-to {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .n-banner-enter-active,
+    .n-banner-leave-active,
+    .n-banner-link-icon {
+      transition: none;
+    }
+  }
+}

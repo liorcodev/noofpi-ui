@@ -1,0 +1,387 @@
+/* Kanban tokens: override in your CSS, e.g. `:root { --n-kanban-column-width-md: 20rem; }`, or on one board with `style="--n-kanban-height: 32rem"` */
+@layer base {
+  :root {
+    /* `auto` grows with the tallest column. A fixed height makes every column scroll on its own */
+    --n-kanban-height: auto;
+    --n-kanban-gap: 1rem;
+    --n-kanban-column-width-sm: 15rem;
+    --n-kanban-column-width-md: 18rem;
+    --n-kanban-column-width-lg: 22rem;
+    --n-kanban-column-bg: var(--ui-neutral-100);
+    --n-kanban-column-border: var(--ui-neutral-200);
+    --n-kanban-card-bg: #fff;
+    --n-kanban-card-border: var(--ui-neutral-200);
+    --n-kanban-accent: var(--ui-primary-500);
+
+    @variant dark {
+      --n-kanban-column-bg: var(--ui-neutral-900);
+      --n-kanban-column-border: var(--ui-neutral-800);
+      --n-kanban-card-bg: var(--ui-neutral-800);
+      --n-kanban-card-border: var(--ui-neutral-700);
+      --n-kanban-accent: var(--ui-primary-400);
+    }
+  }
+}
+
+/* Icons used by NKanban itself; Tailwind can't see them in a package it doesn't scan */
+@source inline("i-lucide-{grip-vertical,plus}");
+
+@layer components {
+  .n-kanban {
+    --n-kanban-column-width: var(--n-kanban-column-width-md);
+    --n-kanban-card-px: 0.75rem;
+    --n-kanban-card-py: 0.625rem;
+    --n-kanban-text: 0.875rem;
+
+    position: relative;
+    box-sizing: border-box;
+    height: var(--n-kanban-height);
+    min-height: 0;
+    color: var(--ui-neutral-900);
+    font-size: var(--n-kanban-text);
+    line-height: 1.25rem;
+
+    @variant dark {
+      color: var(--ui-neutral-100);
+    }
+
+    &[data-size="sm"] {
+      --n-kanban-column-width: var(--n-kanban-column-width-sm);
+      --n-kanban-card-px: 0.5rem;
+      --n-kanban-card-py: 0.5rem;
+      --n-kanban-text: 0.8125rem;
+    }
+    &[data-size="lg"] {
+      --n-kanban-column-width: var(--n-kanban-column-width-lg);
+      --n-kanban-card-px: 1rem;
+      --n-kanban-card-py: 0.875rem;
+      --n-kanban-text: 0.9375rem;
+    }
+
+    &[data-dragging] {
+      cursor: grabbing;
+      user-select: none;
+    }
+  }
+
+  .n-kanban-scroller {
+    display: flex;
+    box-sizing: border-box;
+    align-items: stretch;
+    gap: var(--n-kanban-gap);
+    height: 100%;
+    padding: 0.25rem;
+    overflow: auto hidden;
+    overscroll-behavior-x: contain;
+  }
+
+  .n-kanban-column {
+    --n-kanban-ring: var(--n-kanban-column-border);
+    --n-kanban-ring-w: 1px;
+
+    display: flex;
+    flex: 0 0 var(--n-kanban-column-width);
+    flex-direction: column;
+    box-sizing: border-box;
+    gap: 0.5rem;
+    min-width: 0;
+    max-height: 100%;
+    padding: 0.5rem;
+    border-radius: calc(var(--ui-radius, 0.5rem) + 0.25rem);
+    background-color: var(--n-kanban-column-bg);
+    box-shadow: inset 0 0 0 var(--n-kanban-ring-w) var(--n-kanban-ring);
+
+    .n-kanban[data-variant="outline"] & {
+      background-color: transparent;
+    }
+
+    &[data-disabled] {
+      opacity: 0.65;
+    }
+
+    &[data-exceeded] {
+      --n-kanban-ring: var(--ui-error-400);
+      background-color: color-mix(
+        in oklab,
+        var(--ui-error-500) 8%,
+        var(--n-kanban-column-bg)
+      );
+
+      .n-kanban[data-variant="outline"] & {
+        background-color: color-mix(
+          in oklab,
+          var(--ui-error-500) 6%,
+          transparent
+        );
+      }
+    }
+
+    &[data-over] {
+      --n-kanban-ring: var(--n-kanban-accent);
+      --n-kanban-ring-w: 2px;
+    }
+
+    &[data-refused] {
+      --n-kanban-ring: var(--ui-error-500);
+      --n-kanban-ring-w: 2px;
+      cursor: not-allowed;
+    }
+  }
+
+  .n-kanban-column,
+  .n-kanban-card {
+    &,
+    &[data-color="primary"] {
+      --n-c-500: var(--ui-primary-500);
+    }
+    &[data-color="neutral"] {
+      --n-c-500: var(--ui-neutral-500);
+    }
+    &[data-color="success"] {
+      --n-c-500: var(--ui-success-500);
+    }
+    &[data-color="secondary"] {
+      --n-c-500: var(--ui-secondary-500);
+    }
+    &[data-color="info"] {
+      --n-c-500: var(--ui-info-500);
+    }
+    &[data-color="warning"] {
+      --n-c-500: var(--ui-warning-500);
+    }
+    &[data-color="error"] {
+      --n-c-500: var(--ui-error-500);
+    }
+  }
+
+  .n-kanban-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 1.75rem;
+    padding-inline: 0.25rem;
+  }
+
+  .n-kanban-dot {
+    flex: none;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
+    background-color: var(--n-c-500);
+  }
+
+  .n-kanban-title {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    overflow: hidden;
+    font-size: inherit;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .n-kanban-count {
+    flex: none;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .n-kanban-body {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-height: 0;
+    padding: 0.125rem;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .n-kanban-list {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-height: 0.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .n-kanban-card {
+    position: relative;
+    display: flex;
+    box-sizing: border-box;
+    align-items: flex-start;
+    gap: 0.25rem;
+    padding: var(--n-kanban-card-py) var(--n-kanban-card-px);
+    border-radius: var(--ui-radius, 0.5rem);
+    background-color: var(--n-kanban-card-bg);
+    box-shadow:
+      inset 0 0 0 1px var(--n-kanban-card-border),
+      0 1px 2px rgb(0 0 0 / 0.06);
+    overflow: hidden;
+
+    &[data-color]::before {
+      position: absolute;
+      inset-block: 0;
+      inset-inline-start: 0;
+      width: 3px;
+      background-color: var(--n-c-500);
+      content: "";
+    }
+
+    &[data-draggable] {
+      cursor: grab;
+    }
+
+    &[aria-disabled="true"] {
+      opacity: 0.7;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--n-kanban-accent);
+      outline-offset: 2px;
+    }
+
+    &[data-dragging] {
+      opacity: 0.35;
+    }
+
+    &[data-lifted] {
+      box-shadow:
+        inset 0 0 0 2px var(--n-kanban-accent),
+        0 8px 20px rgb(0 0 0 / 0.18);
+    }
+
+    &[data-ghost] {
+      cursor: grabbing;
+      box-shadow:
+        inset 0 0 0 1px var(--n-kanban-accent),
+        0 12px 28px rgb(0 0 0 / 0.25);
+      transform: rotate(2deg);
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition:
+        opacity 0.15s ease,
+        box-shadow 0.15s ease;
+    }
+  }
+
+  .n-kanban-handle {
+    display: flex;
+    flex: none;
+    align-items: center;
+    margin-inline-start: -0.375rem;
+    padding-block: 0.125rem;
+    color: var(--ui-neutral-400);
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+
+    @variant dark {
+      color: var(--ui-neutral-500);
+    }
+  }
+
+  .n-kanban-handle-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .n-kanban-card-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+
+  .n-kanban-card-badge {
+    align-self: flex-start;
+  }
+
+  .n-kanban-card-title {
+    margin: 0;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+  }
+
+  .n-kanban-card-text {
+    display: -webkit-box;
+    margin: 0;
+    overflow: hidden;
+    color: var(--ui-neutral-600);
+    font-size: 0.8125em;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+
+    @variant dark {
+      color: var(--ui-neutral-400);
+    }
+  }
+
+  .n-kanban-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    margin-top: 0.125rem;
+    color: var(--ui-neutral-600);
+    font-size: 0.8125em;
+
+    @variant dark {
+      color: var(--ui-neutral-400);
+    }
+  }
+
+  .n-kanban-indicator {
+    flex: none;
+    height: 3px;
+    margin-block: -0.125rem;
+    border-radius: 9999px;
+    background-color: var(--n-kanban-accent);
+  }
+
+  .n-kanban-empty {
+    padding: 1rem 0.5rem;
+    border: 1px dashed var(--ui-neutral-300);
+    border-radius: var(--ui-radius, 0.5rem);
+    color: var(--ui-neutral-500);
+    font-size: 0.8125em;
+    text-align: center;
+
+    @variant dark {
+      border-color: var(--ui-neutral-700);
+    }
+  }
+
+  .n-kanban-footer {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .n-kanban-ghost {
+    position: fixed;
+    inset: 0 auto auto 0;
+    z-index: 60;
+    pointer-events: none;
+  }
+
+  .n-kanban-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}

@@ -1,0 +1,145 @@
+/* Override in your CSS, e.g. `:root { --n-field-array-gap: 1rem; }` */
+@layer base {
+  :root {
+    --n-field-array-gap: 0.75rem;
+    --n-field-array-row-gap: 0.5rem;
+    --n-field-array-card-p: 0.75rem;
+  }
+}
+
+/* Icons used by NFieldArray itself; Tailwind can't see them in a package it doesn't scan */
+@source inline("i-lucide-{plus,trash-2,chevron-up,chevron-down}");
+
+@layer components {
+  .n-field-array {
+    --n-field-array-edge: var(--ui-neutral-200);
+    --n-field-array-card-bg: transparent;
+    /* Height of the first line of a row, which its buttons are centered on. Set it to match taller fields */
+    --n-field-array-line: var(--n-input-h, 2.5rem);
+
+    @variant dark {
+      --n-field-array-edge: var(--ui-neutral-800);
+    }
+
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: column;
+    gap: var(--n-field-array-gap);
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 0.875rem;
+
+    &[data-size="sm"] {
+      --n-field-array-gap: 0.5rem;
+      --n-field-array-row-gap: 0.25rem;
+      --n-field-array-card-p: 0.5rem;
+      --n-field-array-line: calc(var(--n-input-h, 2.5rem) - 0.5rem);
+    }
+    &[data-size="lg"] {
+      --n-field-array-gap: 1rem;
+      --n-field-array-row-gap: 0.75rem;
+      --n-field-array-card-p: 1rem;
+      --n-field-array-line: calc(var(--n-input-h, 2.5rem) + 0.5rem);
+    }
+
+    &[data-invalid] {
+      --n-field-array-edge: var(--ui-error-300);
+
+      @variant dark {
+        --n-field-array-edge: color-mix(
+          in oklab,
+          var(--ui-error-500) 45%,
+          transparent
+        );
+      }
+    }
+
+    &[data-disabled] {
+      opacity: 0.6;
+    }
+  }
+
+  .n-field-array-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--n-field-array-gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .n-field-array-row {
+    display: flex;
+    box-sizing: border-box;
+    align-items: flex-start;
+    gap: var(--n-field-array-row-gap);
+
+    .n-field-array[data-align="center"] > .n-field-array-list > & {
+      align-items: center;
+    }
+
+    .n-field-array[data-variant="outline"] > .n-field-array-list > & {
+      padding: var(--n-field-array-card-p);
+      border: 1px solid var(--n-field-array-edge);
+      border-radius: var(--ui-radius, 0.5rem);
+      background-color: var(--n-field-array-card-bg);
+    }
+
+    &[data-invalid] {
+      --n-field-array-edge: var(--ui-error-300);
+
+      @variant dark {
+        --n-field-array-edge: color-mix(
+          in oklab,
+          var(--ui-error-500) 45%,
+          transparent
+        );
+      }
+    }
+  }
+
+  .n-field-array-content {
+    flex: 1 1 0%;
+    min-inline-size: 0;
+  }
+
+  .n-field-array-actions {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: 0.125rem;
+
+    .n-field-array[data-align="start"] & {
+      min-block-size: var(--n-field-array-line);
+    }
+  }
+
+  .n-field-array-empty {
+    color: var(--ui-neutral-500);
+  }
+
+  .n-field-array-error {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: var(--ui-error-600);
+
+    @variant dark {
+      color: var(--ui-error-400);
+    }
+  }
+
+  .n-field-array-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+  }
+
+  .n-field-array-hint {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: var(--ui-neutral-500);
+  }
+}

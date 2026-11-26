@@ -825,6 +825,44 @@ export interface SidebarProps {
   expandLabel?: string;
 }
 
+export const INBOX_BREAKPOINTS = ["sm", "md", "lg", "xl"] as const;
+
+/** Widths of the inbox itself (not the viewport) from which a layout switches from one pane at a time to side by side */
+export type InboxBreakpoint = (typeof INBOX_BREAKPOINTS)[number];
+
+export interface InboxProps {
+  /** Whether a message is open (`v-model:open`). The list fills the inbox until one is, then the reader opens next to it. Default: `false` */
+  open?: boolean;
+  /** Whether the reader takes over the whole width, hiding the list (`v-model:expanded`). Closing the message resets it. Default: `false` */
+  expanded?: boolean;
+  /** Whether the `rail` slot is shown (`v-model:rail`). Default: `true` */
+  rail?: boolean;
+  /** Inbox width from which the list and the reader sit side by side. Narrower, only one is shown at a time. Default: `"lg"` */
+  breakpoint?: InboxBreakpoint;
+  /** Inbox width from which the rail is shown. Narrower, it is hidden. Default: `"xl"` */
+  railBreakpoint?: InboxBreakpoint;
+  /** Outer border and rounded corners. Default: `true` */
+  border?: boolean;
+  /** Accessible name of the inbox. Default: `"Inbox"` */
+  label?: string;
+  /** Accessible name of the button that goes back to the list. Default: `"Back to list"` */
+  backLabel?: string;
+  /** Accessible name of the button that closes the message. Default: `"Close message"` */
+  closeLabel?: string;
+  /** Accessible name of the button that gives the message the whole width. Default: `"Full width"` */
+  expandLabel?: string;
+  /** Accessible name of the button that brings the list back. Default: `"Show list"` */
+  restoreLabel?: string;
+  /** Accessible name of the button that shows the rail. Default: `"Show folders"` */
+  showRailLabel?: string;
+  /** Accessible name of the button that hides the rail. Default: `"Hide folders"` */
+  hideRailLabel?: string;
+  /** Icon of the button that hides the rail. Default: `"i-lucide-panel-left-close"` */
+  hideRailIcon?: ButtonIcon;
+  /** Icon of the button that shows the rail. Default: `"i-lucide-panel-left-open"` */
+  showRailIcon?: ButtonIcon;
+}
+
 export const FOOTER_BRAND_ALIGNS = ["left", "right"] as const;
 export const FOOTER_COPYRIGHT_ALIGNS = ["left", "center", "right"] as const;
 
@@ -1109,6 +1147,50 @@ export interface DatePickerProps extends Omit<
   format?: Intl.DateTimeFormatOptions;
   /** Open state (`v-model:open`) */
   open?: boolean;
+}
+
+export interface DateTimePickerProps extends Omit<
+  DatePickerProps,
+  "modelValue" | "range" | "min" | "max" | "format"
+> {
+  /** A wall-clock `YYYY-MM-DDTHH:mm` string (`YYYY-MM-DDTHH:mm:ss` with `seconds`), without a time zone (`v-model`). Empty is `null` */
+  modelValue?: string | null;
+  /** Accent of the focus ring, of the calendar and of the selected time. Default: `"primary"` */
+  color?: ButtonColor;
+  /** Earliest selectable date and time (`YYYY-MM-DDTHH:mm`; a plain `YYYY-MM-DD` starts that day) */
+  min?: string;
+  /** Latest selectable date and time (`YYYY-MM-DDTHH:mm`; a plain `YYYY-MM-DD` ends that day) */
+  max?: string;
+  /** Options of the formatted date and time in the trigger. Default: `{ dateStyle: "medium", timeStyle: "short" }` (`"medium"` with `seconds`) */
+  format?: Intl.DateTimeFormatOptions;
+  /** 12-hour clock with an AM/PM column. Default: what `locale` uses, 24-hour when that is unknown */
+  hour12?: boolean;
+  /** Distance between the selectable minutes. It must divide 60 (1, 2, 5, 10, 15, 20, 30), otherwise it is 1. Default: `1` */
+  minuteStep?: number;
+  /** Adds a seconds column: the value then carries seconds. Default: `false` */
+  seconds?: boolean;
+  /** Time a picked date gets while no time was chosen: `HH:mm`, `HH:mm:ss`, or `"now"` for the current time rounded down to `minuteStep`. It is moved into `min` and `max` when needed. Default: `"00:00"` */
+  defaultTime?: string;
+  /** IANA time zone (`"Europe/Berlin"`) whose short name is shown next to the time. The value stays a wall-clock time: nothing is converted */
+  timeZone?: string;
+  /** Adds a button that clears the value. Default: `false` */
+  clearable?: boolean;
+  /** Accessible name of the time section. Default: `"Time"` */
+  timeLabel?: string;
+  /** Default: `"Hours"` */
+  hourLabel?: string;
+  /** Default: `"Minutes"` */
+  minuteLabel?: string;
+  /** Default: `"Seconds"` */
+  secondLabel?: string;
+  /** Default: `"AM/PM"` */
+  periodLabel?: string;
+  /** Label of the button that picks the current date and time. Default: `"Now"` */
+  nowLabel?: string;
+  /** Default: `"Clear"` */
+  clearLabel?: string;
+  /** Default: `"Done"` */
+  doneLabel?: string;
 }
 
 export const COLOR_PICKER_FORMATS = ["hex", "rgb", "hsl"] as const;
@@ -1883,5 +1965,544 @@ export interface SliderProps {
   size?: SliderSize;
   /** Mark invalid without an `NFormField` around it. Default: `false` */
   invalid?: boolean;
+  disabled?: boolean;
+}
+
+export const CHAT_MESSAGE_STATUSES = [
+  "sending",
+  "sent",
+  "delivered",
+  "read",
+  "error",
+] as const;
+export type ChatMessageStatus = (typeof CHAT_MESSAGE_STATUSES)[number];
+
+export interface ChatAttachment {
+  name: string;
+  /** Opens (or downloads) the file when set. For an image `type`, it is also the thumbnail */
+  url?: string;
+  /** MIME type, e.g. `"image/png"` */
+  type?: string;
+  /** In bytes */
+  size?: number;
+}
+
+export interface ChatParticipant {
+  /** Shown above a group of messages and as the avatar's fallback text */
+  name: string;
+  avatar?: string;
+  /** Color of the avatar fallback. Default: `"neutral"` */
+  color?: ButtonColor;
+}
+
+export interface ChatMessage {
+  id: string | number;
+  /** Id of the sender: a key of `participants`. `self` marks the messages that are yours */
+  sender: string;
+  /** Plain text: it is escaped and keeps its line breaks. Rich content goes through the `content` slot */
+  text?: string;
+  /** Used for grouping, the date separators and the time under a group */
+  time?: string | number | Date;
+  status?: ChatMessageStatus;
+  attachments?: ChatAttachment[];
+  /** The text is still growing: shows a blinking caret */
+  streaming?: boolean;
+  /** Anything else you need in the slots */
+  [key: string]: unknown;
+}
+
+export interface ChatProps {
+  /** Oldest first */
+  messages?: ChatMessage[];
+  /** Senders by id. Unknown senders show their id */
+  participants?: Record<string, ChatParticipant>;
+  /** Id of the current user: their messages sit at the end, in the accent color. Default: `"me"` */
+  self?: string;
+  /** Shows the typing indicator. An array lists the ids of who is typing. Default: `false` */
+  typing?: boolean | string[];
+  /** Title of the optional header bar (also the `header` slot) */
+  title?: string;
+  /** Language of the dates and times. Default: the browser's */
+  locale?: string;
+  /** Color of your messages and the send button. Default: `"primary"` */
+  color?: ButtonColor;
+  /** Messages of one sender closer than this many minutes form a group. Default: `5` */
+  groupWindow?: number;
+  /** Shows the sender's name above a group of others' messages. Default: `true` */
+  showNames?: boolean;
+  /** Shows the avatar of others at the start of a group. Default: `true` */
+  showAvatars?: boolean;
+  /** Shows the time under a group. Default: `true` */
+  showTime?: boolean;
+  /** Shows the delivery status of your messages. Default: `true` */
+  showStatus?: boolean;
+  /** Shows a spinner at the top while older messages load. Default: `false` */
+  loading?: boolean;
+  /** Set to `false` when there is no older history, so `loadMore` stops firing. Default: `true` */
+  hasMore?: boolean;
+  /** Distance (px) from the top at which `loadMore` fires. Default: `48` */
+  loadMoreThreshold?: number;
+  /** Distance (px) from the bottom within which new messages keep the thread pinned. Default: `80` */
+  stickThreshold?: number;
+  /** Enter sends and Shift+Enter adds a line. When `false`, Ctrl/Cmd+Enter sends. Default: `true` */
+  sendOnEnter?: boolean;
+  /** A message is being sent: disables the send button. Default: `false` */
+  sending?: boolean;
+  /** Disables the composer. Default: `false` */
+  disabled?: boolean;
+  /** Shows the attach button. Default: `false` */
+  attachable?: boolean;
+  /** `accept` of the file picker, e.g. `"image/*"` */
+  accept?: string;
+  /** Lets the picker select several files. Default: `true` */
+  multiple?: boolean;
+  /** Native `maxlength` of the composer */
+  maxlength?: number;
+  /** Lines after which the composer scrolls. Default: `6` */
+  maxRows?: number;
+  /** Default: `"Type a message…"` */
+  placeholder?: string;
+  /** Accessible name of the composer. Default: `"Message"` */
+  inputLabel?: string;
+  /** Default: `"Send"` */
+  sendLabel?: string;
+  /** Default: `"Attach files"` */
+  attachLabel?: string;
+  /** Default: `"Remove"` */
+  removeAttachmentLabel?: string;
+  /** Default: `"New messages"` */
+  newMessagesLabel?: string;
+  /** Accessible name of the thread. Default: `"Messages"` */
+  logLabel?: string;
+  /** Default: `"Typing…"` */
+  typingLabel?: string;
+  /** Default: `"Loading earlier messages…"` */
+  loadingLabel?: string;
+  /** Default: `"No messages yet"` */
+  emptyLabel?: string;
+  /** Default: `"Retry"` */
+  retryLabel?: string;
+  /** Default: the localized "Today" */
+  todayLabel?: string;
+  /** Default: the localized "Yesterday" */
+  yesterdayLabel?: string;
+  /** Texts of the delivery statuses (read by screen readers) */
+  statusLabels?: Partial<Record<ChatMessageStatus, string>>;
+}
+
+export const BANNER_VARIANTS = ["solid", "soft", "subtle", "outline"] as const;
+export type BannerVariant = (typeof BANNER_VARIANTS)[number];
+
+export const BANNER_POSITIONS = ["static", "sticky", "fixed"] as const;
+export type BannerPosition = (typeof BANNER_POSITIONS)[number];
+
+export const BANNER_PLACEMENTS = ["top", "bottom"] as const;
+export type BannerPlacement = (typeof BANNER_PLACEMENTS)[number];
+
+export const BANNER_ALIGNS = ["center", "start"] as const;
+export type BannerAlign = (typeof BANNER_ALIGNS)[number];
+
+export const BANNER_SIZES = ["sm", "md", "lg"] as const;
+export type BannerSize = (typeof BANNER_SIZES)[number];
+
+/** A button next to the banner's text: any `NButton` prop, plus a click handler */
+export type BannerAction = ButtonProps & {
+  onClick?: (event: MouseEvent) => void;
+};
+
+export interface BannerProps {
+  title?: string;
+  description?: string;
+  /** Leading icon. Unlike `NAlert`, there is none unless you set it (or use the `leading` slot) */
+  icon?: ButtonIcon;
+  /** Default: `"primary"` (the Color Theme Studio theme) */
+  color?: ButtonColor;
+  /** Default: `"solid"` */
+  variant?: BannerVariant;
+  /** Makes the message a link to this URL (a `to` for a router link, see `linkAs`) */
+  to?: string;
+  /** Same as `to`; use whichever reads better. `to` wins when both are set */
+  href?: string;
+  /** Link target. `_blank` also adds `rel="noopener noreferrer"` */
+  target?: string;
+  /** Element or component for the link, e.g. a router link (it gets `to`). Default: `"a"` */
+  linkAs?: string | Component;
+  /** Shows an arrow after the message when it's a link. Default: `true` */
+  linkIcon?: boolean | ButtonIcon;
+  /** Buttons after the message */
+  actions?: BannerAction[];
+  /** Shows a dismiss button. Default: `false` */
+  close?: boolean;
+  /** Replaces the close button's `i-lucide-x` icon */
+  closeIcon?: ButtonIcon;
+  /** Accessible name of the close button. Default: `"Dismiss"` */
+  closeLabel?: string;
+  /** Accessible name of the banner region. Default: `"Announcement"` */
+  label?: string;
+  /** Remembers a dismissal in `localStorage` under `noofpi-ui:banner:<persistKey>`, so the banner stays hidden after a reload */
+  persistKey?: string;
+  /** `static` flows with the page, `sticky` sticks to the edge of its scroll container, `fixed` to the viewport. Default: `"static"` */
+  position?: BannerPosition;
+  /** The edge `sticky` and `fixed` stick to, and the side of the divider line. Default: `"top"` */
+  placement?: BannerPlacement;
+  /** Alignment of the content. Default: `"center"` */
+  align?: BannerAlign;
+  /** Default: `"md"` */
+  size?: BannerSize;
+}
+
+export const INFINITE_SCROLL_DIRECTIONS = ["down", "up"] as const;
+export type InfiniteScrollDirection =
+  (typeof INFINITE_SCROLL_DIRECTIONS)[number];
+
+export interface InfiniteScrollProps {
+  /** Your request is in flight; you own it. Blocks further `load` events and shows the loading status. Default: `false` */
+  loading?: boolean;
+  /** There is nothing more to load: stops observing and shows the finished status. Default: `false` */
+  finished?: boolean;
+  /** The last load failed. `true` shows `errorLabel`, a string shows that message. Stops `load` until it is cleared or the user retries. Default: `false` */
+  error?: boolean | string;
+  /** Stops loading without a status. Default: `false` */
+  disabled?: boolean;
+  /** Where the new content goes: `"down"` loads at the end, `"up"` at the start and keeps the scroll position when it is prepended. Default: `"down"` */
+  direction?: InfiniteScrollDirection;
+  /** How early to load before the edge reaches the view: pixels, or a `px`/`%` string such as `"20%"`. Default: `200` */
+  distance?: number | string;
+  /** The scroll container to observe: a CSS selector or an element. Left out, it is the nearest scrolling ancestor, or the page. Ignored when `height` is set */
+  root?: string | HTMLElement;
+  /** Makes the component its own scroll container of this height (a number is pixels, a string any CSS length) */
+  height?: number | string;
+  /** Shows a "Load more" button instead of loading by itself. It is also the fallback when `IntersectionObserver` is missing. Default: `false` */
+  manual?: boolean;
+  /** Default: `"Loading…"` */
+  loadingLabel?: string;
+  /** Shown when `finished`. An empty string hides it. Default: `"No more items"` */
+  finishedLabel?: string;
+  /** Shown when `error` is `true`. Default: `"Something went wrong"` */
+  errorLabel?: string;
+  /** Default: `"Try again"` */
+  retryLabel?: string;
+  /** Default: `"Load more"` */
+  loadMoreLabel?: string;
+}
+
+export const FIELD_ARRAY_SIZES = ["sm", "md", "lg"] as const;
+export type FieldArraySize = (typeof FIELD_ARRAY_SIZES)[number];
+
+/** `"plain"` lays the rows out as they are, `"outline"` draws each one as a bordered card */
+export const FIELD_ARRAY_VARIANTS = ["plain", "outline"] as const;
+export type FieldArrayVariant = (typeof FIELD_ARRAY_VARIANTS)[number];
+
+/** Where the row's buttons sit next to its fields: with the first line (`"start"`) or in the middle (`"center"`) */
+export const FIELD_ARRAY_ALIGNS = ["start", "center"] as const;
+export type FieldArrayAlign = (typeof FIELD_ARRAY_ALIGNS)[number];
+
+/** Messages by row: an array with the row's messages (`string`, `string[]`, or by field `{ email: ["…"] }`, `""` for the row itself), or an object by path (`"0"`, `"0.email"`; `""` for the whole list) like `NForm`'s errors */
+export type FieldArrayErrors =
+  (string | string[] | FormErrors | null | undefined)[] | FormErrors;
+
+export interface FieldArrayProps {
+  /** The rows' values (`v-model`). Strings and numbers work as well as objects. Default: `[]` */
+  modelValue?: unknown[];
+  /** Accessible name of the group */
+  label?: string;
+  /** Path of the list in the surrounding `NForm`'s schema (`"contacts"`). The errors of `contacts.0.email` reach row 0 as `errors.email`. Row `n` is `"contacts.n"` in the slot's `name` */
+  name?: string;
+  /** Errors to show next to the rows, in addition to the `NForm`'s. See `FieldArrayErrors` */
+  errors?: FieldArrayErrors;
+  /** What a new row starts with: a value (objects and arrays are cloned), or a function called for each new row. Default: `""` */
+  defaultItem?: unknown;
+  /** Shows the buttons that move a row up and down. Alt+↑ and Alt+↓ on a row's buttons do the same. Default: `false` */
+  sortable?: boolean;
+  /** Rows that can't be removed. The model is not padded up to it. Default: `0` */
+  min?: number;
+  /** Rows that can be added. Default: no limit */
+  max?: number;
+  /** Default: `"Add"` */
+  addLabel?: string;
+  /** Default: `"i-lucide-plus"` */
+  addIcon?: ButtonIcon;
+  /** Default: `"i-lucide-trash-2"` */
+  removeIcon?: ButtonIcon;
+  /** Name of the remove button, followed by the row's name. Default: `"Remove"` */
+  removeLabel?: string;
+  /** Default: `"Move up"` */
+  moveUpLabel?: string;
+  /** Default: `"Move down"` */
+  moveDownLabel?: string;
+  /** Names a row for screen readers (`"Item 2"`). Default: `"Item"` */
+  itemLabel?: string;
+  /** Shown next to the add button once `max` is reached */
+  maxLabel?: string;
+  /** Default: `"plain"` */
+  variant?: FieldArrayVariant;
+  /** Default: `"md"` */
+  size?: FieldArraySize;
+  /** Default: `"start"` */
+  align?: FieldArrayAlign;
+  /** Mark invalid without an `NFormField` around it. Default: `false` */
+  invalid?: boolean;
+  /** Disables the buttons, and every native field in the rows. Default: `false` */
+  disabled?: boolean;
+}
+
+export const KANBAN_VARIANTS = ["soft", "outline"] as const;
+export const KANBAN_SIZES = ["sm", "md", "lg"] as const;
+
+export type KanbanVariant = (typeof KANBAN_VARIANTS)[number];
+export type KanbanSize = (typeof KANBAN_SIZES)[number];
+
+/** A card on the board. Any extra field is kept as it is, so a `card` slot can use it */
+export interface KanbanItem {
+  /** Unique across the whole board */
+  id: string | number;
+  title: string;
+  /** A short text under the title */
+  description?: string;
+  /** A small label (a tag or priority) shown in a badge */
+  badge?: string;
+  /** Accent color of the card's edge, and of its badge */
+  color?: ButtonColor;
+  /** Name of the person the card is assigned to, shown as an avatar */
+  assignee?: string;
+  /** Image of the `assignee` */
+  avatar?: string;
+  /** A disabled card stays where it is. Default: `false` */
+  disabled?: boolean;
+  [key: string]: unknown;
+}
+
+export interface KanbanColumn {
+  id: string | number;
+  title: string;
+  /** Color of the dot in the header. A column without a color has no dot */
+  color?: ButtonColor;
+  /** Most cards the column should hold. The header shows `count/limit`, in the error color when it is exceeded */
+  limit?: number;
+  items: KanbanItem[];
+  /** Locks the column: its cards can't be moved out and nothing can be dropped into it. Default: `false` */
+  disabled?: boolean;
+}
+
+/** Where a card sits: the `id` of its column and its index in it */
+export interface KanbanPosition {
+  column: KanbanColumn["id"];
+  index: number;
+}
+
+export interface KanbanMoveEvent {
+  item: KanbanItem;
+  from: KanbanPosition;
+  to: KanbanPosition;
+}
+
+/**
+ * Texts for the screen reader announcements. `{item}`, `{column}`, `{position}` and `{total}` are replaced
+ * by the card title, the column title, the 1-based position in the column and the number of cards in it
+ */
+export interface KanbanLabels {
+  /** Read once when a card is focused. Default: `"Press Space or Enter to pick up this card"` */
+  hint?: string;
+  /** Default: `"Picked up {item}, position {position} of {total} in {column}. Use the arrow keys to move it, Space to drop it and Escape to cancel."` */
+  lift?: string;
+  /** Default: `"{column}, position {position} of {total}"` */
+  move?: string;
+  /** Default: `"Dropped {item}, position {position} of {total} in {column}"` */
+  drop?: string;
+  /** Default: `"Move cancelled, {item} is back in {column}, position {position} of {total}"` */
+  cancel?: string;
+  /** Default: `"{column} is full"` */
+  refused?: string;
+}
+
+export interface KanbanProps {
+  /** The columns and their cards (`v-model:columns`, or plain `v-model`) */
+  columns?: KanbanColumn[];
+  /** Same as `columns` for a plain `v-model` */
+  modelValue?: KanbanColumn[];
+  /** `"soft"` puts the columns on a tinted surface, `"outline"` draws them with a border. Default: `"soft"` */
+  variant?: KanbanVariant;
+  /** Default: `"md"` */
+  size?: KanbanSize;
+  /** Refuses drops into a column that has reached its `limit`. Default: `false` */
+  enforceLimit?: boolean;
+  /** Shows the built-in "Add card" button under every column, which emits `add`. Default: `false` */
+  addable?: boolean;
+  /** Shows a grip on each card. Touch screens drag by it, as the rest of the card scrolls the board. Default: `true` */
+  handle?: boolean;
+  /** Makes the board read-only: nothing can be moved or added. Default: `false` */
+  disabled?: boolean;
+  /** Accessible name of the board */
+  label?: string;
+  /** Text of the built-in add button. Default: `"Add card"` */
+  addLabel?: string;
+  /** Shown in a column without cards. Default: `"No cards"` */
+  emptyLabel?: string;
+  /** Overrides the announcement texts */
+  labels?: KanbanLabels;
+}
+
+export const QR_CODE_ERROR_CORRECTIONS = ["L", "M", "Q", "H"] as const;
+/** How much of the code can be damaged or covered and still scan: about 7%, 15%, 25% and 30% */
+export type QRCodeErrorCorrection = (typeof QR_CODE_ERROR_CORRECTIONS)[number];
+
+export const QR_CODE_FORMATS = ["svg", "png"] as const;
+export type QRCodeFormat = (typeof QR_CODE_FORMATS)[number];
+
+export interface QRCodeProps {
+  /** The text or URL to encode. When it's empty or too long for a QR code the `fallback` slot is shown and `error` is emitted */
+  value: string;
+  /** Width and height: a number of pixels or a CSS length. The code scales to it. Default: `160` */
+  size?: number | string;
+  /** Default: `"M"`, or `"H"` with a `logo` so the covered center can be recovered */
+  errorCorrection?: QRCodeErrorCorrection;
+  /** Quiet zone around the code in modules. Scanners need 4, which is the default */
+  margin?: number;
+  /** Color of the modules. Default: the `--n-qr-code-fg` token, near-black in both themes so the code stays scannable */
+  color?: string;
+  /** Color of the plate behind the code. Default: the `--n-qr-code-bg` token, white in both themes. A transparent or dark one can break scanning */
+  background?: string;
+  /** Image URL shown in the center. The modules under it are cleared and the code is at least version 4 */
+  logo?: string;
+  /** Width of the cleared center as a share of the code, 0.1 to 0.3. Default: `0.22` */
+  logoSize?: number;
+  /** Corner radius of the plate in modules. Default: `0` */
+  radius?: number;
+  /** Accessible name. Default: `"QR code: <value>"` */
+  label?: string;
+  /** Shows a button under the code that downloads it. Default: `false` */
+  downloadable?: boolean;
+  /** Text of the download button. Default: `"Download"` */
+  downloadLabel?: string;
+  /** Format of the download button. Default: `"png"` */
+  downloadFormat?: QRCodeFormat;
+  /** Name of the downloaded file, without the extension. Default: `"qr-code"` */
+  filename?: string;
+}
+
+export const FILTER_BAR_FILTER_TYPES = [
+  "select",
+  "multiselect",
+  "boolean",
+  "date",
+  "daterange",
+  "number",
+  "text",
+] as const;
+
+/** What a filter of `NFilterBar` holds: `select` one option value, `multiselect` an array of them, `boolean` `true` or `false`, `date` a `YYYY-MM-DD` string, `daterange` a `DateRange`, `number` a number and `text` a string */
+export type FilterBarFilterType = (typeof FILTER_BAR_FILTER_TYPES)[number];
+
+/** One choice of a `select` or `multiselect` filter */
+export interface FilterBarOption {
+  label: string;
+  value: unknown;
+  /** Shown before the label, in the list and in the chip */
+  icon?: ButtonIcon;
+  /** A colored dot before the label (when there is no `icon`) */
+  color?: ButtonColor;
+}
+
+/** One filter of `NFilterBar`. Its value is stored under `key` in `FilterBarValue.filters` */
+export interface FilterBarFilter {
+  /** Key of the value in `filters`. Also names the slot `filter-<key>` that replaces the editor */
+  key: string;
+  /** Name in the filters panel and in the chip */
+  label: string;
+  type: FilterBarFilterType;
+  /** The choices of a `select` or `multiselect` filter */
+  options?: FilterBarOption[];
+  /** Shown in the field of a `text` or `number` filter while it is empty */
+  placeholder?: string;
+  /** Shown before the label in the chip */
+  icon?: ButtonIcon;
+  /** Smallest value: a number for `number`, a `YYYY-MM-DD` date for `date` and `daterange` */
+  min?: number | string;
+  /** Largest value: a number for `number`, a `YYYY-MM-DD` date for `date` and `daterange` */
+  max?: number | string;
+}
+
+/** The sorting of `NFilterBar`: the same shape as the sort of `NTable` */
+export interface FilterBarSort {
+  key: string;
+  direction: TableSortDirection;
+}
+
+/** The `v-model` of `NFilterBar`. Parts that are missing get their defaults: `""`, `{}` and `null` */
+export interface FilterBarValue {
+  search: string;
+  /** The value of each active filter by its `key`. Filters without a value are left out */
+  filters: Record<string, unknown>;
+  sort: FilterBarSort | null;
+}
+
+/** One column the user can sort by in `NFilterBar` */
+export interface FilterBarSortOption {
+  key: string;
+  label: string;
+}
+
+/** A saved set of search, filters and sort that `NFilterBar` can switch to */
+export interface FilterBarView {
+  id: string | number;
+  label: string;
+  value: FilterBarValue;
+}
+
+export interface FilterBarProps {
+  /** The search, the filters and the sort (`v-model`). It is never mutated, a new object is emitted */
+  modelValue?: FilterBarValue;
+  /** The filters the user can set */
+  filters?: FilterBarFilter[];
+  /** Shows the search field. Default: `true` */
+  searchable?: boolean;
+  /** Default: `"Search…"` */
+  searchPlaceholder?: string;
+  /** Milliseconds to wait after typing before the search is emitted in `v-model`. Enter and clearing apply it at once. Default: `300` */
+  debounce?: number;
+  /** The columns the user can sort by. Without them there is no sort menu */
+  sortOptions?: FilterBarSortOption[];
+  /** Saved views the user can switch to */
+  views?: FilterBarView[];
+  /** The `id` of the current view (`v-model:view`). It is cleared when the value is edited */
+  view?: string | number | null;
+  /** Lets the user save the current value as a view: the menu gets a save item that emits `save-view`. Default: `false` */
+  saveable?: boolean;
+  /** Turns a filter's value into the text of its chip. Return `undefined` to use the default: option labels, `Intl` for dates and numbers */
+  formatValue?: (filter: FilterBarFilter, value: unknown) => string | undefined;
+  /** BCP 47 tag of the dates and numbers in the chips. Default: the browser's */
+  locale?: string;
+  /** Accessible name of the bar. Default: `"Filter bar"` */
+  label?: string;
+  /** Accessible name of the search field. Default: `"Search"` */
+  searchLabel?: string;
+  /** Default: `"Clear search"` */
+  clearSearchLabel?: string;
+  /** Default: `"Filters"` */
+  filtersLabel?: string;
+  /** Default: `"Clear all"` */
+  clearLabel?: string;
+  /** Default: `"Reset"` */
+  resetLabel?: string;
+  /** Default: `"Done"` */
+  doneLabel?: string;
+  /** Start of the accessible name of a chip's remove button. Default: `"Remove filter"` */
+  removeLabel?: string;
+  /** Default: `"Sort"` */
+  sortLabel?: string;
+  /** Default: `"Ascending"` */
+  ascendingLabel?: string;
+  /** Default: `"Descending"` */
+  descendingLabel?: string;
+  /** Item of the sort menu that removes the sorting. Default: `"Default order"` */
+  defaultSortLabel?: string;
+  /** Default: `"Views"` */
+  viewsLabel?: string;
+  /** Default: `"Save current view"` */
+  saveViewLabel?: string;
+  /** Default: `"Yes"` */
+  yesLabel?: string;
+  /** Default: `"No"` */
+  noLabel?: string;
   disabled?: boolean;
 }
