@@ -1,7 +1,10 @@
-import { mount } from "@vue/test-utils";
+import { DOMWrapper, mount } from "@vue/test-utils";
 import { describe, expect, it } from "vitest";
 import { h } from "vue";
 import { NFormField, NSelect, NTabs } from "../src";
+
+// The list is teleported to the body
+const page = new DOMWrapper(document.body);
 
 const items = [
   { label: "Apple", value: "apple" },
@@ -32,7 +35,7 @@ describe("NSelect", () => {
     const trigger = wrapper.get('[role="combobox"]');
 
     await trigger.trigger("click");
-    const options = wrapper.findAll('[role="option"]');
+    const options = page.findAll('[role="option"]');
     expect(options).toHaveLength(3);
     expect(options[0]!.attributes("aria-selected")).toBe("true");
     expect(trigger.attributes("aria-activedescendant")).toBe(
@@ -46,20 +49,20 @@ describe("NSelect", () => {
 
     await trigger.trigger("keydown", { key: "Enter" });
     expect(wrapper.emitted("update:modelValue")![0]).toEqual(["cherry"]);
-    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+    expect(page.find('[role="listbox"]').exists()).toBe(false);
     wrapper.unmount();
   });
 
   it("ignores clicks on disabled options and closes with Escape", async () => {
     const wrapper = mountSelect();
     await wrapper.get('[role="combobox"]').trigger("click");
-    await wrapper.findAll('[role="option"]')[1]!.trigger("click");
+    await page.findAll('[role="option"]')[1]!.trigger("click");
     expect(wrapper.emitted("update:modelValue")).toBeUndefined();
 
     await wrapper
       .get('[role="combobox"]')
       .trigger("keydown", { key: "Escape" });
-    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+    expect(page.find('[role="listbox"]').exists()).toBe(false);
     wrapper.unmount();
   });
 
@@ -67,7 +70,7 @@ describe("NSelect", () => {
     const wrapper = mountSelect();
     const trigger = wrapper.get('[role="combobox"]');
     await trigger.trigger("keydown", { key: "c" });
-    const options = wrapper.findAll('[role="option"]');
+    const options = page.findAll('[role="option"]');
     expect(options[2]!.attributes("data-active")).toBe("");
     wrapper.unmount();
   });
@@ -99,10 +102,10 @@ describe("NSelect", () => {
 
     await trigger.trigger("click");
     expect(
-      wrapper.get('[role="listbox"]').attributes("aria-multiselectable"),
+      page.get('[role="listbox"]').attributes("aria-multiselectable"),
     ).toBe("true");
-    await wrapper.findAll('[role="option"]')[2]!.trigger("click");
-    expect(wrapper.find('[role="listbox"]').exists()).toBe(true);
+    await page.findAll('[role="option"]')[2]!.trigger("click");
+    expect(page.find('[role="listbox"]').exists()).toBe(true);
     expect(trigger.text()).toBe("Apple, Cherry");
     expect(
       wrapper.findAll('input[type="hidden"]').map((i) => i.attributes("value")),

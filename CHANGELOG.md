@@ -4,6 +4,17 @@ All notable changes to noofpi-ui are documented here. The format follows [Keep a
 
 ## [Unreleased]
 
+## [1.9.1] - 2026-11-27
+
+### Changed
+
+- The option lists of `NSelect` and `NCombobox` are teleported to the `body` and positioned next to the field (`position: fixed`), so an ancestor with `overflow` (a card, a dialog body, a table) no longer clips them. They follow the field on scroll and resize, and are placed again when typing filters the options.
+
+### Fixed
+
+- `Escape` in an open `NSelect`, `NCombobox`, `NMenu` or `NPopover` closes only that element, not a dialog around it.
+- A click on a `NSelect` or `NMenu` list inside an `NPopover` no longer counts as an outside click that closes the popover.
+
 ## [1.9.0] - 2026-11-27
 
 ### Added

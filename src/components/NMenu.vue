@@ -230,6 +230,8 @@ function onKeydown(event: KeyboardEvent) {
   if (key === "Escape") {
     if (open.value) {
       event.preventDefault();
+      // Closes only the menu, not a dialog around it
+      event.stopPropagation();
       close(true);
     }
     return;

@@ -34,6 +34,8 @@ const props = defineProps({
   badges: { type: Boolean, default: false },
   badgeVariant: { type: String as PropType<BadgeVariant>, default: "subtle" },
   badgeColor: { type: String as PropType<ButtonColor>, default: "primary" },
+  /** Minimum width (px) of the list when the field is narrower, e.g. an icon-only select. It grows from the field's start edge */
+  listMinWidth: { type: Number, default: undefined },
 });
 
 const model = defineModel<unknown>();
@@ -115,19 +117,50 @@ function choose(index: number) {
 }
 
 const side = ref<"bottom" | "top">("bottom");
+// Rendered only after mounting, so the server and the first client render match (a `Teleport` can't be hydrated)
+const mounted = ref(false);
+const listStyle = ref<Record<string, string>>({});
 
-// Opens upward when there's no room below and more room above
+// Places the list under the field, or above it when there's no room below and more room above. The list is
+// `fixed` (and teleported), so no ancestor's `overflow` (a card, a dialog body, a table) clips it
 function fit() {
   const anchor = root.value?.getBoundingClientRect();
   const height = listbox.value?.offsetHeight;
   if (!anchor || !height) return;
   const below = window.innerHeight - anchor.bottom;
   side.value = below < height + 8 && anchor.top > below ? "top" : "bottom";
+  // The list can be wider than the field (`listMinWidth`), growing from the field's start edge and kept on screen
+  const width = Math.max(anchor.width, props.listMinWidth ?? 0);
+  const start =
+    getComputedStyle(root.value!).direction === "rtl"
+      ? anchor.right - width
+      : anchor.left;
+  const left =
+    width > anchor.width
+      ? Math.max(8, Math.min(start, window.innerWidth - width - 8))
+      : start;
+  // The gap to the field is a margin in the CSS (it flips sign with the side)
+  listStyle.value = {
+    left: `${Math.round(left)}px`,
+    width: `${Math.round(width)}px`,
+    top: `${Math.round(side.value === "top" ? anchor.top - height : anchor.bottom)}px`,
+  };
+}
+
+// Scrolling the list itself (an option scrolled into view on hover) must not move it
+function onScroll(event: Event) {
+  if (!listbox.value?.contains(event.target as Node)) fit();
 }
 
 watch(open, async (isOpen) => {
-  if (!isOpen) return;
+  if (!isOpen) {
+    window.removeEventListener("resize", fit);
+    window.removeEventListener("scroll", onScroll, true);
+    return;
+  }
   side.value = "bottom";
+  window.addEventListener("resize", fit);
+  window.addEventListener("scroll", onScroll, true);
   await nextTick();
   fit();
 });
@@ -190,8 +223,11 @@ function onKeydown(event: KeyboardEvent) {
   else if (key === "Home") active.value = enabledIndexes()[0] ?? -1;
   else if (key === "End") active.value = enabledIndexes().at(-1) ?? -1;
   else if (key === "Enter" || key === " ") choose(active.value);
-  else if (key === "Escape") close();
-  else if (key === "Tab") {
+  else if (key === "Escape") {
+    close();
+    // Closes only the list, not a dialog around it
+    event.stopPropagation();
+  } else if (key === "Tab") {
     close();
     return;
   } else if (
@@ -207,12 +243,23 @@ function onKeydown(event: KeyboardEvent) {
 }
 
 function onPointerDown(event: PointerEvent) {
-  if (open.value && !root.value?.contains(event.target as Node)) close();
+  const target = event.target as Node;
+  if (
+    open.value &&
+    !root.value?.contains(target) &&
+    !listbox.value?.contains(target)
+  )
+    close();
 }
 
-onMounted(() => document.addEventListener("pointerdown", onPointerDown));
+onMounted(() => {
+  mounted.value = true;
+  document.addEventListener("pointerdown", onPointerDown);
+});
 onBeforeUnmount(() => {
   document.removeEventListener("pointerdown", onPointerDown);
+  window.removeEventListener("resize", fit);
+  window.removeEventListener("scroll", onScroll, true);
   clearTimeout(typedTimer);
 });
 </script>
@@ -288,45 +335,49 @@ onBeforeUnmount(() => {
         :disabled="disabled"
       />
     </template>
-    <Transition name="n-select">
-      <ul
-        v-if="open"
-        :id="listId"
-        ref="listbox"
-        class="n-select-list"
-        role="listbox"
-        :aria-multiselectable="multiple ? 'true' : undefined"
-        :aria-label="label"
-        @mousedown.prevent
-      >
-        <li
-          v-for="(item, index) in items"
-          :id="optionId(index)"
-          :key="String(item.value)"
-          class="n-select-option"
-          role="option"
-          :aria-selected="isSelected(item) ? 'true' : 'false'"
-          :aria-disabled="item.disabled ? 'true' : undefined"
-          :data-active="index === active ? '' : undefined"
-          @click="choose(index)"
-          @mouseenter="!item.disabled && (active = index)"
+    <Teleport v-if="mounted" to="body">
+      <Transition name="n-select">
+        <ul
+          v-if="open"
+          :id="listId"
+          ref="listbox"
+          class="n-select-list"
+          role="listbox"
+          :data-side="side"
+          :style="listStyle"
+          :aria-multiselectable="multiple ? 'true' : undefined"
+          :aria-label="label"
+          @mousedown.prevent
         >
-          <slot name="item" :item="item" :selected="isSelected(item)">
-            <NIcon v-if="item.icon" :name="item.icon" class="n-select-icon" />
-            <span class="n-select-option-text">
-              <span class="n-select-label">{{ item.label }}</span>
-              <span v-if="item.description" class="n-select-description">{{
-                item.description
-              }}</span>
-            </span>
-          </slot>
-          <NIcon
-            v-if="isSelected(item)"
-            name="i-lucide-check"
-            class="n-select-check"
-          />
-        </li>
-      </ul>
-    </Transition>
+          <li
+            v-for="(item, index) in items"
+            :id="optionId(index)"
+            :key="String(item.value)"
+            class="n-select-option"
+            role="option"
+            :aria-selected="isSelected(item) ? 'true' : 'false'"
+            :aria-disabled="item.disabled ? 'true' : undefined"
+            :data-active="index === active ? '' : undefined"
+            @click="choose(index)"
+            @mouseenter="!item.disabled && (active = index)"
+          >
+            <slot name="item" :item="item" :selected="isSelected(item)">
+              <NIcon v-if="item.icon" :name="item.icon" class="n-select-icon" />
+              <span class="n-select-option-text">
+                <span class="n-select-label">{{ item.label }}</span>
+                <span v-if="item.description" class="n-select-description">{{
+                  item.description
+                }}</span>
+              </span>
+            </slot>
+            <NIcon
+              v-if="isSelected(item)"
+              name="i-lucide-check"
+              class="n-select-check"
+            />
+          </li>
+        </ul>
+      </Transition>
+    </Teleport>
   </div>
 </template>

@@ -1,7 +1,10 @@
-import { mount } from "@vue/test-utils";
+import { DOMWrapper, mount } from "@vue/test-utils";
 import { describe, expect, it } from "vitest";
 import { h } from "vue";
 import { NCombobox, NFormField } from "../src";
+
+// The list is teleported to the body
+const page = new DOMWrapper(document.body);
 
 const items = [
   { label: "Apple", value: "apple" },
@@ -20,7 +23,7 @@ describe("NCombobox", () => {
     expect(input.element.value).toBe("Cherry");
 
     await input.trigger("click");
-    expect(wrapper.findAll('[role="option"]')).toHaveLength(4);
+    expect(page.findAll('[role="option"]')).toHaveLength(4);
     expect(input.attributes("aria-expanded")).toBe("true");
     wrapper.unmount();
   });
@@ -30,7 +33,7 @@ describe("NCombobox", () => {
     const input = wrapper.get<HTMLInputElement>('[role="combobox"]');
 
     await input.setValue("ap");
-    const options = wrapper.findAll('[role="option"]');
+    const options = page.findAll('[role="option"]');
     expect(options.map((option) => option.text())).toEqual([
       "Apple",
       "Apricot",
@@ -46,7 +49,7 @@ describe("NCombobox", () => {
 
     await input.trigger("keydown", { key: "Enter" });
     expect(wrapper.emitted("update:modelValue")![0]).toEqual(["apple"]);
-    expect(wrapper.find('[role="listbox"]').exists()).toBe(false);
+    expect(page.find('[role="listbox"]').exists()).toBe(false);
     wrapper.unmount();
   });
 
@@ -55,7 +58,7 @@ describe("NCombobox", () => {
     const input = wrapper.get<HTMLInputElement>('[role="combobox"]');
 
     await input.setValue("zzz");
-    expect(wrapper.text()).toContain("No results");
+    expect(page.text()).toContain("No results");
 
     await input.trigger("keydown", { key: "Escape" });
     expect(input.element.value).toBe("Banana");
@@ -66,7 +69,7 @@ describe("NCombobox", () => {
   it("leaves filtering to the parent with filter off and reports the search term", async () => {
     const wrapper = mountCombobox({ filter: false });
     await wrapper.get('[role="combobox"]').setValue("zzz");
-    expect(wrapper.findAll('[role="option"]')).toHaveLength(4);
+    expect(page.findAll('[role="option"]')).toHaveLength(4);
     expect(wrapper.emitted("update:searchTerm")![0]).toEqual(["zzz"]);
     wrapper.unmount();
   });

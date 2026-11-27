@@ -139,6 +139,7 @@ function onPanelFocusOut(event: FocusEvent) {
 function onTriggerKeydown(event: KeyboardEvent) {
   if (event.key === "Escape" && open.value && props.dismissible) {
     event.preventDefault();
+    event.stopPropagation();
     hide(true);
     return;
   }
@@ -244,10 +245,13 @@ function fit() {
 }
 
 function onPointerDown(event: PointerEvent) {
+  const target = event.target as Element;
   if (
     open.value &&
-    !root.value?.contains(event.target as Node) &&
-    !panel.value?.contains(event.target as Node)
+    !root.value?.contains(target) &&
+    !panel.value?.contains(target) &&
+    // A select or menu inside the panel is teleported to the body, so it sits outside the panel
+    !target.closest?.(".n-select-list, .n-menu-panel")
   )
     hide();
 }
